@@ -26,3 +26,22 @@ export function hashString(str: string): number {
   }
   return Math.abs(hash);
 }
+
+/**
+ * Checks whether Supabase environment variables are actively configured.
+ * Returns false when values are missing, empty, or unconfigured placeholders.
+ */
+export function isSupabaseConfigured(): boolean {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !anonKey) return false;
+  const trimmedUrl = url.trim();
+  const trimmedKey = anonKey.trim();
+
+  if (trimmedUrl === "" || trimmedKey === "") return false;
+  if (trimmedUrl.includes("your-project.supabase.co")) return false;
+  if (trimmedKey === "your-anon-key") return false;
+
+  return true;
+}

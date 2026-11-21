@@ -19,7 +19,7 @@ export const publicMemberSchema = z.object({
 export type PublicMember = z.infer<typeof publicMemberSchema>;
 
 /** Schema for creating/updating a member (admin form) */
-export const memberFormSchema = z.object({
+export const baseMemberFormSchema = z.object({
   full_name: z.string().min(1, "Full name is required"),
   role: z.string().optional().default(""),
   department: z.string().optional().default(""),
@@ -29,10 +29,27 @@ export const memberFormSchema = z.object({
   interests: z.string().optional().default(""), // comma-separated strings
   tenure_start: z.string().optional().default(""),
   tenure_end: z.string().optional().default(""),
+  status: z.enum(["draft", "published", "archived"]).default("draft"),
+  verification_status: z
+    .enum(["pending", "source_listed", "confirmed"])
+    .default("pending"),
   source_note: z.string().optional().default(""), // internal-only
 });
 
-export type MemberFormData = z.infer<typeof memberFormSchema>;
+export const memberFormSchema = baseMemberFormSchema.refine(
+  (data) => {
+    if (data.status === "published") {
+      return data.verification_status === "confirmed";
+    }
+    return true;
+  },
+  {
+    message: "A member record may only be published when verification_status is confirmed",
+    path: ["verification_status"],
+  }
+);
+
+export type MemberFormData = z.infer<typeof baseMemberFormSchema>;
 
 /** Schema for a society/chapter */
 export const societySchema = z.object({
@@ -67,11 +84,12 @@ export const societyFormSchema = z.object({
 export type SocietyFormData = z.infer<typeof societyFormSchema>;
 
 /** Schema for member role record */
-export const memberRoleSchema = z.object({
+export const baseMemberRoleSchema = z.object({
   id: z.string().uuid(),
   member_id: z.string().uuid(),
   society_id: z.string().uuid().nullable().optional(),
   role_title: z.string().min(1, "Role title is required"),
+  tier: z.enum(["branch", "society"]).default("branch"),
   start_year: z.string().nullable().optional(),
   end_year: z.string().nullable().optional(),
   is_current: z.boolean().default(false),
@@ -79,26 +97,60 @@ export const memberRoleSchema = z.object({
   updated_at: z.string(),
 });
 
-export type MemberRole = z.infer<typeof memberRoleSchema>;
+export const memberRoleSchema = baseMemberRoleSchema.refine(
+  (data) => {
+    if (data.tier === "branch") {
+      return !data.society_id;
+    }
+    if (data.tier === "society") {
+      return Boolean(data.society_id);
+    }
+    return true;
+  },
+  {
+    message: "Branch tier cannot have a society_id; Society tier must have a valid society_id",
+    path: ["society_id"],
+  }
+);
+
+export type MemberRole = z.infer<typeof baseMemberRoleSchema>;
 
 /** Schema for creating/updating a member role */
-export const memberRoleFormSchema = z.object({
+export const baseMemberRoleFormSchema = z.object({
   member_id: z.string().uuid("Invalid member ID"),
   society_id: z.string().uuid().optional().or(z.literal("")),
   role_title: z.string().min(1, "Role title is required"),
+  tier: z.enum(["branch", "society"]).default("branch"),
   start_year: z.string().optional().default(""),
   end_year: z.string().optional().default(""),
   is_current: z.boolean().default(false),
 });
 
-export type MemberRoleFormData = z.infer<typeof memberRoleFormSchema>;
+export const memberRoleFormSchema = baseMemberRoleFormSchema.refine(
+  (data) => {
+    if (data.tier === "branch") {
+      return !data.society_id || data.society_id === "";
+    }
+    if (data.tier === "society") {
+      return Boolean(data.society_id && data.society_id !== "");
+    }
+    return true;
+  },
+  {
+    message: "Branch tier cannot have a society_id; Society tier must specify a society",
+    path: ["society_id"],
+  }
+);
 
-/** Schema for a milestone */
-export const milestoneSchema = z.object({
+export type MemberRoleFormData = z.infer<typeof baseMemberRoleFormSchema>;
+
+/** Schema for a public milestone (from public_milestones view) */
+export const publicMilestoneSchema = z.object({
   id: z.string().uuid(),
   title: z.string().min(1, "Title is required"),
   description: z.string().nullable().optional(),
   date: z.string().nullable().optional(),
+  milestone_year: z.number().int().min(1900).max(2100).nullable().optional(),
   category: z.string().nullable().optional(),
   society_id: z.string().uuid().nullable().optional(),
   image_url: z.string().url().nullable().optional(),
@@ -106,19 +158,72 @@ export const milestoneSchema = z.object({
   updated_at: z.string(),
 });
 
-export type MilestoneRecord = z.infer<typeof milestoneSchema>;
+export type PublicMilestone = z.infer<typeof publicMilestoneSchema>;
+
+/** Schema for a milestone base table (admin scope) */
+export const baseMilestoneSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().nullable().optional(),
+  date: z.string().nullable().optional(),
+  milestone_year: z.number().int().min(1900).max(2100).nullable().optional(),
+  category: z.string().nullable().optional(),
+  society_id: z.string().uuid().nullable().optional(),
+  image_url: z.string().url().nullable().optional(),
+  status: z.enum(["draft", "published", "archived"]).default("draft"),
+  verification_status: z
+    .enum(["pending", "source_listed", "confirmed"])
+    .default("pending"),
+  source_note: z.string().nullable().optional(),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+
+export const milestoneSchema = baseMilestoneSchema.refine(
+  (data) => {
+    if (data.status === "published") {
+      return data.verification_status === "confirmed";
+    }
+    return true;
+  },
+  {
+    message: "A milestone record may only be published when verification_status is confirmed",
+    path: ["verification_status"],
+  }
+);
+
+export type MilestoneRecord = z.infer<typeof baseMilestoneSchema>;
 
 /** Schema for creating/updating a milestone */
-export const milestoneFormSchema = z.object({
+export const baseMilestoneFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional().default(""),
   date: z.string().optional().default(""),
+  milestone_year: z.number().int().min(1900).max(2100).optional().nullable(),
   category: z.string().optional().default(""),
   society_id: z.string().uuid().optional().or(z.literal("")),
   image_url: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  status: z.enum(["draft", "published", "archived"]).default("draft"),
+  verification_status: z
+    .enum(["pending", "source_listed", "confirmed"])
+    .default("pending"),
+  source_note: z.string().optional().default(""),
 });
 
-export type MilestoneFormData = z.infer<typeof milestoneFormSchema>;
+export const milestoneFormSchema = baseMilestoneFormSchema.refine(
+  (data) => {
+    if (data.status === "published") {
+      return data.verification_status === "confirmed";
+    }
+    return true;
+  },
+  {
+    message: "A milestone record may only be published when verification_status is confirmed",
+    path: ["verification_status"],
+  }
+);
+
+export type MilestoneFormData = z.infer<typeof baseMilestoneFormSchema>;
 
 /** Schema for milestone-member relationship */
 export const milestoneMemberSchema = z.object({

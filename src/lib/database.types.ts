@@ -85,7 +85,10 @@ export type Database = {
           interests: string[] | null;
           tenure_start: string | null;
           tenure_end: string | null;
+          status: "draft" | "published" | "archived";
+          verification_status: "pending" | "source_listed" | "confirmed";
           source_note: string | null;
+          updated_by: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -100,7 +103,10 @@ export type Database = {
           interests?: string[] | null;
           tenure_start?: string | null;
           tenure_end?: string | null;
+          status?: "draft" | "published" | "archived";
+          verification_status?: "pending" | "source_listed" | "confirmed";
           source_note?: string | null;
+          updated_by?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -115,7 +121,10 @@ export type Database = {
           interests?: string[] | null;
           tenure_start?: string | null;
           tenure_end?: string | null;
+          status?: "draft" | "published" | "archived";
+          verification_status?: "pending" | "source_listed" | "confirmed";
           source_note?: string | null;
+          updated_by?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -126,6 +135,7 @@ export type Database = {
           member_id: string;
           society_id: string | null;
           role_title: string;
+          tier: "branch" | "society";
           start_year: string | null;
           end_year: string | null;
           is_current: boolean;
@@ -137,6 +147,7 @@ export type Database = {
           member_id: string;
           society_id?: string | null;
           role_title: string;
+          tier?: "branch" | "society";
           start_year?: string | null;
           end_year?: string | null;
           is_current?: boolean;
@@ -148,6 +159,7 @@ export type Database = {
           member_id?: string;
           society_id?: string | null;
           role_title?: string;
+          tier?: "branch" | "society";
           start_year?: string | null;
           end_year?: string | null;
           is_current?: boolean;
@@ -161,9 +173,14 @@ export type Database = {
           title: string;
           description: string | null;
           date: string | null;
+          milestone_year: number | null;
           category: string | null;
           society_id: string | null;
           image_url: string | null;
+          status: "draft" | "published" | "archived";
+          verification_status: "pending" | "source_listed" | "confirmed";
+          source_note: string | null;
+          updated_by: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -172,9 +189,14 @@ export type Database = {
           title: string;
           description?: string | null;
           date?: string | null;
+          milestone_year?: number | null;
           category?: string | null;
           society_id?: string | null;
           image_url?: string | null;
+          status?: "draft" | "published" | "archived";
+          verification_status?: "pending" | "source_listed" | "confirmed";
+          source_note?: string | null;
+          updated_by?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -183,9 +205,14 @@ export type Database = {
           title?: string;
           description?: string | null;
           date?: string | null;
+          milestone_year?: number | null;
           category?: string | null;
           society_id?: string | null;
           image_url?: string | null;
+          status?: "draft" | "published" | "archived";
+          verification_status?: "pending" | "source_listed" | "confirmed";
+          source_note?: string | null;
+          updated_by?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -231,6 +258,20 @@ export type Database = {
           updated_at: string;
         };
       };
+      public_milestones: {
+        Row: {
+          id: string;
+          title: string;
+          description: string | null;
+          date: string | null;
+          milestone_year: number | null;
+          category: string | null;
+          society_id: string | null;
+          image_url: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+      };
     };
     Functions: {
       is_admin: {
@@ -239,6 +280,18 @@ export type Database = {
       };
       is_superadmin: {
         Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
+      is_member_published: {
+        Args: {
+          p_member_id: string;
+        };
+        Returns: boolean;
+      };
+      is_milestone_published: {
+        Args: {
+          p_milestone_id: string;
+        };
         Returns: boolean;
       };
     };

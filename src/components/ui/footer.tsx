@@ -5,12 +5,12 @@ interface FooterProps {
 export function Footer({ className = "" }: FooterProps) {
   return (
     <footer className={`border-t border-border px-6 py-6 md:px-12 ${className}`}>
-      <div className="mx-auto max-w-4xl flex items-center justify-between">
+      <div className="mx-auto max-w-4xl flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-xs text-muted">
-          NISB People &amp; Milestones
+          NISB People &amp; Milestones · NIE, Mysuru
         </p>
         <p className="font-mono text-xs text-muted">
-          NIE, Mysuru
+          Data as published on nisb.in
         </p>
       </div>
     </footer>
