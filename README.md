@@ -1,16 +1,5 @@
 # NISB Digital Archive
 
-*A record of the people, leadership and milestones of the IEEE Student Branch, The National Institute of Engineering, Mysuru.*
-
-| | |
-|---|---|
-| **Source of truth** | [nisb.in/content.html](https://www.nisb.in/content.html), and nothing else |
-| **Principle** | Nothing is invented. Missing stays missing. |
-| **Stack** | Next.js 16, React 19, TypeScript, Tailwind CSS 4, Supabase |
-| **Access model** | Public read of published records. Authenticated curators write. |
-
----
-
 ## 01 Overview
 
 NISB Digital Archive is a searchable directory of NISB office bearers, with individual profiles, a milestones and achievements section organised by society, and an administration portal for curators.
