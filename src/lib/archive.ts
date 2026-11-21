@@ -12,6 +12,17 @@ import type {
 
 export { isSupabaseConfigured };
 
+export type MemberRoleQueryOptions = {
+  memberId?: string;
+  societyId?: string;
+  tier?: "branch" | "society";
+};
+
+export type MilestoneMemberQueryOptions = {
+  milestoneId?: string;
+  memberId?: string;
+};
+
 /**
  * Fetches published members strictly from the secure public_members view.
  * Excludes source_note and private draft records.
@@ -40,6 +51,38 @@ export async function getPublicMembers(): Promise<{
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to load directory";
     return { data: [], isConfigured: true, error: message };
+  }
+}
+
+/**
+ * Fetches a single published member by their UUID from public_members view.
+ * Returns null if not found or unpublished.
+ */
+export async function getPublicMemberById(id: string): Promise<{
+  data: PublicMember | null;
+  isConfigured: boolean;
+  error: string | null;
+}> {
+  if (!isSupabaseConfigured()) {
+    return { data: null, isConfigured: false, error: null };
+  }
+
+  try {
+    const supabase = await createServerClient();
+    const { data, error } = await supabase
+      .from("public_members")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) {
+      return { data: null, isConfigured: true, error: error.message };
+    }
+
+    return { data: (data as PublicMember) ?? null, isConfigured: true, error: null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to load member";
+    return { data: null, isConfigured: true, error: message };
   }
 }
 
@@ -75,6 +118,38 @@ export async function getPublicMilestones(): Promise<{
 }
 
 /**
+ * Fetches a single published milestone by its UUID from public_milestones view.
+ * Returns null if not found or unpublished.
+ */
+export async function getPublicMilestoneById(id: string): Promise<{
+  data: PublicMilestone | null;
+  isConfigured: boolean;
+  error: string | null;
+}> {
+  if (!isSupabaseConfigured()) {
+    return { data: null, isConfigured: false, error: null };
+  }
+
+  try {
+    const supabase = await createServerClient();
+    const { data, error } = await supabase
+      .from("public_milestones")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) {
+      return { data: null, isConfigured: true, error: error.message };
+    }
+
+    return { data: (data as PublicMilestone) ?? null, isConfigured: true, error: null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to load milestone";
+    return { data: null, isConfigured: true, error: message };
+  }
+}
+
+/**
  * Fetches public societies and chapters from the societies table.
  */
 export async function getPublicSocieties(): Promise<{
@@ -105,10 +180,45 @@ export async function getPublicSocieties(): Promise<{
 }
 
 /**
+ * Fetches a single public society by its URL slug.
+ * Returns null if not found.
+ */
+export async function getPublicSocietyBySlug(slug: string): Promise<{
+  data: Society | null;
+  isConfigured: boolean;
+  error: string | null;
+}> {
+  if (!isSupabaseConfigured()) {
+    return { data: null, isConfigured: false, error: null };
+  }
+
+  try {
+    const supabase = await createServerClient();
+    const { data, error } = await supabase
+      .from("societies")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    if (error) {
+      return { data: null, isConfigured: true, error: error.message };
+    }
+
+    return { data: (data as Society) ?? null, isConfigured: true, error: null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to load society";
+    return { data: null, isConfigured: true, error: message };
+  }
+}
+
+/**
  * Fetches published member roles from member_roles table.
+ * Supports filtering by memberId, societyId, or tier.
  * RLS ensures only roles for published members are returned to anon/authenticated users.
  */
-export async function getPublicMemberRoles(memberId?: string): Promise<{
+export async function getPublicMemberRoles(
+  filter?: string | MemberRoleQueryOptions
+): Promise<{
   data: MemberRole[];
   isConfigured: boolean;
   error: string | null;
@@ -124,8 +234,18 @@ export async function getPublicMemberRoles(memberId?: string): Promise<{
       .select("*")
       .order("start_year", { ascending: false });
 
-    if (memberId) {
-      query = query.eq("member_id", memberId);
+    if (typeof filter === "string") {
+      query = query.eq("member_id", filter);
+    } else if (filter) {
+      if (filter.memberId) {
+        query = query.eq("member_id", filter.memberId);
+      }
+      if (filter.societyId) {
+        query = query.eq("society_id", filter.societyId);
+      }
+      if (filter.tier) {
+        query = query.eq("tier", filter.tier);
+      }
     }
 
     const { data, error } = await query;
@@ -143,9 +263,12 @@ export async function getPublicMemberRoles(memberId?: string): Promise<{
 
 /**
  * Fetches published milestone member junction records.
+ * Supports filtering by milestoneId or memberId.
  * RLS ensures connections are only returned when both the milestone and member are published.
  */
-export async function getPublicMilestoneMembers(milestoneId?: string): Promise<{
+export async function getPublicMilestoneMembers(
+  filter?: string | MilestoneMemberQueryOptions
+): Promise<{
   data: MilestoneMember[];
   isConfigured: boolean;
   error: string | null;
@@ -158,8 +281,15 @@ export async function getPublicMilestoneMembers(milestoneId?: string): Promise<{
     const supabase = await createServerClient();
     let query = supabase.from("milestone_members").select("*");
 
-    if (milestoneId) {
-      query = query.eq("milestone_id", milestoneId);
+    if (typeof filter === "string") {
+      query = query.eq("milestone_id", filter);
+    } else if (filter) {
+      if (filter.milestoneId) {
+        query = query.eq("milestone_id", filter.milestoneId);
+      }
+      if (filter.memberId) {
+        query = query.eq("member_id", filter.memberId);
+      }
     }
 
     const { data, error } = await query;
