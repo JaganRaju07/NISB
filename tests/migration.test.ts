@@ -8,11 +8,13 @@ describe("Phase 2 — Migration Safeguards & SQL Architecture Integrity", () => 
   const migration001Path = path.join(rootDir, "supabase", "migrations", "001_init.sql");
   const migration002Path = path.join(rootDir, "supabase", "migrations", "002_verified_data_foundation.sql");
   const migration002DownPath = path.join(rootDir, "supabase", "migrations", "002_verified_data_foundation.down.sql");
+  const migration003Path = path.join(rootDir, "supabase", "migrations", "003_contributions.sql");
   const schemaPath = path.join(rootDir, "supabase", "schema.sql");
 
   const migration001 = fs.readFileSync(migration001Path, "utf-8");
   const migration002 = fs.readFileSync(migration002Path, "utf-8");
   const migration002Down = fs.readFileSync(migration002DownPath, "utf-8");
+  const migration003 = fs.readFileSync(migration003Path, "utf-8");
   const schema = fs.readFileSync(schemaPath, "utf-8");
 
   const cleanSql = (sql: string) => sql.replace(/--.*$/gm, "").trim();
@@ -185,6 +187,35 @@ describe("Phase 2 — Migration Safeguards & SQL Architecture Integrity", () => 
     it("defines security barrier views filtering on status = 'published' and verification_status = 'confirmed'", () => {
       assert.ok(schema.includes("public.public_members\nwith (security_barrier = true)"));
       assert.ok(schema.includes("public.public_milestones\nwith (security_barrier = true)"));
+    });
+
+    it("includes contributions column and view definition from 003_contributions.sql in schema.sql", () => {
+      assert.ok(schema.includes("contributions       text,"));
+      assert.ok(schema.includes("contributions\n  from public.members"));
+    });
+  });
+
+  describe("Migration 003 Contributions Invariants", () => {
+    it("wraps execution in a transaction block (begin ... commit)", () => {
+      assert.ok(cleanSql(migration003).startsWith("begin;"), "Migration 003 must begin with 'begin;'");
+      assert.ok(cleanSql(migration003).endsWith("commit;"), "Migration 003 must conclude with 'commit;'");
+    });
+
+    it("verifies preflight safeguards against premature execution and schema mismatch", () => {
+      assert.ok(migration003.includes("Preflight: members.contributions already exists"));
+      assert.ok(migration003.includes("Preflight: members.status / verification_status / source_note not all present"));
+      assert.ok(migration003.includes("Preflight: public_members columns differ from expected 12"));
+    });
+
+    it("creates public_members view with security_barrier and explicit column allowlist", () => {
+      assert.ok(migration003.includes("create or replace view public.public_members\nwith (security_barrier = true)"));
+      assert.ok(migration003.includes("where status = 'published' and verification_status = 'confirmed';"));
+    });
+
+    it("embeds postcondition privileges and RLS assertion safeguards", () => {
+      assert.ok(migration003.includes("Postcondition: public_members lost security_barrier"));
+      assert.ok(migration003.includes("Postcondition: anon lost SELECT on public_members"));
+      assert.ok(migration003.includes("Postcondition: RLS disabled on members"));
     });
   });
 });

@@ -1,7 +1,7 @@
 -- ============================================================
 -- NISB People & Milestones — Canonical Schema
--- Synchronized with migrations/001_init.sql and migrations/002_verified_data_foundation.sql
--- Security Audited & Hardened (Phase 2 Canonical Baseline)
+-- Synchronized with migrations/001_init.sql, migrations/002_verified_data_foundation.sql, and migrations/003_contributions.sql
+-- Security Audited & Hardened (Canonical Baseline)
 -- ============================================================
 
 -- Enable required extensions
@@ -100,6 +100,7 @@ create table if not exists public.members (
   verification_status text not null default 'pending' check (verification_status in ('pending', 'source_listed', 'confirmed')),
   source_note         text,            -- Internal private field; strictly excluded from public view
   updated_by          uuid references auth.users(id) on delete set null default auth.uid(),
+  contributions       text,
   created_at          timestamptz not null default now(),
   updated_at          timestamptz not null default now(),
   constraint chk_members_publication_integrity check (
@@ -267,7 +268,8 @@ as
     tenure_start,
     tenure_end,
     created_at,
-    updated_at
+    updated_at,
+    contributions
   from public.members
   where status = 'published'
     and verification_status = 'confirmed';
