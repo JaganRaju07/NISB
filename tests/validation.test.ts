@@ -46,6 +46,37 @@ describe("Phase 2 — Validation & Archival Integrity", () => {
       const result = publicMemberSchema.safeParse(invalid);
       assert.equal(result.success, false);
     });
+
+    it("accepts valid photo_url with full https URL and root-relative path", () => {
+      const withHttps = {
+        id: "22222222-2222-4222-a222-000000000001",
+        full_name: "Sagar Kumar Singh",
+        photo_url: "https://www.nisb.in/assets/cores25-26/SagarSingh.jpg",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      assert.equal(publicMemberSchema.safeParse(withHttps).success, true);
+
+      const withLocalPath = {
+        id: "22222222-2222-4222-a222-000000000001",
+        full_name: "Sagar Kumar Singh",
+        photo_url: "/assets/cores25-26/SagarSingh.jpg",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      assert.equal(publicMemberSchema.safeParse(withLocalPath).success, true);
+    });
+
+    it("rejects malformed photo_url", () => {
+      const invalid = {
+        id: "22222222-2222-4222-a222-000000000001",
+        full_name: "Sagar Kumar Singh",
+        photo_url: "not-a-valid-url-or-path",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      assert.equal(publicMemberSchema.safeParse(invalid).success, false);
+    });
   });
 
   describe("memberRoleSchema Tier Consistency Constraints", () => {
@@ -409,6 +440,23 @@ describe("Phase 2 — Validation & Archival Integrity", () => {
       for (const slug of expectedSocieties) {
         assert.ok(seedSql.includes(`'${slug}'`), `Seed must contain verified society: ${slug}`);
       }
+    });
+
+    it("verifies all 21 team members have official photographs integrated from nisb.in", () => {
+      const photoMatches = seedSql.match(/'https:\/\/www\.nisb\.in\/assets\/cores25-26\/[^']+'/g);
+      assert.ok(photoMatches, "Seed must contain official photograph URLs");
+      assert.equal(
+        photoMatches.length,
+        21,
+        "All 21 official members must have verified photo_url values"
+      );
+    });
+
+    it("verifies on conflict clause updates photo_url in seed.sql", () => {
+      assert.ok(
+        seedSql.includes("photo_url = excluded.photo_url"),
+        "on conflict clause must update photo_url"
+      );
     });
   });
 });

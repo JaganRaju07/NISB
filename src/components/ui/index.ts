@@ -1,4 +1,5 @@
 export { Monogram } from "./monogram";
+export { MemberAvatar } from "./member-avatar";
 export { PageHeader } from "./page-header";
 export { Footer } from "./footer";
 export { Button, buttonVariants } from "./button";

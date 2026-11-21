@@ -12,6 +12,7 @@ import {
 import { StatusBadge } from "@/components/admin/status-badge";
 import { MemberFormDialog } from "@/components/admin/member-form-dialog";
 import { MemberRoleDialog } from "@/components/admin/member-role-dialog";
+import { MemberAvatar } from "@/components/ui";
 import { deleteMemberAction } from "@/lib/actions/admin-actions";
 import type { AdminMember, AdminSociety } from "@/lib/admin";
 
@@ -167,14 +168,40 @@ export function MemberManagementClient({
               filteredMembers.map((m) => (
                 <tr key={m.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-4 py-3">
-                    <div className="font-mono font-bold text-ink text-sm">
-                      {m.full_name}
-                    </div>
-                    {m.department && (
-                      <div className="font-mono text-[11px] text-muted">
-                        {m.department} {m.batch_year ? `('Class of ${m.batch_year})` : ""}
+                    <div className="flex items-center gap-3">
+                      <div className="shrink-0">
+                        <MemberAvatar
+                          name={m.full_name}
+                          photoUrl={m.photo_url}
+                          size="sm"
+                        />
                       </div>
-                    )}
+                      <div className="min-w-0">
+                        <div className="font-mono font-bold text-ink text-sm flex items-center gap-2">
+                          <span className="truncate">{m.full_name}</span>
+                          {m.photo_url ? (
+                            <span
+                              className="inline-block h-2 w-2 shrink-0 rounded-full bg-emerald-600 ring-2 ring-emerald-100"
+                              title="Official Photograph Integrated"
+                            />
+                          ) : (
+                            <span
+                              className="inline-block h-2 w-2 shrink-0 rounded-full bg-slate-300 ring-2 ring-slate-100"
+                              title="No Photograph (Archival Monogram Active)"
+                            />
+                          )}
+                        </div>
+                        {m.department ? (
+                          <div className="font-mono text-[11px] text-muted truncate">
+                            {m.department} {m.batch_year ? `('Class of ${m.batch_year})` : ""}
+                          </div>
+                        ) : (
+                          <div className="font-mono text-[10px] text-muted italic">
+                            Official Roster (nisb.in)
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </td>
 
                   <td className="px-4 py-3 font-mono text-xs text-ink">

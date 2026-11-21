@@ -1,5 +1,22 @@
 import { z } from "zod";
 
+/** Reusable schema for photo/media URLs or root-relative static asset paths */
+export const photoUrlSchema = z
+  .string()
+  .refine(
+    (val) => {
+      if (!val) return true;
+      if (val.startsWith("/")) return true;
+      try {
+        const u = new URL(val);
+        return u.protocol === "http:" || u.protocol === "https:";
+      } catch {
+        return false;
+      }
+    },
+    { message: "Must be a valid URL or path (e.g. https://... or /assets/...)" }
+  );
+
 /** Schema for a public member (from public_members view) */
 export const publicMemberSchema = z.object({
   id: z.string().uuid(),
@@ -7,7 +24,7 @@ export const publicMemberSchema = z.object({
   role: z.string().nullable().optional(),
   department: z.string().nullable().optional(),
   batch_year: z.string().nullable().optional(),
-  photo_url: z.string().url("Must be a valid URL").nullable().optional(),
+  photo_url: photoUrlSchema.nullable().optional(),
   bio: z.string().nullable().optional(),
   interests: z.array(z.string()).nullable().optional(),
   tenure_start: z.string().nullable().optional(),
@@ -24,7 +41,7 @@ export const baseMemberFormSchema = z.object({
   role: z.string().optional().default(""),
   department: z.string().optional().default(""),
   batch_year: z.string().optional().default(""),
-  photo_url: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  photo_url: photoUrlSchema.optional().or(z.literal("")),
   bio: z.string().optional().default(""),
   interests: z.string().optional().default(""), // comma-separated strings
   tenure_start: z.string().optional().default(""),

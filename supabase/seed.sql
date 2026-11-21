@@ -97,7 +97,8 @@ on conflict (id) do update set
 -- Governed by official roster decision:
 -- Status: 'draft', Verification Status: 'source_listed'
 -- Appearance on page does NOT establish current committee.
--- Zero invented tenures, bios, photos, interests, or contributions.
+-- Official Photographs: Integrated from nisb.in assets (cores25-26).
+-- Zero invented tenures, bios, departments, or interests.
 -- These records remain invisible to public directory views until verified and confirmed.
 
 insert into public.members (
@@ -120,194 +121,237 @@ values
     '22222222-2222-4222-a222-000000000001',
     'Sagar Kumar Singh',
     'Chairperson',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/SagarSingh.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000002',
     'Abhay Hegde',
     'Vice Chairperson & Secretary (MP)',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Abhay.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000003',
     'Yogesh S',
     'Treasurer',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Yogesh.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000004',
     'Sakleshwar Hubli',
     'Secretary (IA)',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Saklesh.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000005',
     'K Anantha Krishna Rao',
     'Secretary (Events)',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Anantha.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000006',
     'Shreya P V',
     'Secretary (Events)',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Shreya%20P%20V.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000007',
     'Aadya Sharma',
     'Secretary (MP)',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Aadya.jpeg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000008',
     'Sagar N Mutalik',
     'Secretary (MD) & SAC Coordinator',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/SagarNM.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000009',
     'Pranav A Korlahalli',
     'Technology Coordinator',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Pranav.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000010',
     'Aashish Vatwani',
     'Technology Coordinator',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Aashish.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000011',
     'Rahul K',
     'Editor-in-Chief',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Rahul.jpeg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000012',
     'Shresth S Juptimath',
     'Sponsorship Coordinator',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Shresht.JPG',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000013',
     'Priyanka Pramod Daivagna',
     'CS Chairperson',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Priyanka.jpeg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000014',
     'Prerika P',
     'CS Secretary',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/PrerikaP.jpeg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000015',
     'Nikitha H S',
     'CASS Chairperson & RAS Chairperson',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Nikitha.jpeg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000016',
     'Suma Acharya',
     'CASS Secretary',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Suma.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000017',
     'Sanjana S Shetty',
     'WIE Chairperson',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/SanjanaS.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000018',
     'Panchami Urs S',
     'WIE Secretary',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Panchami.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000019',
     'Rachit Kulkarni',
     'RAS Secretary',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Rachit.jpeg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000020',
     'Mohammed Mansooruddin',
     'GRSS Chairperson',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Mansoor.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   ),
   (
     '22222222-2222-4222-a222-000000000021',
     'Amol S',
     'GRSS Secretary',
-    null, null, null, null, null, null, null,
+    null, null,
+    'https://www.nisb.in/assets/cores25-26/Amol.jpg',
+    null, null, null, null,
     'draft',
     'source_listed',
-    'Listed on official NISB website (https://www.nisb.in/content.html#team). Verification status: source_listed.'
+    'Listed on official NISB website (https://www.nisb.in/content.html#team). Official photograph integrated from nisb.in assets. Verification status: source_listed.'
   )
 on conflict (id) do update set
   full_name = excluded.full_name,
   role = excluded.role,
+  photo_url = excluded.photo_url,
   status = excluded.status,
   verification_status = excluded.verification_status,
   source_note = excluded.source_note;

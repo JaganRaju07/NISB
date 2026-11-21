@@ -1,42 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Image from "next/image";
 import { Search } from "lucide-react";
 import type { PublicMember, MemberRole } from "@/lib/validation";
-import { Monogram } from "@/components/ui/monogram";
+import { MemberAvatar } from "@/components/ui";
 import { Input } from "@/components/ui/input";
 
 interface DirectoryListProps {
   initialMembers: PublicMember[];
   initialRoles?: MemberRole[];
   isConfigured: boolean;
-}
-
-function MemberAvatar({
-  name,
-  photoUrl,
-}: {
-  name: string;
-  photoUrl?: string | null;
-}) {
-  const [error, setError] = useState(false);
-
-  if (!photoUrl || error) {
-    return <Monogram name={name} size="md" />;
-  }
-
-  return (
-    <Image
-      src={photoUrl}
-      alt={name}
-      width={48}
-      height={48}
-      className="h-12 w-12 rounded-sm object-cover border border-border"
-      unoptimized
-      onError={() => setError(true)}
-    />
-  );
 }
 
 export function DirectoryList({

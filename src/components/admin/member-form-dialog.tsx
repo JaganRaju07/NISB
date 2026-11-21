@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, ShieldAlert, X } from "lucide-react";
 import { createMemberAction, updateMemberAction } from "@/lib/actions/admin-actions";
+import { MemberAvatar } from "@/components/ui";
 import type { AdminMember } from "@/lib/admin";
 
 interface MemberFormDialogProps {
@@ -24,6 +25,7 @@ export function MemberFormDialog({
   const [verificationStatus, setVerificationStatus] = useState<string>(
     member?.verification_status ?? "pending"
   );
+  const [photoUrl, setPhotoUrl] = useState<string>(member?.photo_url ?? "");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -112,6 +114,38 @@ export function MemberFormDialog({
               </div>
             </div>
           )}
+
+          {/* Official Photograph Section with Live Preview */}
+          <div className="border-2 border-ink bg-paper p-3 shadow-[2px_2px_0px_#141414]">
+            <div className="flex items-start gap-4">
+              <div className="shrink-0 flex flex-col items-center gap-1">
+                <MemberAvatar
+                  name={member?.full_name || "Member Photo"}
+                  photoUrl={photoUrl ? photoUrl.trim() : null}
+                  size="lg"
+                />
+                <span className="font-mono text-[9px] uppercase tracking-wider text-muted font-bold">
+                  {photoUrl ? "Live Preview" : "Monogram"}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
+                  Official Photograph URL (photo_url)
+                </label>
+                <input
+                  type="text"
+                  name="photo_url"
+                  value={photoUrl}
+                  onChange={(e) => setPhotoUrl(e.target.value)}
+                  placeholder="e.g. https://www.nisb.in/assets/cores25-26/SagarSingh.jpg or /assets/cores25-26/..."
+                  className="w-full border-2 border-ink bg-white px-3 py-1.5 font-mono text-xs focus:outline-hidden focus:ring-2 focus:ring-primary"
+                />
+                <p className="mt-1 font-mono text-[10px] text-muted leading-tight">
+                  Official NISB core photos are sourced from <code>nisb.in/content.html#team</code> or uploaded to Supabase Storage (<code>archive-media</code>). Accepts full HTTPS URLs or local root-relative paths.
+                </p>
+              </div>
+            </div>
+          </div>
 
           {/* Full Name & Role */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

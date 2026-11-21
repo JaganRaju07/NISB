@@ -63,6 +63,42 @@ describe("Phase 3 — Admin Dashboard & Archive Management Invariants", () => {
       assert.equal(parsed.status, "draft");
       assert.equal(parsed.verification_status, "source_listed");
     });
+
+    it("accepts member form with official NISB photo URL", () => {
+      const memberWithPhoto = {
+        full_name: "Sagar Kumar Singh",
+        photo_url: "https://www.nisb.in/assets/cores25-26/SagarSingh.jpg",
+        status: "draft" as const,
+        verification_status: "source_listed" as const,
+      };
+
+      const parsed = memberFormSchema.parse(memberWithPhoto);
+      assert.equal(parsed.photo_url, "https://www.nisb.in/assets/cores25-26/SagarSingh.jpg");
+    });
+
+    it("accepts member form with root-relative photo path", () => {
+      const memberWithLocalPhoto = {
+        full_name: "Abhay Hegde",
+        photo_url: "/assets/cores25-26/Abhay.jpg",
+        status: "draft" as const,
+        verification_status: "source_listed" as const,
+      };
+
+      const parsed = memberFormSchema.parse(memberWithLocalPhoto);
+      assert.equal(parsed.photo_url, "/assets/cores25-26/Abhay.jpg");
+    });
+
+    it("rejects member form with invalid photo URL format", () => {
+      const invalidPhoto = {
+        full_name: "Yogesh S",
+        photo_url: "invalid-photo-path-without-slash-or-protocol",
+        status: "draft" as const,
+        verification_status: "source_listed" as const,
+      };
+
+      const result = memberFormSchema.safeParse(invalidPhoto);
+      assert.equal(result.success, false);
+    });
   });
 
   describe("Milestone Validation & Year Boundary Rules", () => {

@@ -52,13 +52,23 @@ const nextConfig: NextConfig = {
     },
   },
 
-  /* ── Images: allow Supabase storage URLs ── */
+  /* ── Images: allow Supabase storage URLs & official NISB domains ── */
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.nisb.in",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "nisb.in",
+        pathname: "/**",
       },
     ],
   },
