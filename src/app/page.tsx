@@ -27,6 +27,8 @@ import {
   OFFICIAL_PUBLICATIONS,
 } from "@/lib/official-roster";
 
+export const instant = false;
+
 export default async function Home() {
   const [membersRes, milestonesRes] = await Promise.all([
     getPublicMembers(),

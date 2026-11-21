@@ -18,6 +18,8 @@ import {
 } from "@/lib/admin";
 import { StatusBadge } from "@/components/admin/status-badge";
 
+export const instant = false;
+
 export default async function AdminDashboardPage() {
   const auth = await getAdminAuthStatus();
   const decision = getAdminAccessDecision({

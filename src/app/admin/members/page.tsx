@@ -8,6 +8,8 @@ import {
 } from "@/lib/admin";
 import { MemberManagementClient } from "./member-management-client";
 
+export const instant = false;
+
 export default async function AdminMembersPage() {
   const auth = await getAdminAuthStatus();
   const decision = getAdminAccessDecision({
