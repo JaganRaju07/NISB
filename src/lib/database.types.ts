@@ -34,6 +34,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       societies: {
         Row: {
@@ -72,6 +73,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       members: {
         Row: {
@@ -128,6 +130,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       member_roles: {
         Row: {
@@ -166,6 +169,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       milestones: {
         Row: {
@@ -216,6 +220,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       milestone_members: {
         Row: {
@@ -239,6 +244,7 @@ export type Database = {
           role_in_milestone?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
     };
     Views: {
@@ -257,6 +263,7 @@ export type Database = {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
       };
       public_milestones: {
         Row: {
@@ -271,6 +278,7 @@ export type Database = {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
       };
     };
     Functions: {
