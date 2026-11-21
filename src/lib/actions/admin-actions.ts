@@ -125,6 +125,7 @@ export async function createMemberAction(
       verification_status:
         formData.get("verification_status")?.toString() ?? "pending",
       source_note: formData.get("source_note")?.toString() ?? "",
+      contributions: formData.get("contributions")?.toString() ?? "",
     };
 
     const validated = memberFormSchema.parse(raw);
@@ -144,6 +145,7 @@ export async function createMemberAction(
         status: validated.status,
         verification_status: validated.verification_status,
         source_note: emptyToNull(validated.source_note),
+        contributions: validated.contributions ?? null,
         updated_by: user.id,
       })
       .select("id")
@@ -188,6 +190,7 @@ export async function updateMemberAction(
       verification_status:
         formData.get("verification_status")?.toString() ?? "pending",
       source_note: formData.get("source_note")?.toString() ?? "",
+      contributions: formData.get("contributions")?.toString() ?? "",
     };
 
     const validated = memberFormSchema.parse(raw);
@@ -207,6 +210,7 @@ export async function updateMemberAction(
         status: validated.status,
         verification_status: validated.verification_status,
         source_note: emptyToNull(validated.source_note),
+        contributions: validated.contributions ?? null,
         updated_by: user.id,
       })
       .eq("id", validId);

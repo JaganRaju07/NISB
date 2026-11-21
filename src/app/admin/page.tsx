@@ -14,14 +14,19 @@ import {
   getAdminAuthStatus,
   getAdminDashboardStats,
   getAdminMembers,
+  getAdminAccessDecision,
 } from "@/lib/admin";
 import { StatusBadge } from "@/components/admin/status-badge";
 
 export default async function AdminDashboardPage() {
   const auth = await getAdminAuthStatus();
+  const decision = getAdminAccessDecision({
+    isConfigured: auth.isConfigured,
+    isAdmin: auth.isAdmin,
+    nodeEnv: process.env.NODE_ENV,
+  });
 
-  // Redirect to login if configured but not authenticated as admin
-  if (auth.isConfigured && !auth.isAdmin) {
+  if (decision === "redirect") {
     redirect("/admin/login");
   }
 

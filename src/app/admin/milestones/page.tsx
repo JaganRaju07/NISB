@@ -4,13 +4,19 @@ import {
   getAdminAuthStatus,
   getAdminMilestones,
   getAdminSocieties,
+  getAdminAccessDecision,
 } from "@/lib/admin";
 import { MilestoneManagementClient } from "./milestone-management-client";
 
 export default async function AdminMilestonesPage() {
   const auth = await getAdminAuthStatus();
+  const decision = getAdminAccessDecision({
+    isConfigured: auth.isConfigured,
+    isAdmin: auth.isAdmin,
+    nodeEnv: process.env.NODE_ENV,
+  });
 
-  if (auth.isConfigured && !auth.isAdmin) {
+  if (decision === "redirect") {
     redirect("/admin/login");
   }
 

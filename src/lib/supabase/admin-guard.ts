@@ -3,6 +3,13 @@ import "server-only";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { createServerClient } from "./server";
 import type { Database } from "@/lib/database.types";
+import {
+  getAdminAccessDecision,
+  type AdminAccessDecision,
+  type AdminAccessOptions,
+} from "@/lib/utils";
+
+export { getAdminAccessDecision, type AdminAccessDecision, type AdminAccessOptions };
 
 /**
  * Server-only admin client factory using SUPABASE_SERVICE_ROLE_KEY.

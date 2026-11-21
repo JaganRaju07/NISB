@@ -291,6 +291,23 @@ export function MemberFormDialog({
             />
           </div>
 
+          {/* Contributions to NISB */}
+          <div className="border-t border-border pt-4">
+            <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
+              Contributions to NISB
+            </label>
+            <textarea
+              name="contributions"
+              rows={3}
+              defaultValue={member?.contributions ?? ""}
+              placeholder="e.g. Key branch initiatives, organized symposiums, student activities, or awards won."
+              className="w-full border-2 border-ink bg-white px-3 py-2 font-sans text-sm focus:outline-hidden focus:ring-2 focus:ring-primary"
+            />
+            <p className="mt-1 font-mono text-[10px] text-muted">
+              Institutional contributions and achievements (optional, up to 2000 characters).
+            </p>
+          </div>
+
           {/* Bio & Interests */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>

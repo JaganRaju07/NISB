@@ -6,6 +6,7 @@ export const photoUrlSchema = z
   .refine(
     (val) => {
       if (!val) return true;
+      if (val.startsWith("//") || val.startsWith("/\\")) return false;
       if (val.startsWith("/")) return true;
       try {
         const u = new URL(val);
@@ -16,6 +17,15 @@ export const photoUrlSchema = z
     },
     { message: "Must be a valid URL or path (e.g. https://... or /assets/...)" }
   );
+
+/** Reusable schema for member contributions (optional, trim, max 2000 chars, empty string becomes null) */
+export const contributionsSchema = z
+  .string()
+  .trim()
+  .max(2000, "Contributions must not exceed 2000 characters")
+  .transform((val) => (val === "" ? null : val))
+  .nullable()
+  .optional();
 
 /** Schema for a public member (from public_members view) */
 export const publicMemberSchema = z.object({
@@ -31,6 +41,7 @@ export const publicMemberSchema = z.object({
   tenure_end: z.string().nullable().optional(),
   created_at: z.string(),
   updated_at: z.string(),
+  contributions: contributionsSchema,
 });
 
 export type PublicMember = z.infer<typeof publicMemberSchema>;
@@ -51,6 +62,7 @@ export const baseMemberFormSchema = z.object({
     .enum(["pending", "source_listed", "confirmed"])
     .default("pending"),
   source_note: z.string().optional().default(""), // internal-only
+  contributions: contributionsSchema,
 });
 
 export const memberFormSchema = baseMemberFormSchema.refine(

@@ -11,6 +11,8 @@ import {
   milestoneSchema,
   milestoneFormSchema,
   societySchema,
+  photoUrlSchema,
+  contributionsSchema,
 } from "../src/lib/validation.ts";
 
 describe("Phase 2 — Validation & Archival Integrity", () => {
@@ -76,6 +78,95 @@ describe("Phase 2 — Validation & Archival Integrity", () => {
         updated_at: new Date().toISOString(),
       };
       assert.equal(publicMemberSchema.safeParse(invalid).success, false);
+    });
+
+    it("validates standalone contributionsSchema directly", () => {
+      assert.equal(contributionsSchema.parse("  NISB Founder  "), "NISB Founder");
+      assert.equal(contributionsSchema.parse(""), null);
+      assert.equal(contributionsSchema.parse("   "), null);
+      assert.equal(contributionsSchema.parse(null), null);
+      assert.equal(contributionsSchema.parse(undefined), undefined);
+      assert.equal(contributionsSchema.safeParse("a".repeat(2001)).success, false);
+    });
+
+    it("rejects photo_url starting with protocol-relative '//'", () => {
+      assert.equal(photoUrlSchema.safeParse("//malicious.com/avatar.jpg").success, false);
+      const invalid = {
+        id: "22222222-2222-4222-a222-000000000001",
+        full_name: "Sagar Kumar Singh",
+        photo_url: "//malicious.com/avatar.jpg",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      assert.equal(publicMemberSchema.safeParse(invalid).success, false);
+    });
+
+    it("rejects photo_url starting with slash-backslash '/\\'", () => {
+      assert.equal(photoUrlSchema.safeParse("/\\malicious.com/avatar.jpg").success, false);
+      const invalid = {
+        id: "22222222-2222-4222-a222-000000000001",
+        full_name: "Sagar Kumar Singh",
+        photo_url: "/\\malicious.com/avatar.jpg",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      assert.equal(publicMemberSchema.safeParse(invalid).success, false);
+    });
+
+    it("validates contributions field in publicMemberSchema (trim, max 2000, empty string to null)", () => {
+      const base = {
+        id: "22222222-2222-4222-a222-000000000001",
+        full_name: "Sagar Kumar Singh",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      // Valid string trimmed
+      const withContrib = publicMemberSchema.parse({
+        ...base,
+        contributions: "  Founded IEEE CIS chapter and organized workshops.  ",
+      });
+      assert.equal(withContrib.contributions, "Founded IEEE CIS chapter and organized workshops.");
+
+      // Empty string transformed to null
+      const withEmpty = publicMemberSchema.parse({
+        ...base,
+        contributions: "",
+      });
+      assert.equal(withEmpty.contributions, null);
+
+      // Whitespace-only string trimmed and transformed to null
+      const withSpaces = publicMemberSchema.parse({
+        ...base,
+        contributions: "   \t  \n  ",
+      });
+      assert.equal(withSpaces.contributions, null);
+
+      // Null accepted as null
+      const withNull = publicMemberSchema.parse({
+        ...base,
+        contributions: null,
+      });
+      assert.equal(withNull.contributions, null);
+
+      // Omitted / undefined accepted
+      const withOmitted = publicMemberSchema.parse(base);
+      assert.equal(withOmitted.contributions, undefined);
+
+      // Boundary: 2000 chars passes
+      const exact2000 = "a".repeat(2000);
+      const with2000 = publicMemberSchema.parse({
+        ...base,
+        contributions: exact2000,
+      });
+      assert.equal(with2000.contributions, exact2000);
+
+      // Boundary: 2001 chars rejected
+      const tooLong = "a".repeat(2001);
+      assert.equal(
+        publicMemberSchema.safeParse({ ...base, contributions: tooLong }).success,
+        false
+      );
     });
   });
 
@@ -301,6 +392,73 @@ describe("Phase 2 — Validation & Archival Integrity", () => {
 
       const result = memberFormSchema.safeParse(invalid);
       assert.equal(result.success, false);
+    });
+
+    it("validates contributions field in memberFormSchema (trim, max 2000, empty string to null)", () => {
+      // Valid text with whitespace gets trimmed
+      const parsed = memberFormSchema.parse({
+        full_name: "Sagar Kumar Singh",
+        contributions: "   Spearheaded NISB flagship annual symposium.   ",
+      });
+      assert.equal(parsed.contributions, "Spearheaded NISB flagship annual symposium.");
+
+      // Empty string becomes null
+      const parsedEmpty = memberFormSchema.parse({
+        full_name: "Sagar Kumar Singh",
+        contributions: "",
+      });
+      assert.equal(parsedEmpty.contributions, null);
+
+      // Whitespace string becomes null
+      const parsedSpaces = memberFormSchema.parse({
+        full_name: "Sagar Kumar Singh",
+        contributions: "    ",
+      });
+      assert.equal(parsedSpaces.contributions, null);
+
+      // Null is accepted
+      const parsedNull = memberFormSchema.parse({
+        full_name: "Sagar Kumar Singh",
+        contributions: null,
+      });
+      assert.equal(parsedNull.contributions, null);
+
+      // Optional: omitted is allowed
+      const parsedOmitted = memberFormSchema.parse({
+        full_name: "Sagar Kumar Singh",
+      });
+      assert.equal(parsedOmitted.contributions, undefined);
+
+      // Max 2000 characters boundary
+      const exact2000 = "b".repeat(2000);
+      assert.equal(
+        memberFormSchema.parse({ full_name: "Test", contributions: exact2000 }).contributions,
+        exact2000
+      );
+
+      // Exceeding 2000 characters is rejected
+      const over2000 = "b".repeat(2001);
+      const invalid = memberFormSchema.safeParse({ full_name: "Test", contributions: over2000 });
+      assert.equal(invalid.success, false);
+      if (!invalid.success) {
+        assert.ok(
+          invalid.error.issues.some((i) => i.message.includes("2000"))
+        );
+      }
+    });
+
+    it("rejects memberFormSchema photo_url starting with '//' or '/\\'", () => {
+      const doubleSlash = memberFormSchema.safeParse({
+        full_name: "Attacker",
+        photo_url: "//evil.com/x.jpg",
+      });
+      assert.equal(doubleSlash.success, false);
+
+      const slashBackslash = memberFormSchema.safeParse({
+        full_name: "Attacker",
+        photo_url: "/\\evil.com/x.jpg",
+      });
+      assert.equal(slashBackslash.success, false);
     });
   });
 

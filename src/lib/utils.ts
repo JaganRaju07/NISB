@@ -45,3 +45,61 @@ export function isSupabaseConfigured(): boolean {
 
   return true;
 }
+
+export type AdminAccessDecision = "redirect" | "standby" | "allow";
+
+export interface AdminAccessOptions {
+  isConfigured: boolean;
+  isAdmin: boolean;
+  nodeEnv?: string;
+}
+
+/**
+ * Pure decision function determining access for administrative routes (/admin, /admin/members, /admin/milestones).
+ *
+ * Rules:
+ * - In production (process.env.NODE_ENV === "production"):
+ *     Fail-closed: if Supabase is unconfigured OR user is not an admin => "redirect" (to /admin/login).
+ *     Only configured admins are allowed => "allow".
+ * - In development / non-production:
+ *     Standby UI is allowed only when unconfigured => "standby".
+ *     If configured but non-admin => "redirect".
+ *     Configured admin => "allow".
+ */
+export function getAdminAccessDecision(
+  isConfiguredOrOptions: boolean | AdminAccessOptions,
+  isAdminArg?: boolean,
+  nodeEnvArg?: string
+): AdminAccessDecision {
+  let isConfigured: boolean;
+  let isAdmin: boolean;
+  let nodeEnv: string;
+
+  if (typeof isConfiguredOrOptions === "object" && isConfiguredOrOptions !== null) {
+    isConfigured = isConfiguredOrOptions.isConfigured;
+    isAdmin = isConfiguredOrOptions.isAdmin;
+    nodeEnv = isConfiguredOrOptions.nodeEnv ?? process.env.NODE_ENV ?? "development";
+  } else {
+    isConfigured = Boolean(isConfiguredOrOptions);
+    isAdmin = Boolean(isAdminArg);
+    nodeEnv = nodeEnvArg ?? process.env.NODE_ENV ?? "development";
+  }
+
+  if (nodeEnv === "production") {
+    if (!isConfigured || !isAdmin) {
+      return "redirect";
+    }
+    return "allow";
+  }
+
+  // Non-production (development, test)
+  if (!isConfigured) {
+    return "standby";
+  }
+
+  if (!isAdmin) {
+    return "redirect";
+  }
+
+  return "allow";
+}

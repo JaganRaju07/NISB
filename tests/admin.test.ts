@@ -6,7 +6,7 @@ import {
   memberRoleFormSchema,
   adminSchema,
 } from "../src/lib/validation.ts";
-import { isSupabaseConfigured } from "../src/lib/utils.ts";
+import { isSupabaseConfigured, getAdminAccessDecision } from "../src/lib/utils.ts";
 
 describe("Phase 3 — Admin Dashboard & Archive Management Invariants", () => {
   describe("Curatorial Publication Integrity Constraint", () => {
@@ -325,6 +325,112 @@ describe("Phase 3 — Admin Dashboard & Archive Management Invariants", () => {
 
       const result = adminSchema.safeParse(invalid);
       assert.equal(result.success, false);
+    });
+  });
+
+  describe("Admin Guard Fail-Closed Decision (Pure Function)", () => {
+    it("fails closed in production when Supabase is unconfigured (production+unconfigured => redirect)", () => {
+      // Unconfigured non-admin in production
+      const res1 = getAdminAccessDecision({
+        isConfigured: false,
+        isAdmin: false,
+        nodeEnv: "production",
+      });
+      assert.equal(res1, "redirect");
+
+      // Unconfigured even if admin flag is true in production
+      const res2 = getAdminAccessDecision({
+        isConfigured: false,
+        isAdmin: true,
+        nodeEnv: "production",
+      });
+      assert.equal(res2, "redirect");
+
+      // Positional args variant
+      assert.equal(getAdminAccessDecision(false, false, "production"), "redirect");
+      assert.equal(getAdminAccessDecision(false, true, "production"), "redirect");
+    });
+
+    it("fails closed in production when user is not an admin (production+non-admin => redirect)", () => {
+      // Configured but non-admin in production
+      const res = getAdminAccessDecision({
+        isConfigured: true,
+        isAdmin: false,
+        nodeEnv: "production",
+      });
+      assert.equal(res, "redirect");
+
+      // Positional args variant
+      assert.equal(getAdminAccessDecision(true, false, "production"), "redirect");
+    });
+
+    it("permits standby mode only in development when unconfigured (development+unconfigured => standby)", () => {
+      // Unconfigured in development returns standby
+      const res = getAdminAccessDecision({
+        isConfigured: false,
+        isAdmin: false,
+        nodeEnv: "development",
+      });
+      assert.equal(res, "standby");
+
+      // Positional args variant
+      assert.equal(getAdminAccessDecision(false, false, "development"), "standby");
+    });
+
+    it("redirects non-admin in development when configured (development+non-admin => redirect)", () => {
+      const res = getAdminAccessDecision({
+        isConfigured: true,
+        isAdmin: false,
+        nodeEnv: "development",
+      });
+      assert.equal(res, "redirect");
+      assert.equal(getAdminAccessDecision(true, false, "development"), "redirect");
+    });
+
+    it("allows access in production when configured and authorized admin", () => {
+      const res = getAdminAccessDecision({
+        isConfigured: true,
+        isAdmin: true,
+        nodeEnv: "production",
+      });
+      assert.equal(res, "allow");
+      assert.equal(getAdminAccessDecision(true, true, "production"), "allow");
+    });
+
+    it("allows access in development when configured and authorized admin", () => {
+      const res = getAdminAccessDecision({
+        isConfigured: true,
+        isAdmin: true,
+        nodeEnv: "development",
+      });
+      assert.equal(res, "allow");
+      assert.equal(getAdminAccessDecision(true, true, "development"), "allow");
+    });
+  });
+
+  describe("Member Contributions Staging Invariants", () => {
+    it("stages member record with contributions text", () => {
+      const member = {
+        full_name: "Sagar Kumar Singh",
+        status: "draft" as const,
+        verification_status: "source_listed" as const,
+        contributions: "Organized IEEE PES technical day 2024",
+      };
+
+      const parsed = memberFormSchema.parse(member);
+      assert.equal(parsed.contributions, "Organized IEEE PES technical day 2024");
+    });
+
+    it("converts empty string contributions to null in member staging", () => {
+      const member = {
+        full_name: "Sagar Kumar Singh",
+        status: "draft" as const,
+        verification_status: "source_listed" as const,
+        contributions: "",
+      };
+
+      const parsed = memberFormSchema.parse(member);
+      assert.equal(parsed.contributions, null);
     });
   });
 });

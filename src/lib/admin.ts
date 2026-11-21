@@ -1,8 +1,15 @@
 import "server-only";
 
 import { createServerClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/utils";
+import {
+  isSupabaseConfigured,
+  getAdminAccessDecision,
+  type AdminAccessDecision,
+  type AdminAccessOptions,
+} from "@/lib/utils";
 import type { Database } from "@/lib/database.types";
+
+export { getAdminAccessDecision, type AdminAccessDecision, type AdminAccessOptions };
 
 export type AdminMember = Database["public"]["Tables"]["members"]["Row"] & {
   member_roles?: (Database["public"]["Tables"]["member_roles"]["Row"] & {

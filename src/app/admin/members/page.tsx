@@ -4,13 +4,19 @@ import {
   getAdminAuthStatus,
   getAdminMembers,
   getAdminSocieties,
+  getAdminAccessDecision,
 } from "@/lib/admin";
 import { MemberManagementClient } from "./member-management-client";
 
 export default async function AdminMembersPage() {
   const auth = await getAdminAuthStatus();
+  const decision = getAdminAccessDecision({
+    isConfigured: auth.isConfigured,
+    isAdmin: auth.isAdmin,
+    nodeEnv: process.env.NODE_ENV,
+  });
 
-  if (auth.isConfigured && !auth.isAdmin) {
+  if (decision === "redirect") {
     redirect("/admin/login");
   }
 

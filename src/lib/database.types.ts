@@ -91,6 +91,7 @@ export type Database = {
           verification_status: "pending" | "source_listed" | "confirmed";
           source_note: string | null;
           updated_by: string | null;
+          contributions: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -109,6 +110,7 @@ export type Database = {
           verification_status?: "pending" | "source_listed" | "confirmed";
           source_note?: string | null;
           updated_by?: string | null;
+          contributions?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -127,6 +129,7 @@ export type Database = {
           verification_status?: "pending" | "source_listed" | "confirmed";
           source_note?: string | null;
           updated_by?: string | null;
+          contributions?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -262,6 +265,7 @@ export type Database = {
           tenure_end: string | null;
           created_at: string;
           updated_at: string;
+          contributions: string | null;
         };
         Relationships: [];
       };
