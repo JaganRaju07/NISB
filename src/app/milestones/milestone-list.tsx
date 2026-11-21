@@ -2,8 +2,14 @@
 
 import { useMemo, useTransition } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import {
+  Milestone as MilestoneIcon,
+  Users,
+  ArrowRight,
+  ShieldCheck,
+  RotateCcw,
+} from "lucide-react";
 import type {
   PublicMilestone,
   Society,
@@ -27,7 +33,6 @@ export function MilestoneList({
   initialMilestoneMembers,
   initialMembers,
   initialSearchParams = {},
-  isConfigured,
 }: MilestoneListProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -42,7 +47,6 @@ export function MilestoneList({
     return "all";
   };
 
-  // Derive filters directly from URL searchParams
   const societyFilter = getParam("society");
   const yearFilter = getParam("year");
 
@@ -99,246 +103,246 @@ export function MilestoneList({
   const availableYears = useMemo(() => {
     const set = new Set<number>();
     initialMilestones.forEach((m) => {
-      if (m.milestone_year) {
-        set.add(m.milestone_year);
-      } else if (m.date) {
-        const y = parseInt(m.date.slice(0, 4), 10);
-        if (!isNaN(y)) set.add(y);
-      }
+      if (m.milestone_year) set.add(m.milestone_year);
     });
     return Array.from(set).sort((a, b) => b - a);
   }, [initialMilestones]);
 
-  // Filter milestones with pure helper
   const filteredMilestones = useMemo(() => {
     return filterPublicMilestones(initialMilestones, {
       society: societyFilter,
       year: yearFilter,
-      societyMap,
     });
-  }, [initialMilestones, societyFilter, yearFilter, societyMap]);
+  }, [initialMilestones, societyFilter, yearFilter]);
 
   const hasActiveFilters = societyFilter !== "all" || yearFilter !== "all";
 
-  const clearFilters = () => {
+  const clearAllFilters = () => {
     router.replace(pathname, { scroll: false });
   };
 
-  // Base Empty State: when no milestones exist at all
+  // Dedicated institutional empty state when no milestones published yet
   if (initialMilestones.length === 0) {
     return (
-      <div className="border border-border rounded-sm bg-paper p-10 text-center">
-        <p className="font-mono text-sm text-foreground">
-          No milestones published yet.
-        </p>
-        {!isConfigured && (
-          <p className="font-mono text-xs text-muted/70 mt-2">
-            Archive database client in standby mode.
+      <div className="space-y-8">
+        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
+            <MilestoneIcon className="h-7 w-7" />
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">
+              Archival Milestones in Verification
+            </h2>
+            <p className="font-mono text-xs uppercase tracking-wider text-sky-400">
+              Institutional Provenance Lifecycle
+            </p>
+          </div>
+
+          <p className="text-sm text-slate-300 leading-relaxed max-w-xl mx-auto">
+            Under NISB data governance rules, milestone records are strictly prevented from unverified publication.
+            The archive team is actively digitizing and verifying historical events from the past 25+ years,
+            including Region 10 awards, chapter establishment charters, and landmark editions of ANKURA, ADROIT, and Electronika.
           </p>
-        )}
+
+          <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs text-left max-w-lg mx-auto">
+            <div className="rounded border border-slate-800 bg-slate-950 p-3">
+              <span className="text-sky-400 font-semibold block mb-1">Phase 1</span>
+              <span className="text-slate-400">Members &amp; Society Foundation</span>
+            </div>
+            <div className="rounded border border-slate-800 bg-slate-950 p-3">
+              <span className="text-amber-400 font-semibold block mb-1">Phase 2</span>
+              <span className="text-slate-400">Archival Verification (Active)</span>
+            </div>
+            <div className="rounded border border-slate-800 bg-slate-950 p-3">
+              <span className="text-emerald-400 font-semibold block mb-1">Phase 3</span>
+              <span className="text-slate-400">Confirmed Public Indexation</span>
+            </div>
+          </div>
+
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/directory"
+              className="rounded-md bg-sky-600 hover:bg-sky-500 px-4 py-2.5 text-xs font-semibold text-white transition-colors"
+            >
+              Browse Member Directory
+            </Link>
+            <Link
+              href="/admin/login"
+              className="rounded-md border border-slate-700 bg-slate-900 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors"
+            >
+              Admin Sign-in
+            </Link>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-4 text-center font-mono text-xs text-slate-400">
+          Publication Integrity Constraint: Milestones require{" "}
+          <code className="text-sky-400">status = &apos;published&apos;</code> and{" "}
+          <code className="text-sky-400">verification_status = &apos;confirmed&apos;</code> to be indexed.
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-8">
-      {/* Filters Bar: Society Chips & Year Dropdown */}
-      <div className="border-b border-border pb-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          {/* Society Filter Chips */}
-          <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter by society">
-            <span className="font-mono text-[11px] text-muted uppercase tracking-wider mr-1">
-              Society:
-            </span>
-            <button
-              onClick={() => {
-                updateUrl({ society: "all" });
-              }}
-              className={`font-mono text-xs px-2.5 py-1 border rounded-sm transition-colors cursor-pointer ${
-                societyFilter === "all"
-                  ? "border-foreground bg-foreground text-paper font-semibold"
-                  : "border-border bg-paper text-muted hover:border-foreground/40 hover:text-foreground"
-              }`}
-            >
-              All
-            </button>
-
-            {initialSocieties.map((s) => {
-              const isActive = societyFilter === s.slug;
-              return (
-                <button
-                  key={s.id}
-                  onClick={() => {
-                    const next = isActive ? "all" : s.slug;
-                    updateUrl({ society: next });
-                  }}
-                  className={`font-mono text-xs px-2.5 py-1 border rounded-sm transition-colors cursor-pointer ${
-                    isActive
-                      ? "border-accent bg-accent text-white font-semibold"
-                      : "border-border bg-paper text-muted hover:border-accent/50 hover:text-foreground"
-                  }`}
-                >
-                  {s.short_name || s.name}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Year Filter */}
-          {availableYears.length > 0 && (
-            <div className="flex items-center gap-2 shrink-0">
-              <label htmlFor="year-filter" className="font-mono text-[11px] text-muted uppercase tracking-wider">
-                Year:
-              </label>
+      {/* ── Filter Controls ── */}
+      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
+            {/* Society Filter */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-slate-400">Chapter:</span>
               <select
-                id="year-filter"
-                value={yearFilter}
-                onChange={(e) => {
-                  updateUrl({ year: e.target.value });
-                }}
-                className="h-8 px-2.5 bg-paper border border-border rounded-sm font-mono text-xs text-ink focus:outline-none focus:ring-1 focus:ring-accent"
+                value={societyFilter}
+                onChange={(e) => updateUrl({ society: e.target.value })}
+                className="h-8 rounded border border-slate-700 bg-slate-950 px-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                aria-label="Filter by chapter"
               >
-                <option value="all">All Years</option>
-                {availableYears.map((yr) => (
-                  <option key={yr} value={String(yr)}>
-                    {yr}
+                <option value="all">All Chapters</option>
+                <option value="branch">Branch Only</option>
+                {initialSocieties.map((s) => (
+                  <option key={s.id} value={s.slug}>
+                    {s.short_name || s.name}
                   </option>
                 ))}
               </select>
             </div>
-          )}
-        </div>
 
-        {/* Results Counter & Clear Action */}
-        <div className="flex items-center justify-between text-xs font-mono text-muted pt-1">
-          <span>
-            Showing {filteredMilestones.length} of {initialMilestones.length} milestone records
-          </span>
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className="text-accent hover:underline cursor-pointer"
-            >
-              Clear filters
-            </button>
-          )}
+            {/* Year Filter */}
+            {availableYears.length > 0 && (
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-400">Year:</span>
+                <select
+                  value={yearFilter}
+                  onChange={(e) => updateUrl({ year: e.target.value })}
+                  className="h-8 rounded border border-slate-700 bg-slate-950 px-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                  aria-label="Filter by year"
+                >
+                  <option value="all">All Years</option>
+                  {availableYears.map((yr) => (
+                    <option key={yr} value={String(yr)}>
+                      {yr}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {hasActiveFilters && (
+              <button
+                onClick={clearAllFilters}
+                className="flex items-center gap-1 text-sky-400 hover:text-sky-300 ml-2 cursor-pointer"
+              >
+                <RotateCcw className="h-3 w-3" />
+                <span>Reset Filters</span>
+              </button>
+            )}
+          </div>
+
+          <div className="font-mono text-xs text-slate-400">
+            Showing <span className="font-semibold text-white">{filteredMilestones.length}</span>{" "}
+            of {initialMilestones.length} milestone records
+          </div>
         </div>
       </div>
 
-      {/* Filtered Empty State */}
+      {/* ── Milestones Timeline Cards ── */}
       {filteredMilestones.length === 0 ? (
-        <div className="border border-border rounded-sm bg-paper p-10 text-center space-y-2">
-          <p className="font-mono text-sm text-foreground">
-            No milestones found matching the selected society or year.
+        <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-12 text-center space-y-3">
+          <p className="font-mono text-sm text-slate-300">
+            No milestones found matching the selected filter criteria.
           </p>
           <button
-            onClick={clearFilters}
-            className="font-mono text-xs text-accent hover:underline cursor-pointer"
+            onClick={clearAllFilters}
+            className="inline-flex items-center gap-2 rounded-md bg-sky-600 px-4 py-2 text-xs font-semibold text-white hover:bg-sky-500 transition-colors"
           >
-            Clear active filters
+            Clear Active Filters
           </button>
         </div>
       ) : (
-        /* Timeline Items */
-        <div className="relative border-l border-border pl-6 ml-3 space-y-10">
-          {filteredMilestones.map((milestone) => {
-            const society = milestone.society_id
-              ? societyMap.get(milestone.society_id)
-              : null;
-            const participants =
-              participantsByMilestone.get(milestone.id) ?? [];
+        <div className="relative border-l-2 border-slate-800 pl-6 sm:pl-8 space-y-8 ml-3">
+          {filteredMilestones.map((m) => {
+            const society = m.society_id ? societyMap.get(m.society_id) : null;
+            const participants = participantsByMilestone.get(m.id) ?? [];
 
             return (
-              <article
-                key={milestone.id}
-                className="relative group space-y-2"
+              <div
+                key={m.id}
+                className="group relative rounded-xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 hover:border-slate-700 transition-all shadow-sm"
               >
-                {/* Timeline Node */}
-                <span
-                  className="absolute -left-[31px] top-1.5 h-2.5 w-2.5 rounded-full border border-border bg-paper group-hover:border-accent transition-colors"
-                  aria-hidden="true"
-                />
+                {/* Node marker on timeline */}
+                <div className="absolute -left-[31px] sm:-left-[39px] top-7 h-4 w-4 rounded-full border-2 border-slate-950 bg-sky-500 shadow-sm" />
 
-                {/* Header, Year & Date */}
-                <div className="flex flex-wrap items-center gap-2">
-                  {milestone.date && (
-                    <time className="font-mono text-xs text-muted tracking-wider uppercase">
-                      {milestone.date}
-                    </time>
-                  )}
-                  {milestone.milestone_year && !milestone.date && (
-                    <time className="font-mono text-xs text-muted tracking-wider">
-                      Year {milestone.milestone_year}
-                    </time>
-                  )}
-                  {milestone.category && (
-                    <span className="font-mono text-[11px] px-2 py-0.5 border border-border rounded-sm text-muted">
-                      {milestone.category}
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-slate-800/80 pb-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {society ? (
+                      <span className="rounded bg-sky-500/10 px-2 py-0.5 font-mono text-xs text-sky-400 border border-sky-500/20">
+                        {society.short_name || society.name}
+                      </span>
+                    ) : (
+                      <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-xs text-slate-300 border border-slate-700">
+                        Branch Milestone
+                      </span>
+                    )}
+
+                    <span className="font-mono text-xs text-slate-400">
+                      {m.date || (m.milestone_year ? `Year ${m.milestone_year}` : "")}
                     </span>
-                  )}
-                  {society && (
-                    <span className="font-mono text-[11px] px-2 py-0.5 border border-accent/40 text-accent rounded-sm">
-                      {society.short_name || society.name}
-                    </span>
+                  </div>
+
+                  <span className="font-mono text-[11px] text-emerald-400 inline-flex items-center gap-1">
+                    <ShieldCheck className="h-3 w-3" />
+                    <span>Verified</span>
+                  </span>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <h3 className="font-display text-2xl font-bold text-white group-hover:text-sky-300 transition-colors">
+                    <Link href={`/milestones/${m.id}`}>
+                      {m.title}
+                    </Link>
+                  </h3>
+
+                  {m.description && (
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      {m.description}
+                    </p>
                   )}
                 </div>
 
-                {/* Title (Link to Detail Page) */}
-                <h2 className="font-display text-xl font-semibold text-foreground tracking-tight">
-                  <Link
-                    href={`/milestones/${milestone.id}`}
-                    className="hover:text-accent transition-colors focus-visible:outline-accent"
-                  >
-                    {milestone.title}
-                  </Link>
-                </h2>
-
-                {/* Description Snippet */}
-                {milestone.description && (
-                  <p className="font-sans text-sm text-muted leading-relaxed max-w-2xl line-clamp-2">
-                    {milestone.description}
-                  </p>
-                )}
-
-                {/* Optional Image */}
-                {milestone.image_url && (
-                  <div className="pt-2">
-                    <Link href={`/milestones/${milestone.id}`} tabIndex={-1}>
-                      <Image
-                        src={milestone.image_url}
-                        alt={milestone.title}
-                        width={640}
-                        height={360}
-                        className="rounded-sm border border-border max-w-md max-h-60 object-cover"
-                        unoptimized
-                      />
-                    </Link>
-                  </div>
-                )}
-
-                {/* Personnel Preview */}
+                {/* People Behind This Milestone */}
                 {participants.length > 0 && (
-                  <div className="pt-2 flex flex-wrap items-center gap-1.5">
-                    <span className="font-mono text-[11px] text-muted uppercase tracking-wider">
-                      Personnel:
-                    </span>
-                    {participants.slice(0, 5).map((p, idx) => (
-                      <span
-                        key={`${p.name}-${idx}`}
-                        className="inline-flex items-center gap-1 font-mono text-[11px] px-2 py-0.5 border border-border rounded-sm bg-black/[0.02] text-foreground/85"
-                      >
-                        <span>{p.name}</span>
-                        {p.role && <span className="text-muted">({p.role})</span>}
-                      </span>
-                    ))}
-                    {participants.length > 5 && (
-                      <span className="font-mono text-[11px] text-muted">
-                        +{participants.length - 5} more
-                      </span>
-                    )}
+                  <div className="mt-6 pt-4 border-t border-slate-800/80">
+                    <p className="font-mono text-[11px] uppercase tracking-wider text-slate-400 mb-2">
+                      People Behind This Milestone
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {participants.map((p, pIdx) => (
+                        <span
+                          key={pIdx}
+                          className="font-mono text-xs bg-slate-950 px-2.5 py-1 rounded border border-slate-800 text-slate-300 inline-flex items-center gap-1.5"
+                        >
+                          <Users className="h-3 w-3 text-sky-400" />
+                          <span className="font-semibold text-white">{p.name}</span>
+                          {p.role && <span className="text-slate-400">({p.role})</span>}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </article>
+
+                <div className="mt-6 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
+                  <Link
+                    href={`/milestones/${m.id}`}
+                    className="inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 font-semibold"
+                  >
+                    <span>View Record Details</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
+              </div>
             );
           })}
         </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, AlertCircle, Mail, KeyRound } from "lucide-react";
+import { AlertCircle, Mail, KeyRound } from "lucide-react";
 import { loginAdminAction } from "@/lib/actions/admin-actions";
 
 export default function AdminLoginPage() {
@@ -34,61 +34,61 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex flex-1 items-center justify-center p-6 sm:p-12">
-      <div className="w-full max-w-md border-2 border-ink bg-white p-8 shadow-[6px_6px_0px_#141414]">
+      <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl backdrop-blur-md">
         {/* Top Eyebrow */}
         <div className="flex items-center gap-2 mb-2">
-          <span className="border border-ink bg-amber-400 px-2 py-0.5 font-mono text-[10px] font-bold text-ink uppercase tracking-wider">
+          <span className="rounded border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-300 uppercase tracking-wider">
             Restricted Access
           </span>
-          <span className="font-mono text-xs text-muted">
+          <span className="font-mono text-xs text-slate-400">
             Institutional Archive
           </span>
         </div>
 
-        <h1 className="font-mono text-2xl font-bold tracking-tight text-ink">
-          Curator Portal Login
+        <h1 className="font-mono text-2xl font-bold tracking-tight text-white">
+          Admin Portal Login
         </h1>
-        <p className="mt-2 font-sans text-xs text-muted-foreground leading-relaxed">
+        <p className="mt-2 font-sans text-xs text-slate-400 leading-relaxed">
           Authorized access for archive stewards and branch counselors to manage member records,
           verification audits, and milestone chronologies.
         </p>
 
         {error && (
-          <div className="mt-4 flex items-start gap-2 border-2 border-destructive bg-red-50 p-3 font-mono text-xs text-destructive">
-            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+          <div className="mt-4 flex items-start gap-2 rounded-lg border border-rose-500/40 bg-rose-500/10 p-3 font-mono text-xs text-rose-300">
+            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="mt-6 space-y-4">
           <div>
-            <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
-              Curator Email
+            <label className="block font-mono text-xs font-bold uppercase text-slate-300 mb-1.5">
+              Admin Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted" />
+              <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
               <input
                 type="email"
                 name="email"
                 required
-                placeholder="curator@nisb.in"
-                className="w-full border-2 border-ink bg-paper pl-9 pr-3 py-2 font-mono text-xs focus:outline-hidden focus:ring-2 focus:ring-primary"
+                placeholder="admin@nisb.in"
+                className="w-full rounded-md border border-slate-700 bg-slate-950 pl-9 pr-3 py-2 font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
+            <label className="block font-mono text-xs font-bold uppercase text-slate-300 mb-1.5">
               Access Token / Password
             </label>
             <div className="relative">
-              <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-muted" />
+              <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
               <input
                 type="password"
                 name="password"
                 required
                 placeholder="••••••••••••"
-                className="w-full border-2 border-ink bg-paper pl-9 pr-3 py-2 font-mono text-xs focus:outline-hidden focus:ring-2 focus:ring-primary"
+                className="w-full rounded-md border border-slate-700 bg-slate-950 pl-9 pr-3 py-2 font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors"
               />
             </div>
           </div>
@@ -103,16 +103,6 @@ export default function AdminLoginPage() {
             </button>
           </div>
         </form>
-
-        <div className="mt-8 border-t border-border pt-4">
-          <div className="flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-            <span>Protected by PostgreSQL Row-Level Security</span>
-          </div>
-          <p className="mt-1 font-mono text-[10px] text-muted">
-            All administrative actions are cryptographically signed and logged with audit provenance.
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import {
   memberFormSchema,
   milestoneFormSchema,
   memberRoleFormSchema,
+  milestoneMemberFormSchema,
   adminSchema,
 } from "../src/lib/validation.ts";
 import { isSupabaseConfigured, getAdminAccessDecision } from "../src/lib/utils.ts";
@@ -431,6 +432,54 @@ describe("Phase 3 — Admin Dashboard & Archive Management Invariants", () => {
 
       const parsed = memberFormSchema.parse(member);
       assert.equal(parsed.contributions, null);
+    });
+  });
+
+  describe("Milestone Participant Junction Invariants", () => {
+    it("validates milestone participant record with role", () => {
+      const raw = {
+        milestone_id: "11111111-1111-4111-a111-000000000001",
+        member_id: "22222222-2222-4222-a222-000000000001",
+        role_in_milestone: "Lead Organizer",
+      };
+
+      const parsed = milestoneMemberFormSchema.parse(raw);
+      assert.equal(parsed.milestone_id, "11111111-1111-4111-a111-000000000001");
+      assert.equal(parsed.member_id, "22222222-2222-4222-a222-000000000001");
+      assert.equal(parsed.role_in_milestone, "Lead Organizer");
+    });
+
+    it("accepts milestone participant record with empty role", () => {
+      const raw = {
+        milestone_id: "11111111-1111-4111-a111-000000000001",
+        member_id: "22222222-2222-4222-a222-000000000002",
+        role_in_milestone: "",
+      };
+
+      const parsed = milestoneMemberFormSchema.parse(raw);
+      assert.equal(parsed.role_in_milestone, "");
+    });
+
+    it("rejects milestone participant with invalid milestone UUID", () => {
+      const invalid = {
+        milestone_id: "invalid-uuid",
+        member_id: "22222222-2222-4222-a222-000000000001",
+        role_in_milestone: "Organizer",
+      };
+
+      const result = milestoneMemberFormSchema.safeParse(invalid);
+      assert.equal(result.success, false);
+    });
+
+    it("rejects milestone participant with invalid member UUID", () => {
+      const invalid = {
+        milestone_id: "11111111-1111-4111-a111-000000000001",
+        member_id: "invalid-uuid",
+        role_in_milestone: "Organizer",
+      };
+
+      const result = milestoneMemberFormSchema.safeParse(invalid);
+      assert.equal(result.success, false);
     });
   });
 });

@@ -9,9 +9,9 @@ import {
 import { DirectoryList } from "./directory-list";
 
 export const metadata: Metadata = {
-  title: "Directory — NISB People & Milestones",
+  title: "Member Directory — NISB Digital Archive",
   description:
-    "An indexed institutional roster of NIE IEEE Student Branch members, past and present.",
+    "An indexed institutional directory of NIE IEEE Student Branch officers, committee leaders, and members.",
 };
 
 interface DirectoryPageProps {
@@ -22,20 +22,21 @@ export default function DirectoryPage({
   searchParams,
 }: DirectoryPageProps) {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
       <PageHeader
         backLabel="Home"
         backHref="/"
-        eyebrow="NIE IEEE Student Branch"
-        title="Directory"
-        description="An indexed archival roster of NISB members, past and present. Ruled archival record."
+        eyebrow="Institutional Leadership Directory"
+        title="Member Directory"
+        description="Official directory and indexed archival records of NIE IEEE Student Branch officers, technical chapter leads, and committee members."
       />
 
-      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-12">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-8">
         <Suspense
           fallback={
-            <div className="border border-border rounded-sm bg-paper p-10 text-center">
-              <p className="font-mono text-sm text-muted">Loading directory...</p>
+            <div className="border border-slate-800 rounded-lg bg-slate-900/40 p-12 text-center">
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
+              <p className="font-mono text-sm text-slate-400 mt-3">Loading directory...</p>
             </div>
           }
         >

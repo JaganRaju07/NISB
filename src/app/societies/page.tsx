@@ -1,37 +1,37 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { PageHeader, Footer, MemberAvatar } from "@/components/ui";
 import {
-  getPublicSocieties,
-  getPublicMemberRoles,
-  getPublicMembers,
-} from "@/lib/archive";
-import { formatTenure } from "@/lib/archive-helpers";
+  OFFICIAL_SOCIETIES,
+  OFFICIAL_ROSTER_MEMBERS,
+} from "@/lib/official-roster";
 
 export const metadata: Metadata = {
-  title: "Societies & Chapters — NISB People & Milestones",
+  title: "Societies & Chapters — NISB Digital Archive",
   description:
-    "Browse the societies, affinity groups, and chapters of NIE IEEE Student Branch.",
+    "Explore the IEEE technical societies and student affinity groups operating under NIE IEEE Student Branch, Mysuru.",
 };
 
 export default function SocietiesPage() {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
       <PageHeader
         backLabel="Home"
         backHref="/"
-        eyebrow="NIE IEEE Student Branch"
-        title="Societies & Chapters"
-        description="Affinity groups and society chapters under NIE IEEE Student Branch, Mysuru."
+        eyebrow="Technical Chapters &amp; Affinity Groups"
+        title="Societies &amp; Chapters"
+        description="The six official IEEE technical societies and student affinity groups hosted under NIE IEEE Student Branch (STB64141), The National Institute of Engineering, Mysuru."
       />
 
-      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-12 space-y-12">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-8 space-y-16">
         <Suspense
           fallback={
-            <div className="border border-border rounded-sm bg-paper p-10 text-center">
-              <p className="font-mono text-sm text-muted">Loading societies...</p>
+            <div className="border border-slate-800 rounded-lg bg-slate-900/40 p-12 text-center">
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
+              <p className="font-mono text-sm text-slate-400 mt-3">Loading societies...</p>
             </div>
           }
         >
@@ -45,220 +45,170 @@ export default function SocietiesPage() {
 }
 
 async function SocietiesContent() {
-  const [societiesRes, rolesRes, membersRes] = await Promise.all([
-    getPublicSocieties(),
-    getPublicMemberRoles(),
-    getPublicMembers(),
-  ]);
-
-  const societies = societiesRes.data;
-  const roles = rolesRes.data;
-  const members = membersRes.data;
-  const isConfigured = societiesRes.isConfigured;
-
-  const memberMap = new Map(members.map((m) => [m.id, m]));
-
-  // Extract branch-level roles (tier === 'branch')
-  const branchRoles = roles
-    .filter((r) => r.tier === "branch")
-    .map((role) => {
-      const member = memberMap.get(role.member_id);
-      if (!member) return null;
-      return {
-        roleId: role.id,
-        memberId: member.id,
-        fullName: member.full_name,
-        photoUrl: member.photo_url,
-        roleTitle: role.role_title,
-        tenure: formatTenure(role.start_year, role.end_year),
-        isCurrent: role.is_current,
-      };
-    })
-    .filter(Boolean);
-
-  // Group roles count by society_id
-  const rolesBySociety = new Map<string, number>();
-  roles.forEach((r) => {
-    if (r.society_id) {
-      const count = rolesBySociety.get(r.society_id) ?? 0;
-      rolesBySociety.set(r.society_id, count + 1);
-    }
-  });
+  // Branch Executive leadership from official roster
+  const branchExecOfficers = OFFICIAL_ROSTER_MEMBERS.filter(
+    (m) => m.category === "Executive Leadership" || m.category === "Coordination & Editorial"
+  );
 
   return (
     <>
-      {/* Branch-level Section */}
-      <section aria-labelledby="branch-leadership-heading" className="space-y-4">
-        <div className="flex items-baseline justify-between border-b border-border pb-3">
+      {/* ── Section 1: Branch Executive Leadership ── */}
+      <section aria-labelledby="branch-leadership-heading" className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between border-b border-slate-800 pb-4 gap-2">
           <div>
             <h2
               id="branch-leadership-heading"
-              className="font-display text-2xl font-semibold text-foreground tracking-tight"
+              className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight"
             >
-              Branch-level
+              Branch Executive Leadership
             </h2>
-            <p className="font-mono text-xs text-muted mt-0.5">
-              Executive committee and branch office-bearers across tenures.
+            <p className="font-mono text-xs text-slate-400 mt-1">
+              Executive committee officers and coordinators of NIE IEEE Student Branch.
             </p>
           </div>
-          <span className="font-mono text-xs text-muted">
-            {branchRoles.length} indexed role{branchRoles.length === 1 ? "" : "s"}
+          <span className="font-mono text-xs text-sky-400">
+            {branchExecOfficers.length} Officers
           </span>
         </div>
 
-        {branchRoles.length === 0 ? (
-          <div className="border border-border rounded-sm bg-paper p-8 text-center">
-            <p className="font-mono text-xs text-muted italic">
-              Branch-level roles will appear here once indexed.
-            </p>
-            {!isConfigured && (
-              <p className="font-mono text-[11px] text-muted/70 mt-1">
-                Archive database client in standby mode.
-              </p>
-            )}
-          </div>
-        ) : (
-          <ul className="divide-y divide-border border-y border-border" role="list">
-            {branchRoles.map((person) => {
-              if (!person) return null;
-              return (
-                <li
-                  key={person.roleId}
-                  className="py-3 px-2 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02]"
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <MemberAvatar
-                      name={person.fullName}
-                      photoUrl={person.photoUrl}
-                      size="sm"
-                      className="shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <Link
-                        href={`/directory/${person.memberId}`}
-                        className="font-display font-medium text-foreground hover:text-accent transition-colors truncate block"
-                      >
-                        {person.fullName}
-                      </Link>
-                      <span className="font-mono text-xs text-muted block mt-0.5">
-                        {person.roleTitle}
-                      </span>
-                    </div>
-                  </div>
-
-                    {person.tenure && (
-                      <span className="font-mono text-xs text-muted tabular-nums shrink-0">
-                        {person.tenure}
-                      </span>
-                    )}
-                </li>
-              );
-            })}
-          </ul>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {branchExecOfficers.map((person) => {
+            return (
+              <div
+                key={person.id}
+                className="group flex items-center gap-3.5 rounded-lg border border-slate-800 bg-slate-900/50 p-3.5 hover:border-slate-700 transition-colors"
+              >
+                <MemberAvatar
+                  name={person.fullName}
+                  photoUrl={person.localPhotoUrl}
+                  size="md"
+                  className="border border-slate-700 shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/directory/${person.id}`}
+                    className="font-medium text-white text-sm hover:text-sky-300 transition-colors truncate block"
+                  >
+                    {person.fullName}
+                  </Link>
+                  <p className="font-mono text-xs text-slate-400 truncate mt-0.5">
+                    {person.designation}
+                  </p>
+                  <span className="font-mono text-[10px] text-sky-400/90 block truncate mt-0.5">
+                    {person.portfolio}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
-      {/* Societies & Technical Chapters Section */}
-      <section aria-labelledby="technical-chapters-heading" className="space-y-4">
-        <div className="flex items-baseline justify-between border-b border-border pb-3">
-          <div>
-            <h2
-              id="technical-chapters-heading"
-              className="font-display text-2xl font-semibold text-foreground tracking-tight"
-            >
-              Technical Chapters &amp; Affinity Groups
-            </h2>
-            <p className="font-mono text-xs text-muted mt-0.5">
-              Specialized IEEE societies and affinity chapters operating within NISB.
-            </p>
-          </div>
-          <span className="font-mono text-xs text-muted">
-            {societies.length} indexed chapter{societies.length === 1 ? "" : "s"}
-          </span>
+      {/* ── Section 2: All 6 Official Societies & Chapters ── */}
+      <section aria-labelledby="societies-heading" className="space-y-6">
+        <div className="border-b border-slate-800 pb-4">
+          <h2
+            id="societies-heading"
+            className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight"
+          >
+            Technical Chapters &amp; Affinity Groups
+          </h2>
+          <p className="font-mono text-xs text-slate-400 mt-1">
+            Active IEEE student branch chapters at The National Institute of Engineering, Mysuru.
+          </p>
         </div>
 
-        {societies.length === 0 ? (
-          <div className="border border-border rounded-sm bg-paper p-10 text-center">
-            <p className="font-mono text-sm text-muted">
-              Societies and chapter profiles will appear here once data is seeded.
-            </p>
-            {!isConfigured && (
-              <p className="font-mono text-xs text-muted/70 mt-2">
-                Archive database client in standby mode.
-              </p>
-            )}
-          </div>
-        ) : (
-          <ul className="divide-y divide-border border-y border-border" role="list">
-            {societies.map((society) => {
-              const roleCount = rolesBySociety.get(society.id) ?? 0;
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {OFFICIAL_SOCIETIES.map((soc) => {
+            // Find officers from official roster for this society
+            const officers = OFFICIAL_ROSTER_MEMBERS.filter(
+              (m) => m.societySlug === soc.slug || (soc.slug === "ieee-ras" && m.designation.includes("RAS"))
+            );
 
-              return (
-                <li
-                  key={society.id}
-                  className="py-6 px-2 transition-colors hover:bg-black/[0.02] space-y-3"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-display text-xl font-semibold text-foreground tracking-tight">
-                        <Link
-                          href={`/societies/${society.slug}`}
-                          className="hover:text-accent transition-colors"
-                        >
-                          {society.name}
-                        </Link>
-                      </h3>
-                      {society.short_name && (
-                        <span className="font-mono text-xs px-2 py-0.5 border border-border rounded-sm text-muted">
-                          {society.short_name}
-                        </span>
-                      )}
+            return (
+              <article
+                key={soc.slug}
+                className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-slate-700"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="relative h-12 w-12 rounded-lg bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center">
+                      <Image
+                        src={soc.logoUrl}
+                        alt={`${soc.name} logo`}
+                        width={40}
+                        height={40}
+                        className="h-9 w-9 object-contain"
+                      />
                     </div>
-                    <div className="flex items-center gap-2 font-mono text-xs text-muted">
-                      {society.established_year && (
-                        <span>Est. {society.established_year}</span>
-                      )}
-                      {roleCount > 0 && (
-                        <span>
-                          {society.established_year ? "· " : ""}
-                          {roleCount} indexed tenure{roleCount > 1 ? "s" : ""}
-                        </span>
-                      )}
-                    </div>
+                    <span className="rounded bg-sky-500/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-sky-400 border border-sky-500/20">
+                      {soc.shortName}
+                    </span>
                   </div>
 
-                  {society.description && (
-                    <p className="font-sans text-sm text-muted leading-relaxed max-w-2xl">
-                      {society.description}
+                  <h3 className="font-display text-xl font-bold text-white group-hover:text-sky-300 transition-colors">
+                    {soc.name}
+                  </h3>
+
+                  {soc.establishedYear && (
+                    <p className="font-mono text-xs text-slate-400 mt-1">
+                      Established {soc.establishedYear} at NISB
                     </p>
                   )}
 
-                  <div className="flex flex-wrap items-center gap-4 pt-1">
-                    <Link
-                      href={`/societies/${society.slug}`}
-                      className="inline-flex items-center gap-1.5 font-mono text-xs text-accent hover:underline"
-                    >
-                      View Chapter Archive
-                      <ArrowRight className="h-3 w-3" strokeWidth={1.5} />
-                    </Link>
+                  <p className="mt-3 text-xs text-slate-300 leading-relaxed line-clamp-3">
+                    {soc.description}
+                  </p>
 
-                    {society.website_url && (
-                      <a
-                        href={society.website_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-foreground"
-                      >
-                        Official Website
-                        <ExternalLink className="h-3 w-3" strokeWidth={1.5} />
-                      </a>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+                  {/* Society Officers on Official Roster */}
+                  {officers.length > 0 && (
+                    <div className="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5">
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                        Current Officers
+                      </p>
+                      {officers.map((off) => (
+                        <div
+                          key={off.id}
+                          className="flex items-center justify-between text-xs font-mono"
+                        >
+                          <Link
+                            href={`/directory/${off.id}`}
+                            className="text-slate-200 hover:text-sky-300 transition-colors truncate pr-2 font-medium"
+                          >
+                            {off.fullName}
+                          </Link>
+                          <span className="text-slate-400 shrink-0 text-[11px]">
+                            {off.designation}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                  <Link
+                    href={`/societies/${soc.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors"
+                  >
+                    <span>View Chapter Archive</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+
+                  <a
+                    href={soc.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-slate-400 hover:text-white transition-colors"
+                    title={`Visit ${soc.name} Global Website`}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </section>
     </>
   );

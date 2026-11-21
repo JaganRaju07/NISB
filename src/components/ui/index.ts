@@ -1,6 +1,7 @@
 export { Monogram } from "./monogram";
 export { MemberAvatar } from "./member-avatar";
 export { PageHeader } from "./page-header";
+export { Navbar } from "./navbar";
 export { Footer } from "./footer";
 export { Button, buttonVariants } from "./button";
 export { Input } from "./input";
@@ -56,3 +57,8 @@ export {
   FormMessage,
   useFormField,
 } from "./form";
+export {
+  UniversalSearch,
+  type UniversalSearchItem,
+  type SearchCategory,
+} from "../archive/universal-search";

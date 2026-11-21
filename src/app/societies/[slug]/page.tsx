@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { MemberAvatar, Footer } from "@/components/ui";
 import {
   getPublicSocietyBySlug,
-  getPublicMemberRoles,
-  getPublicMembers,
   getPublicMilestones,
 } from "@/lib/archive";
-import { formatTenure } from "@/lib/archive-helpers";
+import {
+  OFFICIAL_SOCIETIES,
+  OFFICIAL_ROSTER_MEMBERS,
+} from "@/lib/official-roster";
 
 interface SocietyDetailProps {
   params: Promise<{ slug: string }>;
@@ -20,17 +22,22 @@ export async function generateMetadata({
   params,
 }: SocietyDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const { data: society } = await getPublicSocietyBySlug(slug);
+  const staticSoc = OFFICIAL_SOCIETIES.find((s) => s.slug === slug);
 
-  if (!society) {
-    return { title: "Society Not Found — NISB Archive" };
+  if (!staticSoc) {
+    const { data: dbSoc } = await getPublicSocietyBySlug(slug);
+    if (!dbSoc) {
+      return { title: "Society Not Found — NISB Archive" };
+    }
+    return {
+      title: `${dbSoc.name} — NISB Societies`,
+      description: dbSoc.description?.slice(0, 160) ?? `Archival record for ${dbSoc.name} at NIE IEEE Student Branch.`,
+    };
   }
 
   return {
-    title: `${society.name} — NISB Societies`,
-    description: society.description
-      ? society.description.slice(0, 160)
-      : `Archival record for ${society.name} at NIE IEEE Student Branch.`,
+    title: `${staticSoc.name} — NISB Societies & Chapters`,
+    description: staticSoc.description.slice(0, 160),
   };
 }
 
@@ -38,12 +45,13 @@ export default function SocietyDetailPage({
   params,
 }: SocietyDetailProps) {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
       <Suspense
         fallback={
-          <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-12">
-            <div className="border border-border rounded-sm bg-paper p-10 text-center">
-              <p className="font-mono text-sm text-muted">Loading society record...</p>
+          <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-12 sm:px-8">
+            <div className="border border-slate-800 rounded-lg bg-slate-900/40 p-12 text-center">
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
+              <p className="font-mono text-sm text-slate-400 mt-3">Loading society record...</p>
             </div>
           </main>
         }
@@ -60,248 +68,179 @@ async function SocietyDetailContent({
 }: SocietyDetailProps) {
   const { slug } = await params;
 
-  const [societyRes, rolesRes, membersRes, milestonesRes] = await Promise.all([
+  const staticSoc = OFFICIAL_SOCIETIES.find((s) => s.slug === slug);
+  const [societyRes, milestonesRes] = await Promise.all([
     getPublicSocietyBySlug(slug),
-    getPublicMemberRoles(),
-    getPublicMembers(),
     getPublicMilestones(),
   ]);
 
-  if (!societyRes.isConfigured) {
-    return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 md:px-12">
-        <Link
-          href="/societies"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors mb-8"
-        >
-          <ArrowLeft className="h-3 w-3" strokeWidth={1.5} />
-          Societies & Chapters
-        </Link>
-        <div className="border border-border rounded-sm bg-paper p-10 text-center">
-          <p className="font-mono text-sm text-muted">
-            Archive database client in standby mode. Society records will appear here once connected.
-          </p>
-        </div>
-      </main>
-    );
-  }
+  const dbSociety = societyRes.data;
 
-  const society = societyRes.data;
-  if (!society) {
+  // If neither static official society nor db society exists, 404
+  if (!staticSoc && !dbSociety) {
     notFound();
   }
 
-  const memberMap = new Map(membersRes.data.map((m) => [m.id, m]));
+  const name = staticSoc?.name || dbSociety?.name || "";
+  const shortName = staticSoc?.shortName || dbSociety?.short_name || "";
+  const description = staticSoc?.description || dbSociety?.description || "";
+  const establishedYear = staticSoc?.establishedYear || dbSociety?.established_year || null;
+  const websiteUrl = staticSoc?.websiteUrl || dbSociety?.website_url || "https://www.ieee.org";
+  const logoUrl = staticSoc?.logoUrl || "/assets/images/Condensed---White-Circle.png";
 
-  // Find people associated with this society via member_roles
-  const societyRoles = rolesRes.data.filter(
-    (r) => r.society_id === society.id
+  // Find official roster members associated with this society
+  const rosterOfficers = OFFICIAL_ROSTER_MEMBERS.filter(
+    (m) => m.societySlug === slug || (slug === "ieee-ras" && m.designation.includes("RAS"))
   );
 
-  const people = societyRoles
-    .map((role) => {
-      const member = memberMap.get(role.member_id);
-      if (!member) return null;
-      return {
-        roleId: role.id,
-        memberId: member.id,
-        fullName: member.full_name,
-        photoUrl: member.photo_url,
-        roleTitle: role.role_title,
-        tenure: formatTenure(role.start_year, role.end_year),
-        isCurrent: role.is_current,
-      };
-    })
-    .filter(Boolean);
-
-  // Find milestones associated with this society
-  const societyMilestones = milestonesRes.data.filter(
-    (m) => m.society_id === society.id
-  );
+  // Milestones associated with this society
+  const societyMilestones = dbSociety
+    ? milestonesRes.data.filter((m) => m.society_id === dbSociety.id)
+    : [];
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-12">
+    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-8">
       {/* Back Link */}
       <nav aria-label="Breadcrumb" className="mb-8">
         <Link
           href="/societies"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors"
+          className="group inline-flex items-center gap-2 font-mono text-xs text-slate-400 hover:text-sky-400 transition-colors"
         >
-          <ArrowLeft className="h-3 w-3" strokeWidth={1.5} />
-          Societies & Chapters
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+          <span>Back to Societies &amp; Chapters</span>
         </Link>
       </nav>
 
-      {/* Society Overview Article */}
-      <article className="border border-border rounded-sm bg-paper p-6 sm:p-10 space-y-10">
+      {/* Society Overview Card */}
+      <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm space-y-10">
         {/* Header */}
-        <header className="space-y-3 pb-8 border-b border-border">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[10px] tracking-widest text-muted uppercase">
-              Society Chapter Archive
-            </span>
-            {society.short_name && (
-              <span className="font-mono text-xs px-2 py-0.5 border border-border rounded-sm text-muted">
-                {society.short_name}
-              </span>
-            )}
-            {society.established_year && (
-              <span className="font-mono text-xs text-muted">
-                Est. {society.established_year}
-              </span>
-            )}
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-slate-800">
+          <div className="flex items-center gap-5">
+            <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-xl border border-slate-700 bg-slate-950 p-2 flex items-center justify-center shrink-0 shadow-inner">
+              <Image
+                src={logoUrl}
+                alt={`${name} emblem`}
+                width={64}
+                height={64}
+                className="h-14 w-14 object-contain"
+                priority
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span className="rounded bg-sky-500/10 px-2 py-0.5 text-sky-400 border border-sky-500/20">
+                  {shortName}
+                </span>
+                {establishedYear && (
+                  <span className="text-slate-400">
+                    Est. {establishedYear} at NISB
+                  </span>
+                )}
+              </div>
+
+              <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
+                {name}
+              </h1>
+            </div>
           </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-foreground">
-            {society.name}
-          </h1>
-
-          {society.description && (
-            <p className="font-sans text-base leading-relaxed text-foreground/90 max-w-2xl pt-2">
-              {society.description}
-            </p>
-          )}
-
-          {society.website_url && (
-            <div className="pt-2">
-              <a
-                href={society.website_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-accent hover:underline"
-              >
-                Visit Chapter Website
-                <ExternalLink className="h-3 w-3" strokeWidth={1.5} />
-              </a>
-            </div>
-          )}
+          <a
+            href={websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs font-mono text-slate-300 hover:text-white hover:border-sky-500 transition-colors shrink-0"
+          >
+            <span>Global Society Site</span>
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
         </header>
 
-        {/* People Behind This Society (via member_roles) */}
-        <section aria-labelledby="chapter-people-heading" className="space-y-4">
+        {/* Description */}
+        <section className="space-y-3">
+          <h2 className="font-mono text-xs uppercase tracking-wider text-sky-400">
+            About the Chapter
+          </h2>
+          <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-3xl whitespace-pre-line">
+            {description}
+          </p>
+        </section>
+
+        {/* Current Chapter Officers */}
+        <section className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-baseline justify-between">
-            <h2
-              id="chapter-people-heading"
-              className="font-display text-2xl font-semibold text-foreground tracking-tight"
-            >
-              Leadership &amp; Members
+            <h2 className="font-mono text-xs uppercase tracking-wider text-slate-400">
+              Chapter Officers &amp; Committee Leads
             </h2>
-            <span className="font-mono text-xs text-muted">
-              {people.length} indexed tenure{people.length === 1 ? "" : "s"}
-            </span>
           </div>
 
-          {people.length === 0 ? (
-            <div className="border border-border rounded-sm p-6 text-center">
-              <p className="font-mono text-xs text-muted italic">
-                No committee members indexed yet for this society.
-              </p>
-            </div>
-          ) : (
-            <ul className="divide-y divide-border border-y border-border" role="list">
-              {people.map((person) => {
-                if (!person) return null;
-                return (
-                  <li
-                    key={person.roleId}
-                    className="py-3.5 px-2 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02]"
-                  >
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      <MemberAvatar
-                        name={person.fullName}
-                        photoUrl={person.photoUrl}
-                        size="sm"
-                        className="shrink-0"
-                      />
-                      <div className="min-w-0">
-                        <Link
-                          href={`/directory/${person.memberId}`}
-                          className="font-display font-medium text-foreground hover:text-accent transition-colors truncate block"
-                        >
-                          {person.fullName}
-                        </Link>
-                        <span className="font-mono text-xs text-muted block mt-0.5">
-                          {person.roleTitle}
-                        </span>
-                      </div>
-                    </div>
-
-                    {person.tenure && (
-                      <span className="font-mono text-xs text-muted tabular-nums shrink-0">
-                        {person.tenure}
-                      </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {rosterOfficers.map((person) => {
+              return (
+                <div
+                  key={person.id}
+                  className="flex items-center gap-3.5 rounded-lg border border-slate-800 bg-slate-950/60 p-3.5 hover:border-slate-700 transition-colors"
+                >
+                  <MemberAvatar
+                    name={person.fullName}
+                    photoUrl={person.localPhotoUrl}
+                    size="md"
+                    className="border border-slate-700 shrink-0"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <Link
+                      href={`/directory/${person.id}`}
+                      className="font-medium text-white text-sm hover:text-sky-300 transition-colors truncate block"
+                    >
+                      {person.fullName}
+                    </Link>
+                    <p className="font-mono text-xs text-sky-400 truncate mt-0.5">
+                      {person.designation}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </section>
 
         {/* Society Milestones */}
-        <section aria-labelledby="chapter-milestones-heading" className="space-y-4">
-          <div className="flex items-baseline justify-between">
-            <h2
-              id="chapter-milestones-heading"
-              className="font-display text-2xl font-semibold text-foreground tracking-tight"
-            >
-              Chapter Milestones
+        {societyMilestones.length > 0 && (
+          <section className="space-y-4 pt-6 border-t border-slate-800">
+            <h2 className="font-mono text-xs uppercase tracking-wider text-slate-400">
+              Chapter Milestones &amp; Events
             </h2>
-            <span className="font-mono text-xs text-muted">
-              {societyMilestones.length} milestone{societyMilestones.length === 1 ? "" : "s"}
-            </span>
-          </div>
-
-          {societyMilestones.length === 0 ? (
-            <div className="border border-border rounded-sm p-6 text-center">
-              <p className="font-mono text-xs text-muted italic">
-                No milestones recorded for this chapter yet.
-              </p>
-            </div>
-          ) : (
-            <ul className="divide-y divide-border border-y border-border" role="list">
+            <div className="space-y-3">
               {societyMilestones.map((m) => (
-                <li
+                <div
                   key={m.id}
-                  className="py-4 px-2 space-y-1.5 transition-colors hover:bg-black/[0.02]"
+                  className="rounded-lg border border-slate-800 bg-slate-950/60 p-4 space-y-1.5"
                 >
-                  <div className="flex flex-wrap items-center gap-2">
-                    {m.date && (
-                      <time className="font-mono text-xs text-muted tracking-wider uppercase">
-                        {m.date}
-                      </time>
-                    )}
-                    {m.milestone_year && !m.date && (
-                      <time className="font-mono text-xs text-muted tracking-wider">
-                        Year {m.milestone_year}
-                      </time>
-                    )}
-                    {m.category && (
-                      <span className="font-mono text-[10px] px-2 py-0.5 border border-border rounded-sm text-muted">
-                        {m.category}
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="font-display text-lg font-medium text-foreground">
+                  <div className="flex items-center justify-between font-mono text-xs">
+                    <span className="text-sky-400">
+                      {m.date || (m.milestone_year ? `Year ${m.milestone_year}` : "")}
+                    </span>
                     <Link
                       href={`/milestones/${m.id}`}
-                      className="hover:text-accent transition-colors"
+                      className="text-slate-400 hover:text-white inline-flex items-center gap-1"
                     >
-                      {m.title}
+                      <span>Record</span>
+                      <ExternalLink className="h-3 w-3" />
                     </Link>
+                  </div>
+                  <h3 className="font-semibold text-white text-base">
+                    {m.title}
                   </h3>
-
                   {m.description && (
-                    <p className="font-sans text-sm text-muted leading-relaxed max-w-2xl line-clamp-2">
+                    <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
                       {m.description}
                     </p>
                   )}
-                </li>
+                </div>
               ))}
-            </ul>
-          )}
-        </section>
+            </div>
+          </section>
+        )}
       </article>
     </main>
   );

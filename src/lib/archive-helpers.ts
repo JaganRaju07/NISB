@@ -180,7 +180,7 @@ export function filterPublicMilestones(
 
 /**
  * Extracts unique display codes for a member's society memberships
- * (e.g. ["NISB", "CS", "PES"]).
+ * (e.g. ["NISB", "CS", "CASS"]).
  */
 export function extractSocietyCodes(
   roles: MemberRole[],

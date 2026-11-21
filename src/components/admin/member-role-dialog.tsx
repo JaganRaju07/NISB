@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertCircle, Trash2, X, Plus } from "lucide-react";
+import { AlertCircle, Trash2, X, Layers } from "lucide-react";
 import {
   addMemberRoleAction,
   deleteMemberRoleAction,
@@ -94,22 +94,26 @@ export function MemberRoleDialog({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto border-2 border-ink bg-paper p-6 shadow-[6px_6px_0px_#141414]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs">
+      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-2xl text-slate-100">
         {/* Header */}
-        <div className="flex items-center justify-between border-b-2 border-ink pb-4">
-          <div>
-            <span className="font-mono text-[10px] uppercase tracking-wider text-muted font-bold">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="space-y-0.5">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-sky-400 font-bold">
               Tenure &amp; Leadership Lineage
             </span>
-            <h2 className="font-mono text-xl font-bold tracking-tight text-ink">
-              Manage Roles: {member.full_name}
+            <h2 className="font-mono text-lg font-bold tracking-tight text-white flex items-center gap-2">
+              <Layers className="h-5 w-5 text-sky-400" />
+              <span>Manage Roles: {member.full_name}</span>
             </h2>
+            <p className="font-sans text-xs text-slate-400">
+              Record branch executive or technical chapter officer tenures.
+            </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center border-2 border-ink bg-white hover:bg-slate-100"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -117,51 +121,53 @@ export function MemberRoleDialog({
 
         {/* Existing roles list */}
         <div className="pt-4 space-y-3">
-          <h3 className="font-mono text-xs font-bold uppercase text-ink">
+          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-300">
             Recorded Tenures ({roles.length})
           </h3>
           {roles.length === 0 ? (
-            <p className="font-mono text-xs text-muted italic border border-dashed border-border p-3">
-              No historical role records linked to this member yet.
-            </p>
+            <div className="rounded-lg border border-dashed border-slate-800 bg-slate-950/60 p-4 text-center">
+              <p className="font-mono text-xs text-slate-400 italic">
+                No historical role records linked to this member yet.
+              </p>
+            </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
               {roles.map((r) => (
                 <div
                   key={r.id}
-                  className="flex items-center justify-between border-2 border-ink bg-white p-3 shadow-[2px_2px_0px_#141414]"
+                  className="flex items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-950/70 p-3 hover:border-slate-700 transition-colors"
                 >
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm font-bold text-ink">
+                  <div className="space-y-0.5 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono text-xs font-bold text-white">
                         {r.role_title}
                       </span>
                       <span
-                        className={`border px-1.5 py-0.2 font-mono text-[9px] uppercase font-bold ${
+                        className={`rounded px-1.5 py-0.2 font-mono text-[9px] uppercase font-bold border ${
                           r.tier === "branch"
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-amber-600 bg-amber-50 text-amber-900"
+                            ? "border-sky-500/40 bg-sky-500/15 text-sky-300"
+                            : "border-amber-500/40 bg-amber-500/15 text-amber-300"
                         }`}
                       >
                         {r.tier === "branch" ? "Branch Tier" : r.societies?.short_name ?? "Society"}
                       </span>
                       {r.is_current && (
-                        <span className="border border-emerald-600 bg-emerald-50 px-1 py-0.2 font-mono text-[9px] font-bold text-emerald-800 uppercase">
+                        <span className="rounded border border-emerald-500/40 bg-emerald-500/15 px-1.5 py-0.2 font-mono text-[9px] font-bold text-emerald-300 uppercase">
                           Current
                         </span>
                       )}
                     </div>
-                    <p className="font-mono text-xs text-muted">
+                    <p className="font-mono text-[11px] text-slate-400">
                       {r.start_year ?? "Unknown"} – {r.end_year ?? (r.is_current ? "Present" : "—")}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleDeleteRole(r.id)}
-                    className="flex h-7 w-7 items-center justify-center border border-border text-destructive hover:border-destructive hover:bg-red-50"
+                    className="p-1.5 rounded text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
                     title="Delete role record"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               ))}
@@ -170,14 +176,14 @@ export function MemberRoleDialog({
         </div>
 
         {/* Add role form */}
-        <form onSubmit={handleAddRole} className="mt-6 border-t-2 border-ink pt-4 space-y-3">
-          <h3 className="font-mono text-xs font-bold uppercase text-ink">
+        <form onSubmit={handleAddRole} className="mt-6 border-t border-slate-800 pt-4 space-y-4">
+          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-300">
             Add New Tenure Record
           </h3>
 
           {error && (
-            <div className="flex items-start gap-2 border-2 border-destructive bg-red-50 p-2 font-mono text-xs text-destructive">
-              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 rounded-lg border border-rose-500/40 bg-rose-500/10 p-3 font-mono text-xs text-rose-300">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
               <span>{error}</span>
             </div>
           )}
@@ -187,38 +193,38 @@ export function MemberRoleDialog({
             <button
               type="button"
               onClick={() => setTier("branch")}
-              className={`border-2 py-1.5 font-mono text-xs font-bold uppercase transition-colors ${
+              className={`rounded-lg border py-2 px-3 font-mono text-xs font-bold uppercase transition-colors ${
                 tier === "branch"
-                  ? "border-ink bg-primary text-white shadow-[2px_2px_0px_#141414]"
-                  : "border-border bg-white text-muted"
+                  ? "border-sky-500/50 bg-sky-500/20 text-sky-300 shadow-sm"
+                  : "border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
               }`}
             >
-              Branch Tier (NISB Executive)
+              Branch Tier (Executive)
             </button>
             <button
               type="button"
               onClick={() => setTier("society")}
-              className={`border-2 py-1.5 font-mono text-xs font-bold uppercase transition-colors ${
+              className={`rounded-lg border py-2 px-3 font-mono text-xs font-bold uppercase transition-colors ${
                 tier === "society"
-                  ? "border-ink bg-amber-400 text-ink shadow-[2px_2px_0px_#141414]"
-                  : "border-border bg-white text-muted"
+                  ? "border-amber-500/50 bg-amber-500/20 text-amber-300 shadow-sm"
+                  : "border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
               }`}
             >
-              Society Tier (Chapter Officer)
+              Society Tier (Officer)
             </button>
           </div>
 
           {/* Society Dropdown (if society tier) */}
           {tier === "society" && (
             <div>
-              <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
-                Select Society / Chapter <span className="text-destructive">*</span>
+              <label className="block font-mono text-[11px] font-bold uppercase text-slate-400 mb-1">
+                Select Society / Chapter <span className="text-rose-400">*</span>
               </label>
               <select
                 required
                 value={societyId}
                 onChange={(e) => setSocietyId(e.target.value)}
-                className="w-full border-2 border-ink bg-white px-3 py-1.5 font-mono text-xs font-bold"
+                className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-slate-100 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
               >
                 <option value="">-- Choose Chapter --</option>
                 {societies.map((s) => (
@@ -232,8 +238,8 @@ export function MemberRoleDialog({
 
           {/* Role Title */}
           <div>
-            <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
-              Role Title <span className="text-destructive">*</span>
+            <label className="block font-mono text-[11px] font-bold uppercase text-slate-400 mb-1">
+              Role Title <span className="text-rose-400">*</span>
             </label>
             <input
               type="text"
@@ -241,60 +247,69 @@ export function MemberRoleDialog({
               value={roleTitle}
               onChange={(e) => setRoleTitle(e.target.value)}
               placeholder="e.g. Chair, Secretary, Treasurer, Webmaster"
-              className="w-full border-2 border-ink bg-white px-3 py-1.5 font-sans text-sm focus:outline-hidden"
+              className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
             />
           </div>
 
           {/* Years */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
+              <label className="block font-mono text-[11px] font-bold uppercase text-slate-400 mb-1">
                 Start Year
               </label>
               <input
                 type="text"
                 value={startYear}
                 onChange={(e) => setStartYear(e.target.value)}
-                placeholder="2023"
-                className="w-full border-2 border-ink bg-white px-3 py-1.5 font-mono text-xs"
+                placeholder="e.g. 2024"
+                className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
               />
             </div>
             <div>
-              <label className="block font-mono text-xs font-bold uppercase text-ink mb-1">
+              <label className="block font-mono text-[11px] font-bold uppercase text-slate-400 mb-1">
                 End Year
               </label>
               <input
                 type="text"
                 value={endYear}
+                disabled={isCurrent}
                 onChange={(e) => setEndYear(e.target.value)}
-                placeholder="2024"
-                className="w-full border-2 border-ink bg-white px-3 py-1.5 font-mono text-xs"
+                placeholder={isCurrent ? "Present" : "e.g. 2025"}
+                className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:opacity-50"
               />
             </div>
           </div>
 
           {/* Is Current Checkbox */}
-          <div className="flex items-center gap-2 pt-1">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="is_current"
               checked={isCurrent}
               onChange={(e) => setIsCurrent(e.target.checked)}
-              className="h-4 w-4 border-2 border-ink rounded-none text-primary"
+              className="h-4 w-4 rounded border-slate-700 bg-slate-950 text-sky-500 focus:ring-sky-500"
             />
-            <label htmlFor="is_current" className="font-mono text-xs text-ink">
+            <label htmlFor="is_current" className="font-mono text-xs text-slate-300 select-none">
               Currently holding this position
             </label>
           </div>
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-border">
+          {/* Buttons */}
+          <div className="flex items-center justify-end gap-3 border-t border-slate-800 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={isSubmitting}
+              className="btn-tactile-ghost px-4 py-2 text-xs uppercase"
+            >
+              Close
+            </button>
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="btn-tactile-amber inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase"
+              disabled={isSubmitting || !roleTitle.trim()}
+              className="btn-tactile-amber px-5 py-2 text-xs uppercase disabled:opacity-50"
             >
-              <Plus className="h-3.5 w-3.5" />
-              <span>{isSubmitting ? "Adding..." : "Add Role"}</span>
+              {isSubmitting ? "Saving..." : "Add Role"}
             </button>
           </div>
         </form>

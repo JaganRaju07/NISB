@@ -29,15 +29,15 @@ export default async function AdminMembersPage() {
     <div className="mx-auto w-full max-w-6xl p-6 md:p-8 space-y-6">
       {/* Standby Banner */}
       {!auth.isConfigured && (
-        <div className="border-2 border-amber-600 bg-amber-50 p-4 shadow-[4px_4px_0px_#D97706]">
+        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5 shadow-sm">
           <div className="flex items-start gap-3">
-            <Database className="h-5 w-5 text-amber-700 shrink-0 mt-0.5" />
+            <Database className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <h3 className="font-mono text-sm font-bold uppercase text-amber-900">
-                Curator Standby Mode Active
+              <h3 className="font-mono text-sm font-bold uppercase text-amber-300">
+                Admin Standby Mode Active
               </h3>
-              <p className="font-sans text-xs text-amber-800 leading-relaxed">
-                Supabase database credentials are not actively configured in <code>.env.local</code>.
+              <p className="font-sans text-xs text-amber-200/80 leading-relaxed">
+                Supabase database credentials are not actively configured in <code className="text-amber-100">.env.local</code>.
                 Member records are operating in local inspection standby. Configure{" "}
                 <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, and{" "}
                 <code>SUPABASE_SERVICE_ROLE_KEY</code> to enable live database persistence.
@@ -48,21 +48,21 @@ export default async function AdminMembersPage() {
       )}
 
       {/* Header */}
-      <div className="border-b-2 border-ink pb-4">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="border border-ink bg-amber-400 px-2 py-0.2 font-mono text-[10px] font-bold text-ink uppercase tracking-wider">
-            Curator Portal
+      <div className="border-b border-slate-800 pb-5">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="rounded border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-300 uppercase tracking-wider">
+            Admin Portal
           </span>
-          <span className="font-mono text-xs text-muted">
-            Institutional Roster
+          <span className="font-mono text-xs text-slate-400">
+            Institutional Members
           </span>
         </div>
-        <h1 className="font-mono text-3xl font-extrabold tracking-tight text-ink flex items-center gap-2">
-          <Users className="h-7 w-7 text-primary" />
-          <span>Member Roster Management</span>
+        <h1 className="font-mono text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
+          <Users className="h-7 w-7 text-sky-400" />
+          <span>Member Management</span>
         </h1>
-        <p className="mt-1 font-sans text-xs text-muted leading-relaxed">
-          Manage member records, review audit provenance notes, stage official roster entries,
+        <p className="mt-1 font-sans text-xs text-slate-400 leading-relaxed">
+          Manage member records, review audit provenance notes, stage official member entries,
           and assign branch or society tier positions.
         </p>
       </div>

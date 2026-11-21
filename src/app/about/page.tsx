@@ -1,92 +1,325 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ShieldCheck,
+  Award,
+  Layers,
+  Cpu,
+  BookOpen,
+  CheckCircle2,
+  Lock,
+  Landmark,
+  ExternalLink,
+} from "lucide-react";
 import { PageHeader, Footer } from "@/components/ui";
+import { OFFICIAL_PUBLICATIONS } from "@/lib/official-roster";
 
 export const metadata: Metadata = {
-  title: "About — NISB People & Milestones",
-  description: "About the institutional archive of NIE IEEE Student Branch, Mysuru.",
+  title: "About the Digital Archive — NIE IEEE Student Branch",
+  description:
+    "Institutional mission, governance charter, and historical stewardship of NIE IEEE Student Branch (STB64141), Mysuru.",
 };
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
       <PageHeader
         backLabel="Home"
         backHref="/"
-        eyebrow="NIE IEEE Student Branch"
+        eyebrow="Institutional Mission &amp; Charter"
         title="About the Archive"
-        description="Institutional record, preservation policy, and historical stewardship of NIE IEEE Student Branch."
+        description="Preserving the historical provenance, student branch leadership, and engineering achievements of NIE IEEE Student Branch (STB64141)."
       />
 
-      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-12">
-        <div className="space-y-8 font-sans text-sm leading-relaxed text-foreground/90">
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
-              Institutional Heritage
-            </h2>
-            <p className="text-muted leading-relaxed">
-              The NIE IEEE Student Branch (NISB) at The National Institute of
-              Engineering, Mysuru, stands as one of the premier IEEE student
-              organizations in the region. Since its inception, the branch has
-              fostered technical excellence, professional development, and community
-              outreach across engineering disciplines.
-            </p>
-            <p className="text-muted leading-relaxed">
-              This digital archive serves as an authoritative institutional ledger,
-              documenting the students, office bearers, faculty advisors, and mentors
-              who have contributed to the branch&apos;s sustained journey.
-            </p>
-          </section>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-8 space-y-16">
+        {/* Section 1: Institutional Heritage */}
+        <section className="space-y-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-sky-400">
+                Institutional Heritage
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+                NIE IEEE Student Branch (NISB)
+              </h2>
+            </div>
+            <div className="rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-1 font-mono text-xs text-sky-400">
+              STB64141 · EST. 25+ YEARS
+            </div>
+          </div>
 
-          <section className="space-y-3 border-t border-border pt-8">
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
-              Archival Standards &amp; Data Integrity
-            </h2>
-            <p className="text-muted leading-relaxed">
-              The archive operates under rigorous record-keeping principles:
-            </p>
-            <ul className="list-disc pl-5 space-y-2 text-muted">
-              <li>
-                <strong className="text-foreground">Verifiable Provenance:</strong>{" "}
-                Records are populated strictly from audited institutional rosters and
-                verified publications as published on nisb.in.
-              </li>
-              <li>
-                <strong className="text-foreground">Zero Synthetic Data:</strong>{" "}
-                No placeholder personnel, speculative affiliations, or invented
-                biographies exist within the repository.
-              </li>
-              <li>
-                <strong className="text-foreground">Defense-in-Depth Privacy:</strong>{" "}
-                Public directory views selectively expose verified professional
-                information through database-level security barriers, isolating internal
-                curatorial annotations and private audit metadata.
-              </li>
-            </ul>
-          </section>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-8 space-y-4 text-sm sm:text-base text-slate-300 leading-relaxed">
+              <p>
+                NIE IEEE Student Branch (NISB) is the official student branch of
+                The National Institute of Engineering, Mysuru. Operating under the
+                IEEE Bangalore Section and IEEE Mysuru Sub Section, NISB stands as
+                one of the oldest, largest, and most active IEEE student branches
+                in Karnataka.
+              </p>
+              <p>
+                Over more than a quarter-century of continuous activity, NISB has
+                fostered technical innovation, professional leadership, and ethical
+                engineering practices. The branch has been honoured with numerous
+                prestigious accolades, including the coveted{" "}
+                <strong className="text-white">
+                  &ldquo;The Best Student Chapter&rdquo;
+                </strong>{" "}
+                award of IEEE Region 10 (Asia-Pacific).
+              </p>
+            </div>
 
-          <section className="space-y-3 border-t border-border pt-8">
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
-              Design &amp; Archival Philosophy
-            </h2>
-            <p className="text-muted leading-relaxed">
-              The platform embraces a restrained editorial design:
-            </p>
-            <div className="border border-border rounded-sm p-4 bg-paper space-y-2 font-mono text-xs text-muted">
-              <div className="flex justify-between py-1 border-b border-border">
-                <span>Color Palette</span>
-                <span className="text-foreground">Paper (#F4F1EA) · Ink (#141414) · Accent (#00629B)</span>
+            <div className="md:col-span-4 rounded-xl border border-slate-800 bg-slate-900/60 p-6 space-y-3 font-mono text-xs shadow-inner">
+              <div className="flex items-center gap-2 text-sky-400 font-semibold border-b border-slate-800 pb-2">
+                <Landmark className="h-4 w-4" />
+                <span>Institutional Affiliations</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border">
-                <span>Typography</span>
-                <span className="text-foreground">Newsreader (Editorial) · Geist (UI) · Geist Mono (Data)</span>
-              </div>
-              <div className="flex justify-between py-1">
-                <span>Presentation</span>
-                <span className="text-foreground">Ruled Indexed Lists · Fine Hairlines · Monogram Placeholders</span>
+              <div className="space-y-2 text-slate-400">
+                <div>
+                  <span className="text-slate-500 block text-[10px]">COLLEGE</span>
+                  <span className="text-slate-200">The National Institute of Engineering</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">SECTION</span>
+                  <span className="text-slate-200">IEEE Bangalore Section</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">SUB-SECTION</span>
+                  <span className="text-slate-200">IEEE Mysuru Sub Section</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">REGION</span>
+                  <span className="text-slate-200">IEEE Region 10 (Asia-Pacific)</span>
+                </div>
               </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
+
+        {/* Section 2: Technical Ecosystem & Activities */}
+        <section className="space-y-6">
+          <div className="border-b border-slate-800 pb-4">
+            <p className="font-mono text-xs uppercase tracking-widest text-sky-400">
+              Operations &amp; Programs
+            </p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+              Branch Activities &amp; Signature Fests
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded bg-sky-500/10 text-sky-400">
+                <Cpu className="h-5 w-5" />
+              </div>
+              <h3 className="font-semibold text-white text-base">
+                Focus Groups &amp; Meetups
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Peer-led engineering cohorts in Microcontrollers (AVR Atmega), Deep Learning,
+                Web Development, and Python. Women in Engineering hosts weekly technical meetups.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded bg-amber-500/10 text-amber-400">
+                <Award className="h-5 w-5" />
+              </div>
+              <h3 className="font-semibold text-white text-base">
+                Flagship Fests &amp; Contests
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Organizers of ANKURA (Odd Sem Fest), ADROIT (Even Sem Fest), and Electronika
+                circuit hardware design competitions attracting participants across Karnataka.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded bg-purple-500/10 text-purple-400">
+                <BookOpen className="h-5 w-5" />
+              </div>
+              <h3 className="font-semibold text-white text-base">
+                Chronicles &amp; Publications
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Publisher of MANAS (half-yearly newsletter), JIJNASA (annual branch magazine),
+                and technical writeups on the official NISB Engineering Blog.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 2B: Documented Archival Collections & Publications */}
+        <section id="collections" className="space-y-6">
+          <div className="border-b border-slate-800 pb-4">
+            <p className="font-mono text-xs uppercase tracking-widest text-purple-400">
+              Primary Source Material
+            </p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+              Documented Collections &amp; Publications
+            </h2>
+            <p className="text-sm text-slate-400 font-sans mt-1">
+              Authentic periodicals preserved in full text as part of the student branch archival record.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+            {OFFICIAL_PUBLICATIONS.map((pub) => (
+              <div
+                key={pub.title}
+                className="flex flex-col sm:flex-row gap-6 rounded-xl border border-slate-800 bg-slate-900/60 p-6 items-center"
+              >
+                <div className="relative h-44 w-32 shrink-0 overflow-hidden rounded-md border border-slate-700 bg-slate-950 shadow-md">
+                  <Image
+                    src={pub.coverImage}
+                    alt={`${pub.title} Cover`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 128px, 128px"
+                  />
+                </div>
+
+                <div className="space-y-3 text-center sm:text-left flex-1">
+                  <span className="rounded bg-purple-500/10 px-2 py-0.5 font-mono text-[10px] text-purple-400 border border-purple-500/20">
+                    {pub.periodicity}
+                  </span>
+                  <h3 className="font-display text-2xl font-bold text-white">
+                    {pub.title}
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {pub.description}
+                  </p>
+
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 pt-2">
+                    {pub.externalLink && (
+                      <a
+                        href={pub.externalLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-md bg-sky-600 hover:bg-sky-500 px-3 py-1.5 text-xs font-semibold text-white transition-colors"
+                      >
+                        <BookOpen className="h-3.5 w-3.5" />
+                        <span>View Issue</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                    {pub.downloadLink && (
+                      <a
+                        href={pub.downloadLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-colors"
+                      >
+                        <span>Download Archive PDF</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 3: Archival Purpose & Data Integrity */}
+        <section className="space-y-6">
+          <div className="border-b border-slate-800 pb-4">
+            <p className="font-mono text-xs uppercase tracking-widest text-sky-400">
+              Data Governance &amp; Provenance
+            </p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+              Why a Verifiable Digital Archive?
+            </h2>
+          </div>
+
+          <div className="space-y-4 text-sm sm:text-base text-slate-300 leading-relaxed">
+            <p>
+              Student branches frequently encounter institutional memory loss across
+              annual committee transitions. Paper records, event photographs, and
+              student accomplishments often dissipate over time. The NISB Digital Archive
+              establishes a permanent, tamper-resistant, verifiable repository of
+              student branch history.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+              <div className="flex items-center gap-2 text-emerald-400 font-semibold text-sm">
+                <CheckCircle2 className="h-4 w-4" />
+                <span>Zero Speculative Metadata</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                No placeholder personnel, speculative affiliations, or invented biographies
+                are permitted. Missing fields remain strictly null until verified against
+                official committee records.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+              <div className="flex items-center gap-2 text-sky-400 font-semibold text-sm">
+                <ShieldCheck className="h-4 w-4" />
+                <span>Publication Integrity Constraint</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Enforced by PostgreSQL check constraints: a record can only transition
+                to <code className="text-sky-300 font-mono">published</code> status if its verification status
+                is confirmed by an administrator.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+              <div className="flex items-center gap-2 text-purple-400 font-semibold text-sm">
+                <Lock className="h-4 w-4" />
+                <span>Security Barrier Public Views</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Anonymous and public users query exclusively through PostgreSQL views
+                defined with <code className="text-purple-300 font-mono">security_barrier = true</code>,
+                preventing optimizer leaks and strictly isolating internal administrative notes.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+              <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm">
+                <Layers className="h-4 w-4" />
+                <span>Official Asset Integration</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Member photographs and society emblems are mirrored from official NISB
+                servers and local mirrors with deterministic monogram fallbacks derived
+                from the officer&apos;s full name.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 4: Fast Navigation Callouts */}
+        <section className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1 text-center md:text-left">
+            <h3 className="font-display text-xl font-bold text-white">
+              Explore Members Directory
+            </h3>
+            <p className="text-xs text-slate-400 font-mono">
+              Search all 21 official committee members and explore society chapters.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/directory"
+              className="rounded-md bg-sky-600 hover:bg-sky-500 px-4 py-2 text-xs font-semibold text-white transition-colors"
+            >
+              Member Directory
+            </Link>
+            <Link
+              href="/societies"
+              className="rounded-md border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-200 hover:text-white transition-colors"
+            >
+              Societies &amp; Chapters
+            </Link>
+          </div>
+        </section>
       </main>
 
       <Footer />

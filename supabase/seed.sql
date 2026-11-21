@@ -24,63 +24,54 @@ values
   (
     '11111111-1111-4111-a111-000000000002',
     'ieee-cs',
-    'IEEE Computer Society Student Branch Chapter',
-    'IEEE CS',
-    'Technical chapter dedicated to computing and computer science under NISB.',
+    'Computer Society',
+    'CS',
+    'IEEE Computer Society chapter at NISB, started in 2015.',
     '2015',
     'https://www.computer.org'
   ),
   (
     '11111111-1111-4111-a111-000000000003',
     'ieee-wie',
-    'IEEE Women in Engineering Student Branch Affinity Group',
-    'IEEE WIE',
-    'Affinity group dedicated to promoting women in engineering and STEM under NISB.',
+    'Women in Engineering',
+    'WIE',
+    'Women in Engineering affinity group of NISB, formed in April 2015.',
     '2015',
     'https://wie.ieee.org'
   ),
   (
     '11111111-1111-4111-a111-000000000004',
     'ieee-cass',
-    'IEEE Circuits and Systems Society Student Branch Chapter',
-    'IEEE CASS',
-    'Technical chapter focused on circuits and systems engineering under NISB.',
+    'Circuits and Systems Society',
+    'CASS',
+    'IEEE Circuits and Systems Society chapter at NISB.',
     null,
     'https://ieee-cas.org'
   ),
   (
-    '11111111-1111-4111-a111-000000000005',
-    'ieee-pes',
-    'IEEE Power and Energy Society Student Branch Chapter',
-    'IEEE PES',
-    'Technical chapter dedicated to power and energy systems under NISB.',
-    null,
-    'https://nisb.in'
-  ),
-  (
     '11111111-1111-4111-a111-000000000006',
     'ieee-ceda',
-    'IEEE Council on Electronic Design Automation Student Branch Chapter',
-    'IEEE CEDA',
-    'Technical chapter focused on electronic design automation under NISB.',
+    'Council on Electronic Design Automation',
+    'CEDA',
+    'IEEE Council on Electronic Design Automation at NISB.',
     null,
     'https://ieee-ceda.org/'
   ),
   (
     '11111111-1111-4111-a111-000000000007',
     'ieee-grss',
-    'IEEE Geoscience and Remote Sensing Society Student Branch Chapter',
-    'IEEE GRSS',
-    'Technical chapter focused on geoscience and remote sensing technologies under NISB.',
+    'Geoscience and Remote Sensing Society',
+    'GRSS',
+    'IEEE Geoscience and Remote Sensing Society chapter at NISB.',
     null,
     'https://www.grss-ieee.org'
   ),
   (
     '11111111-1111-4111-a111-000000000008',
     'ieee-ras',
-    'IEEE Robotics and Automation Society Student Branch Chapter',
-    'IEEE RAS',
-    'Technical chapter focused on robotics and automation engineering under NISB.',
+    'Robotics and Automation Society',
+    'RAS',
+    'IEEE Robotics and Automation Society chapter at NISB.',
     null,
     'https://www.ieee-ras.org'
   )

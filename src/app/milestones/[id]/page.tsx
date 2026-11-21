@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, ShieldCheck } from "lucide-react";
 import { MemberAvatar, Footer } from "@/components/ui";
 import {
   getPublicMilestoneById,
@@ -44,12 +43,13 @@ export default function MilestoneDetailPage({
   params,
 }: MilestoneDetailProps) {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
       <Suspense
         fallback={
-          <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10 md:px-12">
-            <div className="border border-border rounded-sm bg-paper p-10 text-center">
-              <p className="font-mono text-sm text-muted">Loading milestone...</p>
+          <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-8">
+            <div className="border border-slate-800 rounded-lg bg-slate-900/40 p-12 text-center">
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
+              <p className="font-mono text-sm text-slate-400 mt-3">Loading milestone record...</p>
             </div>
           </main>
         }
@@ -78,19 +78,18 @@ async function MilestoneDetailContent({
       getPublicMembers(),
     ]);
 
-  // Handle standby state when database is unconfigured
   if (!milestoneRes.isConfigured) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 md:px-12">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-8">
         <Link
           href="/milestones"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-400 hover:text-sky-400 transition-colors mb-8"
         >
-          <ArrowLeft className="h-3 w-3" strokeWidth={1.5} />
-          Milestones
+          <ArrowLeft className="h-3.5 w-3.5" />
+          <span>Back to Milestones</span>
         </Link>
-        <div className="border border-border rounded-sm bg-paper p-10 text-center">
-          <p className="font-mono text-sm text-muted">
+        <div className="border border-slate-800 rounded-lg bg-slate-900/40 p-12 text-center space-y-3">
+          <p className="font-mono text-sm text-slate-300">
             Archive database client in standby mode. Milestone records will appear here once connected.
           </p>
         </div>
@@ -108,140 +107,121 @@ async function MilestoneDetailContent({
     ? societies.find((s) => s.id === milestone.society_id)
     : null;
 
-  const members = membersRes.data;
-  const memberMap = new Map(members.map((m) => [m.id, m]));
+  const milestoneMembers = milestoneMembersRes.data;
+  const memberMap = new Map(membersRes.data.map((m) => [m.id, m]));
 
-  const participants = milestoneMembersRes.data
+  const participants = milestoneMembers
     .map((mm) => {
       const member = memberMap.get(mm.member_id);
-      return member
-        ? {
-            id: member.id,
-            name: member.full_name,
-            photoUrl: member.photo_url,
-            roleInMilestone: mm.role_in_milestone,
-          }
-        : null;
+      if (!member) return null;
+      return {
+        memberId: member.id,
+        fullName: member.full_name,
+        photoUrl: member.photo_url,
+        roleInMilestone: mm.role_in_milestone,
+      };
     })
     .filter(Boolean);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10 md:px-12">
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10 sm:px-8">
       {/* Back Link */}
       <nav aria-label="Breadcrumb" className="mb-8">
         <Link
           href="/milestones"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors"
+          className="group inline-flex items-center gap-2 font-mono text-xs text-slate-400 hover:text-sky-400 transition-colors"
         >
-          <ArrowLeft className="h-3 w-3" strokeWidth={1.5} />
-          Milestones
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+          <span>Back to Milestones</span>
         </Link>
       </nav>
 
-      {/* Milestone Detail Article */}
-      <article className="border border-border rounded-sm bg-paper p-6 sm:p-10 space-y-8">
-        {/* Header */}
-        <header className="space-y-3 pb-6 border-b border-border">
-          <div className="flex flex-wrap items-center gap-2">
-            {milestone.date && (
-              <time className="font-mono text-xs text-muted tracking-wider uppercase">
-                {milestone.date}
-              </time>
-            )}
-            {milestone.milestone_year && !milestone.date && (
-              <time className="font-mono text-xs text-muted tracking-wider">
-                Year {milestone.milestone_year}
-              </time>
-            )}
-            {milestone.category && (
-              <span className="font-mono text-[11px] px-2 py-0.5 border border-border rounded-sm text-muted">
-                {milestone.category}
-              </span>
-            )}
-            {society && (
-              <Link
-                href={`/societies/${society.slug}`}
-                className="font-mono text-[11px] px-2 py-0.5 border border-accent/40 text-accent rounded-sm hover:bg-accent/10 transition-colors"
-              >
-                {society.short_name || society.name}
-              </Link>
-            )}
+      {/* Record Sheet Card */}
+      <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm space-y-8">
+        <header className="border-b border-slate-800 pb-6 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+            <div className="flex items-center gap-2">
+              {society ? (
+                <Link
+                  href={`/societies/${society.slug}`}
+                  className="rounded bg-sky-500/10 px-2.5 py-0.5 text-sky-400 border border-sky-500/20 hover:bg-sky-500/20 transition-colors"
+                >
+                  {society.short_name || society.name}
+                </Link>
+              ) : (
+                <span className="rounded bg-slate-800 px-2.5 py-0.5 text-slate-300 border border-slate-700">
+                  Branch Milestone
+                </span>
+              )}
+
+              {(milestone.date || milestone.milestone_year) && (
+                <span className="text-slate-400 inline-flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5 text-sky-400" />
+                  <span>{milestone.date || `Year ${milestone.milestone_year}`}</span>
+                </span>
+              )}
+            </div>
+
+            <span className="text-emerald-400 inline-flex items-center gap-1">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              <span>Confirmed Public Record</span>
+            </span>
           </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-foreground">
+          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white">
             {milestone.title}
           </h1>
         </header>
 
-        {/* Description */}
         {milestone.description && (
-          <div className="prose prose-sm max-w-2xl font-sans text-base leading-relaxed text-foreground/90">
-            <p>{milestone.description}</p>
-          </div>
-        )}
-
-        {/* Optional Milestone Image */}
-        {milestone.image_url && (
-          <div className="pt-2">
-            <Image
-              src={milestone.image_url}
-              alt={milestone.title}
-              width={800}
-              height={450}
-              className="rounded-sm border border-border max-w-full h-auto object-cover"
-              unoptimized
-            />
-          </div>
-        )}
-
-        {/* People Behind This Milestone Section */}
-        <section className="pt-4 border-t border-border" aria-labelledby="people-heading">
-          <h2
-            id="people-heading"
-            className="font-display text-xl font-semibold text-foreground tracking-tight"
-          >
-            People behind this milestone
-          </h2>
-
-          {participants.length === 0 ? (
-            <p className="font-mono text-xs text-muted italic mt-4">
-              No individual contributors indexed for this milestone.
+          <div className="space-y-2">
+            <h2 className="font-mono text-xs uppercase tracking-wider text-slate-400">
+              Overview &amp; Context
+            </h2>
+            <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-3xl whitespace-pre-line">
+              {milestone.description}
             </p>
-          ) : (
-            <ul className="divide-y divide-border border-y border-border mt-4" role="list">
+          </div>
+        )}
+
+        {/* People Behind This Milestone */}
+        {participants.length > 0 && (
+          <div className="space-y-4 pt-6 border-t border-slate-800">
+            <h2 className="font-mono text-xs uppercase tracking-wider text-slate-400">
+              People Behind This Milestone
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {participants.map((p) => {
                 if (!p) return null;
                 return (
-                  <li
-                    key={p.id}
-                    className="py-3 px-2 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02]"
+                  <div
+                    key={p.memberId}
+                    className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950/60 p-3 hover:border-slate-700 transition-colors"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <MemberAvatar
-                        name={p.name}
-                        photoUrl={p.photoUrl}
-                        size="sm"
-                        className="shrink-0"
-                      />
+                    <MemberAvatar
+                      name={p.fullName}
+                      photoUrl={p.photoUrl}
+                      size="md"
+                    />
+                    <div className="min-w-0 flex-1">
                       <Link
-                        href={`/directory/${p.id}`}
-                        className="font-display font-medium text-foreground hover:text-accent transition-colors truncate"
+                        href={`/directory/${p.memberId}`}
+                        className="font-medium text-white text-sm hover:text-sky-300 transition-colors truncate block"
                       >
-                        {p.name}
+                        {p.fullName}
                       </Link>
+                      {p.roleInMilestone && (
+                        <p className="font-mono text-xs text-sky-400">
+                          {p.roleInMilestone}
+                        </p>
+                      )}
                     </div>
-
-                    {p.roleInMilestone && (
-                      <span className="font-mono text-xs text-muted shrink-0">
-                        {p.roleInMilestone}
-                      </span>
-                    )}
-                  </li>
+                  </div>
                 );
               })}
-            </ul>
-          )}
-        </section>
+            </div>
+          </div>
+        )}
       </article>
     </main>
   );

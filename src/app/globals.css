@@ -5,68 +5,69 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* ── Institutional Archive Palette ── */
-  --color-paper: #F4F1EA;
-  --color-ink: #141414;
+  /* ── NISB Institutional Palette ── */
+  --color-paper: #090D16;
+  --color-ink: #F8FAFC;
   --color-accent: #00629B;
   --color-primary: #00629B;
   --color-primary-foreground: #FFFFFF;
-  --color-border: #D9D4C7;
-  --color-muted: #8A8578;
+  --color-border: #1E293B;
+  --color-muted: #94A3B8;
 
   /* ── Semantic mappings ── */
-  --color-background: var(--color-paper);
-  --color-foreground: var(--color-ink);
+  --color-background: #090D16;
+  --color-foreground: #F8FAFC;
 
   /* ── Typography ── */
   --font-display: var(--font-newsreader);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* ── Radius: Restrained fine borders ── */
-  --radius-sm: 2px;
-  --radius-md: 2px;
-  --radius-lg: 2px;
-  --radius-xl: 2px;
-  --radius-2xl: 2px;
-  --radius-3xl: 2px;
-  --radius-4xl: 2px;
+  /* ── Radius: Restrained, sharp institutional borders ── */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+  --radius-4xl: 20px;
 }
 
 :root {
-  /* ── Institutional Archive Palette Variables ── */
-  --background: #F4F1EA;
-  --foreground: #141414;
-  --card: #F4F1EA;
-  --card-foreground: #141414;
-  --popover: #F4F1EA;
-  --popover-foreground: #141414;
+  /* ── Institutional Modern Variables ── */
+  --background: #090D16;
+  --foreground: #F8FAFC;
+  --card: #0F172A;
+  --card-foreground: #F8FAFC;
+  --popover: #0F172A;
+  --popover-foreground: #F8FAFC;
   --primary: #00629B;
   --primary-foreground: #FFFFFF;
-  --secondary: #EBE7DC;
-  --secondary-foreground: #141414;
-  --muted: #EBE7DC;
-  --muted-foreground: #8A8578;
-  --accent: #E2ECF2;
-  --accent-foreground: #00629B;
-  --destructive: #B91C1C;
+  --secondary: #1E293B;
+  --secondary-foreground: #F8FAFC;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #0284C7;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #D9D4C7;
-  --input: #D9D4C7;
-  --ring: #00629B;
-  --radius: 2px;
+  --border: #1E293B;
+  --input: #1E293B;
+  --ring: #38BDF8;
+  --radius: 6px;
 }
 
 /* ── Base styles ── */
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
 /* ── Ruled line utility ── */
 .ruled-line {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border);
 }
 
 /* ── Monogram block (missing photo placeholder) ── */
@@ -74,8 +75,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-border);
-  color: var(--color-ink);
+  background-color: #1E293B;
+  color: #38BDF8;
   font-family: var(--font-display), serif;
   font-weight: 600;
   user-select: none;
@@ -83,14 +84,14 @@ body {
 
 /* ── Focus styles ── */
 *:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid #38BDF8;
   outline-offset: 2px;
 }
 
 /* ── Selection ── */
 ::selection {
-  background-color: var(--color-accent);
-  color: white;
+  background-color: #00629B;
+  color: #FFFFFF;
 }
 
 @layer base {
@@ -102,107 +103,129 @@ body {
   }
 }
 
-/* ── NISB Tactile Utilities ── */
+/* ── NISB Institutional Backdrops ── */
 
 /* Technical Blueprint Grid Backdrops */
 .bg-blueprint-grid {
   background-image:
-    linear-gradient(to right, rgba(0, 98, 155, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 98, 155, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 .bg-blueprint-grid-dense {
   background-image:
-    linear-gradient(to right, rgba(0, 98, 155, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 98, 155, 0.1) 1px, transparent 1px);
+    linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
   background-size: 12px 12px;
 }
 
 .bg-circuit-dots {
-  background-image: radial-gradient(rgba(0, 98, 155, 0.18) 1.2px, transparent 1.2px);
-  background-size: 16px 16px;
+  background-image: radial-gradient(rgba(56, 189, 248, 0.15) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
 }
 
-/* Tactile Buttons */
+/* Tactile Buttons for Curatorial & Institutional Actions */
 .btn-tactile-amber {
   background-color: #F59E0B;
-  color: #141414;
-  border: 2px solid #141414;
+  color: #090D16;
+  border: 1px solid #D97706;
   font-family: var(--font-mono);
   font-weight: 700;
-  box-shadow: 2px 2px 0px #141414;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
-.btn-tactile-amber:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #141414;
+.btn-tactile-amber:hover:not(:disabled) {
   background-color: #FBBF24;
+  box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
 }
-.btn-tactile-amber:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px #141414;
+.btn-tactile-amber:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .btn-tactile-blue {
   background-color: #00629B;
   color: #FFFFFF;
-  border: 2px solid #141414;
+  border: 1px solid #0284C7;
   font-family: var(--font-mono);
-  font-weight: 700;
-  box-shadow: 2px 2px 0px #141414;
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
-.btn-tactile-blue:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #141414;
-  background-color: #0077BA;
+.btn-tactile-blue:hover:not(:disabled) {
+  background-color: #0284C7;
+  box-shadow: 0 4px 12px -2px rgba(2, 132, 199, 0.4);
+  transform: translateY(-1px);
 }
-.btn-tactile-blue:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px #141414;
+.btn-tactile-blue:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .btn-tactile-ghost {
-  background-color: #FFFFFF;
-  color: #141414;
-  border: 2px solid #141414;
+  background-color: #0F172A;
+  color: #E2E8F0;
+  border: 1px solid #1E293B;
   font-family: var(--font-mono);
   font-weight: 600;
-  box-shadow: 2px 2px 0px #141414;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
-.btn-tactile-ghost:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #141414;
-  background-color: #F4F1EA;
+.btn-tactile-ghost:hover:not(:disabled) {
+  background-color: #1E293B;
+  border-color: #38BDF8;
+  color: #38BDF8;
+  transform: translateY(-1px);
 }
-.btn-tactile-ghost:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px #141414;
+.btn-tactile-ghost:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
-/* Tactile High-Contrast Cards */
+.btn-tactile-destructive {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #FCA5A5;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.btn-tactile-destructive:hover:not(:disabled) {
+  background-color: rgba(239, 68, 68, 0.25);
+  border-color: #EF4444;
+  color: #FFFFFF;
+}
+
+/* Institutional Cards */
 .card-tactile {
-  background-color: #FFFFFF;
-  border: 2px solid #141414;
-  box-shadow: 3px 3px 0px #141414;
+  background-color: #0F172A;
+  border: 1px solid #1E293B;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .card-tactile:hover {
   transform: translateY(-2px);
-  box-shadow: 5px 5px 0px #141414;
+  border-color: #38BDF8;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
 }
 
 .card-tactile-dark {
-  background-color: #0F172A;
-  border: 2px solid #334155;
-  box-shadow: 3px 3px 0px #020617;
+  background-color: #0B1120;
+  border: 1px solid #1E293B;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .card-tactile-dark:hover {
   transform: translateY(-2px);
-  box-shadow: 5px 5px 0px #38BDF8;
+  box-shadow: 0 10px 20px -3px rgba(2, 132, 199, 0.25);
   border-color: #38BDF8;
 }
 
@@ -217,15 +240,7 @@ body {
 }
 
 .animate-float-subtle {
-  animation: float-subtle 3s ease-in-out infinite;
-}
-
-/* Accessibility: Tactile Focus-Visible States */
-.btn-tactile-amber:focus-visible,
-.btn-tactile-blue:focus-visible,
-.btn-tactile-ghost:focus-visible {
-  outline: 2px solid #00629B;
-  outline-offset: 2px;
+  animation: float-subtle 4s ease-in-out infinite;
 }
 
 /* Accessibility: Reduced Motion Preference */
@@ -233,9 +248,6 @@ body {
   .animate-float-subtle {
     animation: none;
   }
-  .btn-tactile-amber,
-  .btn-tactile-blue,
-  .btn-tactile-ghost,
   .card-tactile,
   .card-tactile-dark {
     transition: none;

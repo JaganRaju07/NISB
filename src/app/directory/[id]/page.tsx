@@ -2,7 +2,14 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Milestone as MilestoneIcon,
+  ExternalLink,
+  ShieldCheck,
+  Landmark,
+} from "lucide-react";
 import { MemberAvatar, Footer } from "@/components/ui";
 import {
   getPublicMemberById,
@@ -16,6 +23,7 @@ import {
   formatTenure,
   isMemberRecordEmpty,
 } from "@/lib/archive-helpers";
+import { OFFICIAL_ROSTER_MEMBERS } from "@/lib/official-roster";
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -30,6 +38,14 @@ export async function generateMetadata({
   const { id } = await params;
   if (!UUID_REGEX.test(id)) {
     return { title: "Member Not Found — NISB Archive" };
+  }
+
+  const staticMember = OFFICIAL_ROSTER_MEMBERS.find((m) => m.id === id);
+  if (staticMember) {
+    return {
+      title: `${staticMember.fullName} — NISB Directory`,
+      description: `${staticMember.fullName}, ${staticMember.designation} (${staticMember.portfolio}) at NIE IEEE Student Branch (STB64141).`,
+    };
   }
 
   const { data: member } = await getPublicMemberById(id);
@@ -49,12 +65,13 @@ export default function DirectoryRecordPage({
   params,
 }: DirectoryRecordProps) {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
       <Suspense
         fallback={
-          <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10 md:px-12">
-            <div className="border border-border rounded-sm bg-paper p-10 text-center">
-              <p className="font-mono text-sm text-muted">Loading member record...</p>
+          <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-8">
+            <div className="border border-slate-800 rounded-lg bg-slate-900/40 p-12 text-center">
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
+              <p className="font-mono text-sm text-slate-400 mt-3">Loading member record...</p>
             </div>
           </main>
         }
@@ -75,6 +92,8 @@ async function DirectoryRecordContent({
     notFound();
   }
 
+  const staticMember = OFFICIAL_ROSTER_MEMBERS.find((m) => m.id === id);
+
   const [
     memberRes,
     rolesRes,
@@ -89,31 +108,146 @@ async function DirectoryRecordContent({
     getPublicMilestoneMembers({ memberId: id }),
   ]);
 
-  // Handle standby state when database is unconfigured
-  if (!memberRes.isConfigured) {
+  const member = memberRes.data;
+
+  // If neither published DB member nor official static member exists, 404
+  if (!member && !staticMember) {
+    notFound();
+  }
+
+  // If member is not yet published in DB, display official verified roster profile
+  if (!member && staticMember) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 md:px-12">
-        <Link
-          href="/directory"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors mb-8"
-        >
-          <ArrowLeft className="h-3 w-3" strokeWidth={1.5} />
-          Directory
-        </Link>
-        <div className="border border-border rounded-sm bg-paper p-10 text-center">
-          <p className="font-mono text-sm text-muted">
-            Archive database client in standby mode. Member records will appear here once connected.
-          </p>
-        </div>
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10 sm:px-8">
+        {/* Back Link */}
+        <nav aria-label="Breadcrumb" className="mb-8">
+          <Link
+            href="/directory"
+            className="group inline-flex items-center gap-2 font-mono text-xs text-slate-400 hover:text-sky-400 transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Directory</span>
+          </Link>
+        </nav>
+
+        {/* Record Sheet Card */}
+        <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm space-y-8">
+          {/* Header Row */}
+          <header className="flex flex-col sm:flex-row items-start gap-6 pb-8 border-b border-slate-800">
+            <div className="shrink-0">
+              <MemberAvatar
+                name={staticMember.fullName}
+                photoUrl={staticMember.localPhotoUrl}
+                size="2xl"
+                className="border border-slate-700 shadow-md"
+                priority
+              />
+            </div>
+
+            <div className="flex-1 min-w-0 space-y-2">
+              <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span className="rounded bg-amber-500/10 px-2.5 py-0.5 text-amber-400 border border-amber-500/20">
+                  Executive Committee
+                </span>
+                <span className="text-slate-400">·</span>
+                <span className="text-sky-400 inline-flex items-center gap-1">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  <span>nisb.in/content.html#team</span>
+                </span>
+              </div>
+
+              <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mt-1">
+                {staticMember.fullName}
+              </h1>
+
+              <p className="font-mono text-sm tracking-wide text-sky-300 font-medium">
+                {staticMember.designation}
+              </p>
+
+              <p className="font-mono text-xs text-slate-400 pt-1">
+                {staticMember.portfolio} · NIE IEEE Student Branch
+              </p>
+            </div>
+          </header>
+
+          {/* Details Definition List */}
+          <dl className="divide-y divide-slate-800/80">
+            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
+                Committee Category
+              </dt>
+              <dd className="font-mono text-xs text-slate-200">
+                {staticMember.category}
+              </dd>
+            </div>
+
+            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
+                Portfolio Focus
+              </dt>
+              <dd className="font-mono text-xs text-sky-400 font-medium">
+                {staticMember.portfolio}
+              </dd>
+            </div>
+
+            {staticMember.societyName && (
+              <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+                <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
+                  Affiliated Chapter
+                </dt>
+                <dd className="font-mono text-xs text-slate-200 flex items-center gap-2">
+                  <Landmark className="h-3.5 w-3.5 text-amber-400" />
+                  {staticMember.societySlug ? (
+                    <Link
+                      href={`/societies/${staticMember.societySlug}`}
+                      className="text-sky-300 hover:underline"
+                    >
+                      {staticMember.societyName}
+                    </Link>
+                  ) : (
+                    <span>{staticMember.societyName}</span>
+                  )}
+                </dd>
+              </div>
+            )}
+
+            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
+                Institutional Source
+              </dt>
+              <dd className="text-xs text-slate-300 leading-relaxed">
+                Listed on the official NIE IEEE Student Branch team directory at{" "}
+                <a
+                  href="https://www.nisb.in/content.html#team"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sky-400 hover:underline inline-flex items-center gap-1"
+                >
+                  <span>nisb.in/content.html#team</span>
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </dd>
+            </div>
+          </dl>
+
+          {/* Staging Notice */}
+          <div className="rounded-lg border border-slate-800 bg-slate-950/60 p-4 text-xs font-mono text-slate-400 space-y-1">
+            <div className="flex items-center gap-2 text-amber-400 font-bold">
+              <CheckCircle2 className="h-4 w-4" />
+              <span>Executive Committee Record</span>
+            </div>
+            <p className="text-slate-400 font-sans leading-relaxed">
+              This record is established by official appearance on the NISB website.
+              Extended historical tenures, technical papers, and milestone associations
+              are currently undergoing verification by the archival committee.
+            </p>
+          </div>
+        </article>
       </main>
     );
   }
 
-  const member = memberRes.data;
-  if (!member) {
-    notFound();
-  }
-
+  // Published DB member view
   const roles = rolesRes.data;
   const societies = societiesRes.data;
   const societyMap = new Map(societies.map((s) => [s.id, s]));
@@ -129,54 +263,63 @@ async function DirectoryRecordContent({
     memberMilestoneIds.has(m.id)
   );
 
-  const tenureDisplay = formatTenure(member.tenure_start, member.tenure_end);
-  const showQuietEmptyLine = isMemberRecordEmpty(member);
+  const tenureDisplay = formatTenure(member!.tenure_start, member!.tenure_end);
+  const showQuietEmptyLine = isMemberRecordEmpty(member!);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10 md:px-12">
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10 sm:px-8">
       {/* Back Link */}
       <nav aria-label="Breadcrumb" className="mb-8">
         <Link
           href="/directory"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-accent transition-colors"
+          className="group inline-flex items-center gap-2 font-mono text-xs text-slate-400 hover:text-sky-400 transition-colors"
         >
-          <ArrowLeft className="h-3 w-3" strokeWidth={1.5} />
-          Directory
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+          <span>Back to Directory</span>
         </Link>
       </nav>
 
       {/* Record Sheet Card */}
-      <article className="border border-border rounded-sm bg-paper p-6 sm:p-10">
+      <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm">
         {/* Header Row: Portrait on Left, Name & Role on Right */}
-        <header className="flex flex-col sm:flex-row items-start gap-6 pb-8 border-b border-border">
+        <header className="flex flex-col sm:flex-row items-start gap-6 pb-8 border-b border-slate-800">
           <div className="shrink-0">
             <MemberAvatar
-              name={member.full_name}
-              photoUrl={member.photo_url}
-              size="lg"
-              className="w-24 h-24 sm:w-28 sm:h-28 text-2xl"
+              name={member!.full_name}
+              photoUrl={member!.photo_url}
+              size="2xl"
+              className="border border-slate-700 shadow-md"
+              priority
             />
           </div>
 
-          <div className="flex-1 min-w-0">
-            <p className="font-mono text-[10px] tracking-widest text-muted uppercase">
-              Archival Record Sheet
-            </p>
-            <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-foreground mt-1">
-              {member.full_name}
+          <div className="flex-1 min-w-0 space-y-2">
+            <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <span className="rounded bg-sky-500/10 px-2.5 py-0.5 text-sky-400 border border-sky-500/20">
+                Verified Archival Record
+              </span>
+              <span className="text-slate-400">·</span>
+              <span className="text-emerald-400 inline-flex items-center gap-1">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                <span>Confirmed Status</span>
+              </span>
+            </div>
+
+            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mt-1">
+              {member!.full_name}
             </h1>
 
-            {member.role && (
-              <p className="font-mono text-xs uppercase tracking-wider text-muted font-medium mt-1.5">
-                {member.role}
+            {member!.role && (
+              <p className="font-mono text-sm tracking-wide text-sky-300 font-medium">
+                {member!.role}
               </p>
             )}
 
-            {(member.department || member.batch_year) && (
-              <p className="font-mono text-xs text-muted/80 mt-1">
+            {(member!.department || member!.batch_year) && (
+              <p className="font-mono text-xs text-slate-400 pt-1">
                 {[
-                  member.department,
-                  member.batch_year ? `Batch of ${member.batch_year}` : null,
+                  member!.department,
+                  member!.batch_year ? `Batch of ${member!.batch_year}` : null,
                 ]
                   .filter(Boolean)
                   .join(" · ")}
@@ -186,14 +329,14 @@ async function DirectoryRecordContent({
         </header>
 
         {/* Ruled Rows with Mono Labels */}
-        <dl className="divide-y divide-border">
+        <dl className="divide-y divide-slate-800/80">
           {/* Society / Portfolio Row (from member_roles, label tier as Branch or Society) */}
           {roles.length > 0 && (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-6">
-              <dt className="font-mono text-xs text-muted uppercase tracking-wider shrink-0 w-36 sm:w-44">
-                Society / portfolio
+            <div className="py-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
+                Society / Portfolio
               </dt>
-              <dd className="flex-1 space-y-1.5">
+              <dd className="flex-1 space-y-2">
                 {roles.map((r) => {
                   const soc = r.society_id ? societyMap.get(r.society_id) : null;
                   const tierLabel = formatRoleTierLabel(
@@ -205,15 +348,15 @@ async function DirectoryRecordContent({
                   return (
                     <div
                       key={r.id}
-                      className="font-mono text-xs text-foreground/90 flex flex-wrap items-center gap-1.5"
+                      className="font-mono text-xs text-slate-200 flex flex-wrap items-center gap-2"
                     >
-                      <span className="font-semibold text-accent/90 uppercase tracking-wide">
+                      <span className="font-semibold text-sky-400 uppercase tracking-wide">
                         {tierLabel}
                       </span>
-                      <span>·</span>
+                      <span className="text-slate-400">·</span>
                       <span>{r.role_title}</span>
                       {roleTenure && (
-                        <span className="text-muted">({roleTenure})</span>
+                        <span className="text-slate-400 font-normal">({roleTenure})</span>
                       )}
                     </div>
                   );
@@ -224,39 +367,39 @@ async function DirectoryRecordContent({
 
           {/* Tenure Row */}
           {tenureDisplay && (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-6">
-              <dt className="font-mono text-xs text-muted uppercase tracking-wider shrink-0 w-36 sm:w-44">
+            <div className="py-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
                 Tenure
               </dt>
-              <dd className="flex-1 font-mono text-xs text-foreground/90 tabular-nums">
+              <dd className="flex-1 font-mono text-xs text-slate-200 tabular-nums">
                 {tenureDisplay}
               </dd>
             </div>
           )}
 
           {/* Bio Row (rendered only when present) */}
-          {member.bio && member.bio.trim() && (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-6">
-              <dt className="font-mono text-xs text-muted uppercase tracking-wider shrink-0 w-36 sm:w-44">
+          {member!.bio && member!.bio.trim() && (
+            <div className="py-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
                 Biography
               </dt>
-              <dd className="flex-1 font-sans text-sm leading-relaxed text-foreground/90 max-w-xl">
-                {member.bio}
+              <dd className="flex-1 text-sm leading-relaxed text-slate-200 max-w-xl">
+                {member!.bio}
               </dd>
             </div>
           )}
 
           {/* Technical Interests Row */}
-          {member.interests && member.interests.length > 0 && (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-6">
-              <dt className="font-mono text-xs text-muted uppercase tracking-wider shrink-0 w-36 sm:w-44">
-                Technical interests
+          {member!.interests && member!.interests.length > 0 && (
+            <div className="py-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
+                Technical Interests
               </dt>
-              <dd className="flex-1 flex flex-wrap gap-1.5">
-                {member.interests.map((interest) => (
+              <dd className="flex-1 flex flex-wrap gap-2">
+                {member!.interests.map((interest) => (
                   <span
                     key={interest}
-                    className="font-mono text-[11px] px-2 py-0.5 border border-border rounded-sm bg-black/[0.02] text-foreground/80"
+                    className="font-mono text-xs px-2.5 py-1 border border-slate-700 rounded bg-slate-950 text-slate-300"
                   >
                     {interest}
                   </span>
@@ -266,41 +409,42 @@ async function DirectoryRecordContent({
           )}
 
           {/* Contributions Row */}
-          {member.contributions && member.contributions.trim() && (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-6">
-              <dt className="font-mono text-xs text-muted uppercase tracking-wider shrink-0 w-36 sm:w-44">
+          {member!.contributions && member!.contributions.trim() && (
+            <div className="py-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
                 Contributions
               </dt>
-              <dd className="flex-1 font-sans text-sm leading-relaxed whitespace-pre-line text-foreground/90 max-w-xl">
-                {member.contributions}
+              <dd className="flex-1 text-sm leading-relaxed whitespace-pre-line text-slate-200 max-w-xl">
+                {member!.contributions}
               </dd>
             </div>
           )}
 
           {/* Milestones Row */}
           {memberMilestones.length > 0 && (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-6">
-              <dt className="font-mono text-xs text-muted uppercase tracking-wider shrink-0 w-36 sm:w-44">
-                Milestones
+            <div className="py-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
+                Linked Milestones
               </dt>
-              <dd className="flex-1 space-y-2">
+              <dd className="flex-1 space-y-2.5">
                 {memberMilestones.map((m) => {
                   const roleInMilestone = milestoneRoleMap.get(m.id);
                   return (
-                    <div key={m.id} className="text-sm">
+                    <div key={m.id} className="text-sm flex items-baseline gap-2">
+                      <MilestoneIcon className="h-3.5 w-3.5 text-sky-400 shrink-0 self-center" />
                       <Link
                         href={`/milestones/${m.id}`}
-                        className="font-display font-medium text-foreground hover:text-accent underline underline-offset-4 transition-colors"
+                        className="font-medium text-white hover:text-sky-300 underline underline-offset-4 transition-colors"
                       >
                         {m.title}
                       </Link>
                       {roleInMilestone && (
-                        <span className="font-mono text-xs text-muted ml-2">
+                        <span className="font-mono text-xs text-slate-400">
                           ({roleInMilestone})
                         </span>
                       )}
                       {(m.date || m.milestone_year) && (
-                        <span className="font-mono text-xs text-muted ml-2">
+                        <span className="font-mono text-xs text-slate-400">
                           · {m.date || `Year ${m.milestone_year}`}
                         </span>
                       )}
@@ -314,8 +458,8 @@ async function DirectoryRecordContent({
 
         {/* Quiet fallback line when bio, interests, contributions and tenure are all empty */}
         {showQuietEmptyLine && (
-          <p className="font-mono text-xs text-muted italic pt-6 pb-2 border-t border-border mt-2">
-            Further details will be added by the committee.
+          <p className="font-mono text-xs text-slate-400 italic pt-6 pb-2 border-t border-slate-800/80 mt-2">
+            Further historical details will be indexed as records are confirmed by the archive committee.
           </p>
         )}
       </article>

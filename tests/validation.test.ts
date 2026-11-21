@@ -589,7 +589,6 @@ describe("Phase 2 — Validation & Archival Integrity", () => {
         "ieee-cs",
         "ieee-wie",
         "ieee-cass",
-        "ieee-pes",
         "ieee-ceda",
         "ieee-grss",
         "ieee-ras",

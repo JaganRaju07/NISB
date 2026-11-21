@@ -7,15 +7,18 @@ import { Monogram } from "@/components/ui/monogram";
 export interface MemberAvatarProps {
   name: string;
   photoUrl?: string | null;
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
   className?: string;
+  priority?: boolean;
 }
 
 const sizeConfig = {
-  xs: { px: 28, class: "h-7 w-7", monogramSize: "sm" as const },
-  sm: { px: 36, class: "h-9 w-9", monogramSize: "sm" as const },
-  md: { px: 48, class: "h-12 w-12", monogramSize: "md" as const },
-  lg: { px: 80, class: "h-20 w-20", monogramSize: "lg" as const },
+  xs: { px: 28, class: "h-7 w-7 text-xs", monogramSize: "sm" as const },
+  sm: { px: 36, class: "h-9 w-9 text-xs", monogramSize: "sm" as const },
+  md: { px: 48, class: "h-12 w-12 text-sm", monogramSize: "md" as const },
+  lg: { px: 80, class: "h-20 w-20 text-lg", monogramSize: "lg" as const },
+  xl: { px: 112, class: "h-28 w-28 text-xl", monogramSize: "lg" as const },
+  "2xl": { px: 160, class: "h-40 w-40 text-2xl", monogramSize: "lg" as const },
 };
 
 /**
@@ -28,6 +31,7 @@ export function MemberAvatar({
   photoUrl,
   size = "md",
   className = "",
+  priority = false,
 }: MemberAvatarProps) {
   const [useLocalFallback, setUseLocalFallback] = useState(false);
   const [error, setError] = useState(false);
@@ -63,7 +67,8 @@ export function MemberAvatar({
       alt={name}
       width={cfg.px}
       height={cfg.px}
-      className={`${cfg.class} rounded-sm object-cover border border-border shrink-0 ${className}`}
+      priority={priority}
+      className={`${cfg.class} rounded-md object-cover border border-slate-700/80 shrink-0 shadow-sm ${className}`}
       unoptimized
       onError={handleImageError}
     />

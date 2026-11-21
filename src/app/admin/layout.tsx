@@ -3,8 +3,8 @@ import { getAdminAuthStatus } from "@/lib/admin";
 import { AdminHeader } from "@/components/admin/admin-header";
 
 export const metadata: Metadata = {
-  title: "Curator Portal — NISB People & Milestones",
-  description: "Administrative archive management and curatorial verification.",
+  title: "Admin Portal — NISB Digital Archive",
+  description: "Administrative archive management, member staging, and verification.",
 };
 
 export default async function AdminLayout({
@@ -15,7 +15,7 @@ export default async function AdminLayout({
   const auth = await getAdminAuthStatus();
 
   return (
-    <div className="min-h-screen flex flex-col bg-paper text-ink">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
       <AdminHeader
         userEmail={auth.userEmail}
         role={auth.role}

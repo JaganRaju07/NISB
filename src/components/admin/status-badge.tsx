@@ -4,31 +4,34 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ type, value }: StatusBadgeProps) {
-  if (!value) return <span className="font-mono text-xs text-muted">—</span>;
+  if (!value) return <span className="font-mono text-xs text-slate-500">—</span>;
 
   if (type === "status") {
     switch (value) {
       case "published":
         return (
-          <span className="inline-flex items-center border-2 border-ink bg-primary px-2 py-0.5 font-mono text-[10px] font-bold text-white uppercase tracking-wider shadow-[1px_1px_0px_#141414]">
+          <span className="inline-flex items-center gap-1 rounded border border-sky-500/40 bg-sky-500/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-sky-300 shadow-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
             Published
           </span>
         );
       case "draft":
         return (
-          <span className="inline-flex items-center border border-ink bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-bold text-slate-800 uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1 rounded border border-slate-700 bg-slate-800/80 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-slate-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
             Draft
           </span>
         );
       case "archived":
         return (
-          <span className="inline-flex items-center border border-border bg-stone-100 px-2 py-0.5 font-mono text-[10px] font-medium text-stone-600 uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1 rounded border border-zinc-700 bg-zinc-900 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
             Archived
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center border border-border px-1.5 py-0.5 font-mono text-[10px]">
+          <span className="inline-flex items-center rounded border border-slate-800 bg-slate-900 px-1.5 py-0.5 font-mono text-[10px] text-slate-400">
             {value}
           </span>
         );
@@ -39,25 +42,28 @@ export function StatusBadge({ type, value }: StatusBadgeProps) {
   switch (value) {
     case "confirmed":
       return (
-        <span className="inline-flex items-center border-2 border-ink bg-emerald-500 px-2 py-0.5 font-mono text-[10px] font-bold text-white uppercase tracking-wider shadow-[1px_1px_0px_#141414]">
+        <span className="inline-flex items-center gap-1 rounded border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-300 shadow-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
           Confirmed
         </span>
       );
     case "source_listed":
       return (
-        <span className="inline-flex items-center border border-ink bg-amber-400 px-2 py-0.5 font-mono text-[10px] font-bold text-ink uppercase tracking-wider">
+        <span className="inline-flex items-center gap-1 rounded border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300 shadow-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
           Source Listed
         </span>
       );
     case "pending":
       return (
-        <span className="inline-flex items-center border border-dashed border-amber-600 bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-medium text-amber-900 uppercase tracking-wider">
+        <span className="inline-flex items-center gap-1 rounded border border-dashed border-rose-500/40 bg-rose-500/15 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-rose-300">
+          <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
           Pending
         </span>
       );
     default:
       return (
-        <span className="inline-flex items-center border border-border px-1.5 py-0.5 font-mono text-[10px]">
+        <span className="inline-flex items-center rounded border border-slate-800 bg-slate-900 px-1.5 py-0.5 font-mono text-[10px] text-slate-400">
           {value}
         </span>
       );

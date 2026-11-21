@@ -20,64 +20,67 @@ export function AdminHeader({
 
   const navItems = [
     { href: "/admin", label: "Overview" },
-    { href: "/admin/members", label: "Members Roster" },
+    { href: "/admin/members", label: "Members" },
     { href: "/admin/milestones", label: "Milestones Timeline" },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b-2 border-ink bg-paper/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-950/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        {/* Left: Brand & Curator Tag */}
+        {/* Left: Brand & Admin Tag */}
         <div className="flex items-center gap-3">
-          <Link href="/admin" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center border-2 border-ink bg-primary font-mono text-xs font-bold text-white shadow-[2px_2px_0px_#141414]">
+          <Link href="/admin" className="flex items-center gap-2 group">
+            <div className="flex h-8 w-8 items-center justify-center rounded border border-sky-500/40 bg-sky-600 font-mono text-xs font-bold text-white shadow-sm transition-transform group-hover:scale-105">
               N
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
-                <span className="font-mono text-sm font-bold tracking-tight text-ink">
+                <span className="font-mono text-sm font-bold tracking-tight text-white">
                   NISB ARCHIVE
                 </span>
-                <span className="border border-ink bg-amber-400 px-1 py-0.2 font-mono text-[9px] font-bold text-ink uppercase">
-                  Curator
+                <span className="rounded border border-amber-500/40 bg-amber-500/20 px-1.5 py-0.2 font-mono text-[9px] font-bold text-amber-300 uppercase tracking-wider">
+                  Admin
                 </span>
               </div>
             </div>
           </Link>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 ml-6 border-l border-border pl-6" aria-label="Admin Navigation">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
-                  pathname === item.href
-                    ? "border-b-2 border-primary text-primary"
-                    : "text-muted hover:text-ink"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center gap-1 ml-6 border-l border-slate-800 pl-6" aria-label="Admin Navigation">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
+                    isActive
+                      ? "border-b-2 border-sky-400 text-sky-400"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
         {/* Right: User Status & Actions */}
         <div className="flex items-center gap-3">
           {isConfigured ? (
-            <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1 border border-ink bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-900">
-                <ShieldCheck className="h-3 w-3 text-emerald-700" />
+            <div className="hidden sm:flex items-center gap-2 font-mono text-xs">
+              <span className="inline-flex items-center gap-1 rounded border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                <ShieldCheck className="h-3 w-3 text-emerald-400" />
                 {role ?? "Admin"}
               </span>
-              <span className="max-w-[160px] truncate text-ink font-medium" title={userEmail ?? undefined}>
+              <span className="max-w-[160px] truncate text-slate-300 font-medium" title={userEmail ?? undefined}>
                 {userEmail}
               </span>
             </div>
           ) : (
-            <span className="inline-flex items-center gap-1 border border-ink bg-amber-100 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-900">
-              <Database className="h-3 w-3 text-amber-700" />
+            <span className="inline-flex items-center gap-1 rounded border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-300">
+              <Database className="h-3 w-3 text-amber-400" />
               Standby Mode
             </span>
           )}
@@ -86,10 +89,10 @@ export function AdminHeader({
           <Link
             href="/"
             target="_blank"
-            className="hidden sm:inline-flex items-center gap-1 border border-border px-2.5 py-1 font-mono text-xs text-muted hover:text-ink hover:border-ink transition-colors"
+            className="hidden sm:inline-flex items-center gap-1 rounded border border-slate-700 bg-slate-900 px-2.5 py-1 font-mono text-xs text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
           >
             <span>Public Site</span>
-            <ExternalLink className="h-3 w-3" />
+            <ExternalLink className="h-3 w-3 text-slate-400" />
           </Link>
 
           {/* Sign Out Button */}
@@ -98,7 +101,7 @@ export function AdminHeader({
               <button
                 type="submit"
                 className="btn-tactile-ghost inline-flex items-center gap-1 px-2.5 py-1 text-xs"
-                title="Sign out of curator portal"
+                title="Sign out of admin portal"
               >
                 <LogOut className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Logout</span>
@@ -109,15 +112,15 @@ export function AdminHeader({
       </div>
 
       {/* Mobile nav row */}
-      <div className="flex md:hidden border-t border-border px-4 py-2 gap-2 overflow-x-auto bg-paper font-mono text-xs">
+      <div className="flex md:hidden border-t border-slate-800 px-4 py-2 gap-2 overflow-x-auto bg-slate-950 font-mono text-xs">
         {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className={`whitespace-nowrap px-2.5 py-1 border ${
+            className={`whitespace-nowrap rounded px-2.5 py-1 border transition-colors ${
               pathname === item.href
-                ? "border-ink bg-amber-300 font-bold text-ink"
-                : "border-border text-muted"
+                ? "border-sky-500/50 bg-sky-500/20 font-bold text-sky-300"
+                : "border-slate-800 text-slate-400 hover:text-white"
             }`}
           >
             {item.label}

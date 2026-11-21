@@ -21,6 +21,8 @@ export type AdminMilestone = Database["public"]["Tables"]["milestones"]["Row"] &
   societies?: Database["public"]["Tables"]["societies"]["Row"] | null;
 };
 
+export type AdminMilestoneMember = Database["public"]["Tables"]["milestone_members"]["Row"];
+
 export type AdminSociety = Database["public"]["Tables"]["societies"]["Row"];
 
 export type AdminAuthStatus = {
@@ -299,6 +301,37 @@ export async function getAdminSocieties(): Promise<{
     return { data: data ?? [], isConfigured: true, error: null };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to load societies";
+    return { data: [], isConfigured: true, error: message };
+  }
+}
+
+/**
+ * Fetches milestone participant junctions for curator management.
+ */
+export async function getAdminMilestoneMembers(milestoneId?: string): Promise<{
+  data: AdminMilestoneMember[];
+  isConfigured: boolean;
+  error: string | null;
+}> {
+  if (!isSupabaseConfigured()) {
+    return { data: [], isConfigured: false, error: null };
+  }
+
+  try {
+    const supabase = await createServerClient();
+    let q = supabase.from("milestone_members").select("*");
+    if (milestoneId) {
+      q = q.eq("milestone_id", milestoneId);
+    }
+    const { data, error } = await q;
+
+    if (error) {
+      return { data: [], isConfigured: true, error: error.message };
+    }
+
+    return { data: (data as AdminMilestoneMember[]) ?? [], isConfigured: true, error: null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to load milestone participants";
     return { data: [], isConfigured: true, error: message };
   }
 }

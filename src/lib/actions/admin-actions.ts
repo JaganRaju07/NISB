@@ -10,6 +10,7 @@ import {
   memberFormSchema,
   milestoneFormSchema,
   memberRoleFormSchema,
+  milestoneMemberFormSchema,
 } from "@/lib/validation";
 
 export type ActionResponse = {
@@ -475,5 +476,161 @@ export async function deleteMilestoneAction(
     return { success: true };
   } catch (err) {
     return { success: false, error: formatError(err, "Failed to delete milestone") };
+  }
+}
+
+/**
+ * Add a participant/member to a milestone with custom contribution role.
+ */
+export async function addMilestoneMemberAction(
+  formData: FormData
+): Promise<ActionResponse> {
+  try {
+    await requireAdmin();
+    const supabase = await createServerClient();
+
+    const raw = {
+      milestone_id: formData.get("milestone_id")?.toString() ?? "",
+      member_id: formData.get("member_id")?.toString() ?? "",
+      role_in_milestone: formData.get("role_in_milestone")?.toString() ?? "",
+    };
+
+    const validated = milestoneMemberFormSchema.parse(raw);
+
+    const { data, error } = await supabase
+      .from("milestone_members")
+      .insert({
+        milestone_id: validated.milestone_id,
+        member_id: validated.member_id,
+        role_in_milestone: emptyToNull(validated.role_in_milestone),
+      })
+      .select("id")
+      .single();
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/admin/milestones");
+    revalidatePath("/milestones");
+    revalidatePath("/directory");
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: formatError(err, "Failed to add milestone participant") };
+  }
+}
+
+/**
+ * Delete a milestone member participant link.
+ */
+export async function deleteMilestoneMemberAction(
+  junctionId: string
+): Promise<ActionResponse> {
+  try {
+    await requireAdmin();
+    const validId = parseUuid(junctionId, "milestone member junction");
+    const supabase = await createServerClient();
+
+    const { error } = await supabase
+      .from("milestone_members")
+      .delete()
+      .eq("id", validId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/admin/milestones");
+    revalidatePath("/milestones");
+    revalidatePath("/directory");
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: formatError(err, "Failed to remove milestone participant") };
+  }
+}
+
+/**
+ * Quick status and verification transition for a member record.
+ * Strictly enforces publication integrity: cannot publish unless confirmed.
+ */
+export async function quickUpdateMemberStatusAction(
+  memberId: string,
+  status: "draft" | "published" | "archived",
+  verificationStatus: "pending" | "source_listed" | "confirmed"
+): Promise<ActionResponse> {
+  try {
+    const { user } = await requireAdmin();
+    const validId = parseUuid(memberId, "member");
+
+    if (status === "published" && verificationStatus !== "confirmed") {
+      return {
+        success: false,
+        error: "Publication Constraint Violation: Records can only be published when verification status is 'confirmed'.",
+      };
+    }
+
+    const supabase = await createServerClient();
+    const { error } = await supabase
+      .from("members")
+      .update({
+        status,
+        verification_status: verificationStatus,
+        updated_by: user.id,
+      })
+      .eq("id", validId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/admin/members");
+    revalidatePath("/directory");
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: formatError(err, "Failed to update member status") };
+  }
+}
+
+/**
+ * Quick status and verification transition for a milestone record.
+ * Strictly enforces publication integrity: cannot publish unless confirmed.
+ */
+export async function quickUpdateMilestoneStatusAction(
+  milestoneId: string,
+  status: "draft" | "published" | "archived",
+  verificationStatus: "pending" | "source_listed" | "confirmed"
+): Promise<ActionResponse> {
+  try {
+    const { user } = await requireAdmin();
+    const validId = parseUuid(milestoneId, "milestone");
+
+    if (status === "published" && verificationStatus !== "confirmed") {
+      return {
+        success: false,
+        error: "Publication Constraint Violation: Milestones can only be published when verification status is 'confirmed'.",
+      };
+    }
+
+    const supabase = await createServerClient();
+    const { error } = await supabase
+      .from("milestones")
+      .update({
+        status,
+        verification_status: verificationStatus,
+        updated_by: user.id,
+      })
+      .eq("id", validId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/admin/milestones");
+    revalidatePath("/milestones");
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: formatError(err, "Failed to update milestone status") };
   }
 }
