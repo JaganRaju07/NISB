@@ -153,9 +153,6 @@ export default function AboutPage() {
         {/* Section 2B: Documented Archival Collections & Publications */}
         <section id="collections" className="space-y-6">
           <div className="border-b border-slate-800 pb-4">
-            <p className="font-mono text-xs uppercase tracking-widest text-purple-400">
-              Primary Source Material
-            </p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
               Documented Collections &amp; Publications
             </h2>
@@ -226,7 +223,7 @@ export default function AboutPage() {
         <section className="space-y-6">
           <div className="border-b border-slate-800 pb-4">
             <p className="font-mono text-xs uppercase tracking-widest text-sky-400">
-              Data Governance &amp; Provenance
+              Data Governance
             </p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
               Why a Verifiable Digital Archive?

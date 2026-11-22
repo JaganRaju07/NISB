@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { MemberAvatar, Footer } from "@/components/ui";
 import {
   getPublicMilestoneById,
@@ -161,11 +161,6 @@ async function MilestoneDetailContent({
                 </span>
               )}
             </div>
-
-            <span className="text-emerald-400 inline-flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Confirmed Public Record</span>
-            </span>
           </div>
 
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white">

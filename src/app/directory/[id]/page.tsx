@@ -4,10 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
-  CheckCircle2,
   Milestone as MilestoneIcon,
-  ExternalLink,
-  ShieldCheck,
   Landmark,
 } from "lucide-react";
 import { MemberAvatar, Footer } from "@/components/ui";
@@ -149,11 +146,6 @@ async function DirectoryRecordContent({
                 <span className="rounded bg-amber-500/10 px-2.5 py-0.5 text-amber-400 border border-amber-500/20">
                   Executive Committee
                 </span>
-                <span className="text-slate-400">·</span>
-                <span className="text-sky-400 inline-flex items-center gap-1">
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  <span>nisb.in/content.html#team</span>
-                </span>
               </div>
 
               <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -211,37 +203,7 @@ async function DirectoryRecordContent({
               </div>
             )}
 
-            <div className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
-              <dt className="font-mono text-xs text-slate-400 uppercase tracking-wider shrink-0 w-36 sm:w-44">
-                Institutional Source
-              </dt>
-              <dd className="text-xs text-slate-300 leading-relaxed">
-                Listed on the official NIE IEEE Student Branch team directory at{" "}
-                <a
-                  href="https://www.nisb.in/content.html#team"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sky-400 hover:underline inline-flex items-center gap-1"
-                >
-                  <span>nisb.in/content.html#team</span>
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              </dd>
-            </div>
           </dl>
-
-          {/* Staging Notice */}
-          <div className="rounded-lg border border-slate-800 bg-slate-950/60 p-4 text-xs font-mono text-slate-400 space-y-1">
-            <div className="flex items-center gap-2 text-amber-400 font-bold">
-              <CheckCircle2 className="h-4 w-4" />
-              <span>Executive Committee Record</span>
-            </div>
-            <p className="text-slate-400 font-sans leading-relaxed">
-              This record is established by official appearance on the NISB website.
-              Extended historical tenures, technical papers, and milestone associations
-              are currently undergoing verification by the archival committee.
-            </p>
-          </div>
         </article>
       </main>
     );
@@ -294,17 +256,6 @@ async function DirectoryRecordContent({
           </div>
 
           <div className="flex-1 min-w-0 space-y-2">
-            <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-              <span className="rounded bg-sky-500/10 px-2.5 py-0.5 text-sky-400 border border-sky-500/20">
-                Verified Archival Record
-              </span>
-              <span className="text-slate-400">·</span>
-              <span className="text-emerald-400 inline-flex items-center gap-1">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Confirmed Status</span>
-              </span>
-            </div>
-
             <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mt-1">
               {member!.full_name}
             </h1>

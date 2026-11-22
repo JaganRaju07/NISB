@@ -366,21 +366,10 @@ export function Footer({ className = "" }: FooterProps) {
           </div>
         </div>
 
-        {/* Copyright & Provenance Notice */}
+        {/* Copyright */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-900 pt-6 sm:flex-row font-mono text-xs text-slate-400">
           <p>
             © 2026 NIE IEEE Student Branch (NISB) · STB64141. All rights reserved.
-          </p>
-          <p className="flex items-center gap-2 text-slate-400">
-            <span>Data as published on</span>
-            <a
-              href="https://www.nisb.in/content.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sky-400 hover:underline"
-            >
-              nisb.in
-            </a>
           </p>
         </div>
       </div>

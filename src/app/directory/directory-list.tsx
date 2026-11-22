@@ -9,8 +9,6 @@ import {
   LayoutGrid,
   List,
   RotateCcw,
-  ExternalLink,
-  CheckCircle2,
 } from "lucide-react";
 import type { PublicMember, MemberRole, Society } from "@/lib/validation";
 import { MemberAvatar } from "@/components/ui/member-avatar";
@@ -377,20 +375,6 @@ export function DirectoryList({
                       <span className="inline-block rounded bg-slate-800 px-2 py-0.5 text-[10px] font-mono text-slate-300 border border-slate-700/60 truncate max-w-full">
                         {item.portfolio}
                       </span>
-                      {item.isPublished ? (
-                        <span className="inline-flex items-center gap-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-mono text-emerald-400 border border-emerald-500/20">
-                          <CheckCircle2 className="h-2.5 w-2.5" />
-                          <span>Confirmed</span>
-                        </span>
-                      ) : (
-                        <span
-                          className="inline-flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-mono text-amber-300 border border-amber-500/20"
-                          title="Listed on official website roster (nisb.in/content.html#team)"
-                        >
-                          <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                          <span>Official Roster</span>
-                        </span>
-                      )}
                     </div>
                     <h3 className="font-semibold text-white text-sm truncate group-hover:text-sky-300 transition-colors">
                       {item.fullName}
@@ -473,18 +457,6 @@ export function DirectoryList({
                       {item.portfolio}
                     </span>
 
-                    {item.isPublished ? (
-                      <span className="hidden md:inline-flex items-center gap-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[9px] text-emerald-400 border border-emerald-500/20">
-                        <CheckCircle2 className="h-2.5 w-2.5" />
-                        <span>Confirmed</span>
-                      </span>
-                    ) : (
-                      <span className="hidden md:inline-flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 text-[9px] text-amber-300 border border-amber-500/20">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                        <span>Official Roster</span>
-                      </span>
-                    )}
-
                     <Link
                       href={`/directory/${item.id}`}
                       className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 text-xs font-semibold"
@@ -499,27 +471,6 @@ export function DirectoryList({
           </ul>
         </div>
       )}
-
-      {/* Institutional Source Note */}
-      <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-4 text-center font-mono text-xs text-slate-400 space-y-1">
-        <div>
-          Data Governance Standard: Sourced directly from official NIE IEEE Student Branch records at{" "}
-          <a
-            href="https://www.nisb.in/content.html#team"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sky-400 hover:underline inline-flex items-center gap-1"
-          >
-            <span>nisb.in/content.html#team</span>
-            <ExternalLink className="h-3 w-3" />
-          </a>
-          .
-        </div>
-        <p className="text-[11px] text-slate-400 font-sans">
-          Staged roster entries reflect official 2025–2026 branch appointments awaiting full archival corroboration.
-          Confirmed records reflect verified database publications.
-        </p>
-      </div>
     </div>
   );
 }

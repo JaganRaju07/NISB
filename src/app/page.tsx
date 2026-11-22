@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   BookOpen,
   Search,
-  CheckCircle2,
 } from "lucide-react";
 import {
   Footer,
@@ -72,7 +71,7 @@ export default async function Home() {
         meta: m.department ? `${m.department} · Batch ${m.batch_year ?? ""}` : "Archival Record",
         href: `/directory/${m.id}`,
         photoUrl: m.photo_url,
-        badge: "Confirmed Archive Record",
+        badge: m.department ? m.department : undefined,
         provenance: "confirmed",
       });
     }
@@ -149,15 +148,12 @@ export default async function Home() {
           {/* Editorial Headline */}
           <div className="space-y-4 max-w-4xl mx-auto">
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
-              The Institutional Digital Archive of{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-sky-200 to-amber-200">
-                NIE IEEE Student Branch
-              </span>
+              NISB Digital Archive
             </h1>
 
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto font-sans">
               A people-centred, searchable repository preserving the verified
-              leadership, society officers, milestones, and primary source
+              leadership, society officers, milestones, and
               publications of NISB at The National Institute of Engineering, Mysuru.
             </p>
           </div>
@@ -167,8 +163,8 @@ export default async function Home() {
             <UniversalSearch items={searchIndex} />
           </div>
 
-          {/* Real Verified Archive Metrics (Zero Speculation) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto font-mono text-left pt-2">
+          {/* Archive Metrics */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto font-mono text-left pt-2">
             <div className="rounded-lg border border-slate-800 bg-slate-900/70 p-3.5 shadow-sm">
               <div className="text-xs text-slate-400">Officers Cataloged</div>
               <div className="text-xl sm:text-2xl font-bold text-white mt-1">
@@ -191,15 +187,6 @@ export default async function Home() {
                 {OFFICIAL_PUBLICATIONS.length}
               </div>
               <div className="text-[10px] text-slate-400 mt-0.5">MANAS &amp; JIJNASA</div>
-            </div>
-
-            <div className="rounded-lg border border-slate-800 bg-slate-900/70 p-3.5 shadow-sm">
-              <div className="text-xs text-slate-400">Governance Model</div>
-              <div className="text-sm sm:text-base font-bold text-emerald-400 mt-1.5 flex items-center gap-1">
-                <CheckCircle2 className="h-4 w-4 shrink-0" />
-                <span>Strict 2D</span>
-              </div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Zero Speculation</div>
             </div>
           </div>
         </div>
@@ -278,23 +265,6 @@ export default async function Home() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Archival Provenance Callout */}
-            <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-slate-400">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>
-                  Source: Listed on official NIE IEEE Student Branch roster at{" "}
-                  <code className="text-sky-300">nisb.in/content.html#team</code>.
-                </span>
-              </div>
-              <Link
-                href="/directory"
-                className="text-sky-400 hover:underline shrink-0"
-              >
-                Browse complete 21-member roster &rarr;
-              </Link>
             </div>
           </div>
 
@@ -420,10 +390,6 @@ export default async function Home() {
           <div id="milestones" className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-5">
               <div>
-                <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-emerald-400 mb-1">
-                  <Milestone className="h-3.5 w-3.5" />
-                  <span>Historical Provenance</span>
-                </div>
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
                   Milestones &amp; Institutional Achievements
                 </h2>
@@ -453,9 +419,6 @@ export default async function Home() {
                         <span className="text-sky-400 font-semibold">
                           {m.milestone_year ? `Year ${m.milestone_year}` : "Archival"}
                         </span>
-                        <span className="rounded bg-slate-800 px-2 py-0.5 text-slate-300">
-                          Verified
-                        </span>
                       </div>
                       <h3 className="font-semibold text-white text-base">
                         {m.title}
@@ -480,7 +443,7 @@ export default async function Home() {
                 ))}
               </div>
             ) : (
-              /* Honest Curatorial Provenance State (No fabricated achievements) */
+              /* Honest Curatorial State (No fabricated achievements) */
               <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-4">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   <Milestone className="h-6 w-6" />
@@ -488,9 +451,6 @@ export default async function Home() {
                 <h3 className="font-display text-xl font-bold text-white">
                   Chronological Transcriptions in Progress
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed max-w-xl mx-auto">
-                  NISB strictly adheres to a zero-speculation policy: milestones from the past 25+ years (including the IEEE Region 10 &ldquo;Best Student Chapter&rdquo; accolade and flagship ANKURA/ADROIT editions) require verified primary source documentation before public indexing.
-                </p>
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                   <Link
                     href="/milestones"
@@ -513,10 +473,6 @@ export default async function Home() {
           <div id="collections" className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-5">
               <div>
-                <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-purple-400 mb-1">
-                  <BookOpen className="h-3.5 w-3.5" />
-                  <span>Primary Source Archive</span>
-                </div>
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
                   Documented Collections &amp; Publications
                 </h2>

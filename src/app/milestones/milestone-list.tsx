@@ -7,7 +7,6 @@ import {
   Milestone as MilestoneIcon,
   Users,
   ArrowRight,
-  ShieldCheck,
   RotateCcw,
 } from "lucide-react";
 import type {
@@ -134,9 +133,6 @@ export function MilestoneList({
             <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">
               Archival Milestones in Verification
             </h2>
-            <p className="font-mono text-xs uppercase tracking-wider text-sky-400">
-              Institutional Provenance Lifecycle
-            </p>
           </div>
 
           <p className="text-sm text-slate-300 leading-relaxed max-w-xl mx-auto">
@@ -291,11 +287,6 @@ export function MilestoneList({
                       {m.date || (m.milestone_year ? `Year ${m.milestone_year}` : "")}
                     </span>
                   </div>
-
-                  <span className="font-mono text-[11px] text-emerald-400 inline-flex items-center gap-1">
-                    <ShieldCheck className="h-3 w-3" />
-                    <span>Verified</span>
-                  </span>
                 </div>
 
                 <div className="mt-4 space-y-3">
