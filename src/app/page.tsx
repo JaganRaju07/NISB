@@ -7,7 +7,6 @@ import {
   Landmark,
   ArrowRight,
   ExternalLink,
-  ShieldCheck,
   BookOpen,
   Search,
 } from "lucide-react";
@@ -463,7 +462,7 @@ export default async function Home() {
                     href="/about"
                     className="rounded-md border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-medium text-slate-300 hover:text-white transition-colors"
                   >
-                    Read Verification Charter
+                    About the Archive
                   </Link>
                 </div>
               </div>
@@ -547,45 +546,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Section 3: Institutional Governance & Zero-Speculation Charter ── */}
-      <section className="border-b border-slate-800 bg-slate-900/30 py-12 sm:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-8">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 sm:p-8 space-y-4">
-            <div className="flex items-center gap-2 text-amber-400 font-mono text-xs uppercase tracking-wider font-semibold">
-              <ShieldCheck className="h-4 w-4" />
-              <span>Institutional Data Governance Charter</span>
-            </div>
-
-            <h3 className="font-display text-xl sm:text-2xl font-bold text-white">
-              Two-Dimensional Verification Invariant
-            </h3>
-
-            <p className="text-sm text-slate-300 leading-relaxed font-sans">
-              Unlike promotional websites, NIE IEEE Student Branch enforces a strict database-level check:
-              no record can be published to public indexation unless its verification status is explicitly confirmed
-              by authorized branch curators. Staged website entries remain labeled with their provenance status,
-              and empty fields remain explicitly empty until confirmed by official branch records.
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-mono">
-              <Link
-                href="/about"
-                className="text-sky-400 hover:underline inline-flex items-center gap-1"
-              >
-                <span>Read Governance &amp; Charter Specification</span>
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-              <span className="text-slate-600">|</span>
-              <Link
-                href="/admin/login"
-                className="text-slate-400 hover:text-amber-400 transition-colors"
-              >
-                Curator Authentication Portal
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <Footer />

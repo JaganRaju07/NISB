@@ -131,30 +131,13 @@ export function MilestoneList({
 
           <div className="space-y-2">
             <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">
-              Archival Milestones in Verification
+              Branch Milestones Timeline
             </h2>
           </div>
 
           <p className="text-sm text-slate-300 leading-relaxed max-w-xl mx-auto">
-            Under NISB data governance rules, milestone records are strictly prevented from unverified publication.
-            The archive team is actively digitizing and verifying historical events from the past 25+ years,
-            including Region 10 awards, chapter establishment charters, and landmark editions of ANKURA, ADROIT, and Electronika.
+            The archive is curating historical events, Region 10 awards, chapter establishments, and landmark editions of ANKURA, ADROIT, and Electronika from the past 25+ years.
           </p>
-
-          <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs text-left max-w-lg mx-auto">
-            <div className="rounded border border-slate-800 bg-slate-950 p-3">
-              <span className="text-sky-400 font-semibold block mb-1">Phase 1</span>
-              <span className="text-slate-400">Members &amp; Society Foundation</span>
-            </div>
-            <div className="rounded border border-slate-800 bg-slate-950 p-3">
-              <span className="text-amber-400 font-semibold block mb-1">Phase 2</span>
-              <span className="text-slate-400">Archival Verification (Active)</span>
-            </div>
-            <div className="rounded border border-slate-800 bg-slate-950 p-3">
-              <span className="text-emerald-400 font-semibold block mb-1">Phase 3</span>
-              <span className="text-slate-400">Confirmed Public Indexation</span>
-            </div>
-          </div>
 
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
             <Link
@@ -163,19 +146,7 @@ export function MilestoneList({
             >
               Browse Member Directory
             </Link>
-            <Link
-              href="/admin/login"
-              className="rounded-md border border-slate-700 bg-slate-900 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors"
-            >
-              Admin Sign-in
-            </Link>
           </div>
-        </div>
-
-        <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-4 text-center font-mono text-xs text-slate-400">
-          Publication Integrity Constraint: Milestones require{" "}
-          <code className="text-sky-400">status = &apos;published&apos;</code> and{" "}
-          <code className="text-sky-400">verification_status = &apos;confirmed&apos;</code> to be indexed.
         </div>
       </div>
     );

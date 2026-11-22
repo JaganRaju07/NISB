@@ -5,7 +5,6 @@ import {
   Phone,
   MapPin,
   ExternalLink,
-  Shield,
   MessageSquare,
 } from "lucide-react";
 import { OFFICIAL_CONTACT } from "@/lib/official-roster";
@@ -220,7 +219,7 @@ export function Footer({ className = "" }: FooterProps) {
 
         {/* Institutional Affiliation & Fast Links */}
         <div className="mt-12 border-t border-slate-800/80 pt-8">
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-4 font-mono text-xs">
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-3 font-mono text-xs">
             <div>
               <p className="font-semibold text-white uppercase tracking-wider mb-2">
                 Digital Archive
@@ -335,31 +334,6 @@ export function Footer({ className = "" }: FooterProps) {
                     <span>nisb.in Official Site</span>
                     <ExternalLink className="h-2.5 w-2.5" />
                   </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <p className="font-semibold text-white uppercase tracking-wider mb-2">
-                Governance &amp; Admin
-              </p>
-              <ul className="space-y-1.5 text-slate-400">
-                <li>
-                  <Link
-                    href="/admin/login"
-                    className="hover:text-amber-400 inline-flex items-center gap-1 transition-colors"
-                  >
-                    <Shield className="h-3 w-3 text-amber-400" />
-                    <span>Admin</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/login" className="hover:text-slate-200 transition-colors">
-                    Admin Authentication
-                  </Link>
-                </li>
-                <li className="pt-2 text-slate-400">
-                  Two-dimensional publication verification model enforced.
                 </li>
               </ul>
             </div>

@@ -18,7 +18,7 @@ import { OFFICIAL_PUBLICATIONS } from "@/lib/official-roster";
 export const metadata: Metadata = {
   title: "About the Digital Archive — NIE IEEE Student Branch",
   description:
-    "Institutional mission, governance charter, and historical stewardship of NIE IEEE Student Branch (STB64141), Mysuru.",
+    "Institutional mission, historical records, and stewardship of NIE IEEE Student Branch (STB64141), Mysuru.",
 };
 
 export default function AboutPage() {
@@ -27,9 +27,9 @@ export default function AboutPage() {
       <PageHeader
         backLabel="Home"
         backHref="/"
-        eyebrow="Institutional Mission &amp; Charter"
+        eyebrow="Institutional Mission &amp; History"
         title="About the Archive"
-        description="Preserving the historical provenance, student branch leadership, and engineering achievements of NIE IEEE Student Branch (STB64141)."
+        description="Preserving the historical records, student branch leadership, and engineering achievements of NIE IEEE Student Branch (STB64141)."
       />
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-8 space-y-16">
@@ -223,7 +223,7 @@ export default function AboutPage() {
         <section className="space-y-6">
           <div className="border-b border-slate-800 pb-4">
             <p className="font-mono text-xs uppercase tracking-widest text-sky-400">
-              Data Governance
+              Data Integrity
             </p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
               Why a Verifiable Digital Archive?
@@ -244,36 +244,30 @@ export default function AboutPage() {
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
               <div className="flex items-center gap-2 text-emerald-400 font-semibold text-sm">
                 <CheckCircle2 className="h-4 w-4" />
-                <span>Zero Speculative Metadata</span>
+                <span>Accurate Branch Records</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                No placeholder personnel, speculative affiliations, or invented biographies
-                are permitted. Missing fields remain strictly null until verified against
-                official committee records.
+                Every entry is aligned with official IEEE Student Branch rosters and documented committee appointments.
               </p>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
               <div className="flex items-center gap-2 text-sky-400 font-semibold text-sm">
                 <ShieldCheck className="h-4 w-4" />
-                <span>Publication Integrity Constraint</span>
+                <span>Documented History</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Enforced by PostgreSQL check constraints: a record can only transition
-                to <code className="text-sky-300 font-mono">published</code> status if its verification status
-                is confirmed by an administrator.
+                Branch milestones, publications, and awards reflect documented achievements across the branch&apos;s history.
               </p>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
               <div className="flex items-center gap-2 text-purple-400 font-semibold text-sm">
                 <Lock className="h-4 w-4" />
-                <span>Security Barrier Public Views</span>
+                <span>Secure Digital Infrastructure</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Anonymous and public users query exclusively through PostgreSQL views
-                defined with <code className="text-purple-300 font-mono">security_barrier = true</code>,
-                preventing optimizer leaks and strictly isolating internal administrative notes.
+                Built on modern, hardened cloud architecture ensuring fast, reliable public access to student branch archives.
               </p>
             </div>
 
