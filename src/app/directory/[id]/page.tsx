@@ -41,7 +41,7 @@ export async function generateMetadata({
   if (staticMember) {
     return {
       title: `${staticMember.fullName} — NISB Directory`,
-      description: `${staticMember.fullName}, ${staticMember.designation} (${staticMember.portfolio}) at NIE IEEE Student Branch (STB64141).`,
+      description: `${staticMember.fullName}, ${staticMember.designation} (${staticMember.portfolio}) at NIE IEEE Student Branch.`,
     };
   }
 

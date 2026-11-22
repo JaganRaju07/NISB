@@ -288,7 +288,7 @@ describe("Phase 2 — Validation & Archival Integrity", () => {
       const milestone = {
         id: "44444444-4444-4444-a444-000000000001",
         title: "Inception of NIE IEEE Student Branch",
-        description: "Official charter STB64141.",
+        description: "Official charter of NIE IEEE Student Branch.",
         date: "August 2008",
         milestone_year: 2008,
         category: "Charter",

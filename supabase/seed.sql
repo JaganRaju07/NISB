@@ -17,7 +17,7 @@ values
     'nisb',
     'NIE IEEE Student Branch',
     'NISB',
-    'The parent student branch at The National Institute of Engineering, Mysuru (IEEE Branch Code: STB64141). Operating under IEEE Bangalore Section.',
+    'The parent student branch at The National Institute of Engineering, Mysuru. Operating under IEEE Bangalore Section.',
     null,
     'https://nisb.in'
   ),

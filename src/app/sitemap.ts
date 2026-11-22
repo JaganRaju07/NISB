@@ -5,7 +5,7 @@ import {
 } from "@/lib/official-roster";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://archive.nisb.in";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nisb.vercel.app";
   const currentDate = new Date();
 
   // Core public routes

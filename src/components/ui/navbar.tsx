@@ -69,9 +69,7 @@ function NavbarContent() {
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-semibold text-slate-200">NIE IEEE STUDENT BRANCH</span>
             <span className="hidden sm:inline text-slate-600">|</span>
-            <span className="hidden sm:inline text-slate-400">STB64141</span>
-            <span className="hidden md:inline text-slate-600">|</span>
-            <span className="hidden md:inline text-slate-400">IEEE Bangalore Section</span>
+            <span className="hidden sm:inline text-slate-400">IEEE Bangalore Section</span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px] font-mono">
@@ -118,9 +116,6 @@ function NavbarContent() {
             <div className="flex items-center gap-1.5">
               <span className="font-bold tracking-tight text-white text-base md:text-lg">
                 NISB
-              </span>
-              <span className="rounded bg-sky-500/20 px-1.5 py-0.2 text-[10px] font-mono font-medium text-sky-400 border border-sky-500/30">
-                ARCHIVE
               </span>
             </div>
             <span className="font-mono text-[10px] text-slate-400 tracking-wider uppercase hidden sm:block">
@@ -233,7 +228,7 @@ function NavbarContent() {
             </div>
 
             <div className="pt-4 border-t border-slate-800/60 font-mono text-center text-xs text-slate-500">
-              NIE IEEE Student Branch · STB64141
+              NIE IEEE Student Branch
             </div>
           </div>
         </div>

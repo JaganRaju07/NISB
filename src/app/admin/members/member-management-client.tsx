@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   Plus,
@@ -11,6 +11,7 @@ import {
   Archive,
   CheckCheck,
 } from "lucide-react";
+import { toast } from "sonner";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { MemberFormDialog } from "@/components/admin/member-form-dialog";
 import { MemberRoleDialog } from "@/components/admin/member-role-dialog";
@@ -33,6 +34,9 @@ export function MemberManagementClient({
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [verificationFilter, setVerificationFilter] = useState("all");
+  const [sortBy, setSortBy] = useState<"name" | "role" | "department">("name");
+  const [members, setMembers] = useState(initialMembers);
+  const [memberPendingDelete, setMemberPendingDelete] = useState<AdminMember | null>(null);
 
   const [activeMemberForEdit, setActiveMemberForEdit] = useState<AdminMember | null>(null);
   const [isMemberFormOpen, setIsMemberFormOpen] = useState(false);
@@ -43,8 +47,12 @@ export function MemberManagementClient({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  useEffect(() => {
+    setMembers(initialMembers);
+  }, [initialMembers]);
+
   // Filter members client-side
-  const filteredMembers = initialMembers.filter((m) => {
+  const filteredMembers = members.filter((m) => {
     const matchesSearch =
       searchTerm.trim() === "" ||
       m.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -58,6 +66,10 @@ export function MemberManagementClient({
       verificationFilter === "all" || m.verification_status === verificationFilter;
 
     return matchesSearch && matchesStatus && matchesVerification;
+  }).sort((a, b) => {
+    if (sortBy === "role") return (a.role ?? "").localeCompare(b.role ?? "");
+    if (sortBy === "department") return (a.department ?? "").localeCompare(b.department ?? "");
+    return a.full_name.localeCompare(b.full_name);
   });
 
   function handleOpenCreate() {
@@ -76,16 +88,18 @@ export function MemberManagementClient({
   }
 
   function handleDelete(memberId: string, memberName: string) {
-    if (!confirm(`Are you sure you want to permanently delete "${memberName}" from the archive?`)) {
-      return;
-    }
-
     startTransition(async () => {
+      const previous = members;
+      setMembers((current) => current.filter((member) => member.id !== memberId));
       const res = await deleteMemberAction(memberId);
       if (res.success) {
+        toast.success(`${memberName} removed`);
+        setMemberPendingDelete(null);
         router.refresh();
       } else {
-        alert(res.error ?? "Failed to delete member");
+        setMembers(previous);
+        setMemberPendingDelete(null);
+        toast.error(res.error ?? "Failed to remove member");
       }
     });
   }
@@ -98,9 +112,10 @@ export function MemberManagementClient({
         "confirmed"
       );
       if (res.success) {
+        toast.success("Member published");
         router.refresh();
       } else {
-        alert(res.error ?? "Failed to publish member");
+        toast.error(res.error ?? "Failed to publish member");
       }
     });
   }
@@ -113,9 +128,10 @@ export function MemberManagementClient({
         member.verification_status
       );
       if (res.success) {
+        toast.success("Member moved to draft");
         router.refresh();
       } else {
-        alert(res.error ?? "Failed to unpublish member");
+        toast.error(res.error ?? "Failed to move member to draft");
       }
     });
   }
@@ -165,6 +181,19 @@ export function MemberManagementClient({
               <option value="confirmed">Confirmed</option>
               <option value="source_listed">Source Listed</option>
               <option value="pending">Pending</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-1.5 font-mono text-xs">
+            <span className="text-slate-400 text-[10px] uppercase font-bold">Sort:</span>
+            <select
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value as "name" | "role" | "department")}
+              className="rounded-md border border-slate-700 bg-slate-950 px-2.5 py-1.5 font-mono text-xs text-slate-200 focus:outline-none focus:border-sky-500"
+            >
+              <option value="name">Name</option>
+              <option value="role">Role</option>
+              <option value="department">Department</option>
             </select>
           </div>
 
@@ -311,12 +340,13 @@ export function MemberManagementClient({
 
                       <button
                         type="button"
-                        onClick={() => handleDelete(m.id, m.full_name)}
+                        onClick={() => setMemberPendingDelete(m)}
                         disabled={isPending}
-                        className="p-1.5 rounded text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors disabled:opacity-50"
+                        className="inline-flex items-center gap-1.5 rounded border border-rose-500/30 px-2 py-1.5 text-[10px] font-semibold text-rose-300 hover:bg-rose-500/10 transition-colors disabled:opacity-50"
                         title="Delete member"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
+                        <span>Remove</span>
                       </button>
                     </div>
                   </td>
@@ -326,6 +356,41 @@ export function MemberManagementClient({
           </tbody>
         </table>
       </div>
+
+      {memberPendingDelete && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="remove-member-title"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+        >
+          <div className="w-full max-w-md rounded-xl border border-slate-700 bg-slate-900 p-6 shadow-2xl">
+            <h2 id="remove-member-title" className="text-lg font-semibold text-white">
+              Remove {memberPendingDelete.full_name}?
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              This permanently removes the member record. This action cannot be undone.
+            </p>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setMemberPendingDelete(null)}
+                className="rounded-md border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDelete(memberPendingDelete.id, memberPendingDelete.full_name)}
+                disabled={isPending}
+                className="rounded-md border border-rose-500/50 bg-rose-500/15 px-4 py-2 text-sm font-semibold text-rose-300 hover:bg-rose-500/25 disabled:opacity-50"
+              >
+                {isPending ? "Removing..." : "Remove member"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Dialogs */}
       <MemberFormDialog

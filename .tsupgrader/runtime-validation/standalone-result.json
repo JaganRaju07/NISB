@@ -1,0 +1,18 @@
+{
+  "planHash": "251a98df5cc3ac5a2d1da1121bd2577d6a6a90a0dae73f070f63f2fc303acdfb",
+  "phase": "standalone",
+  "recordedAtUtc": "2026-11-22T17:24:38.3087850Z",
+  "retryCount": 2,
+  "resetBaseline": false,
+  "complete": false,
+  "runningStep": "setup[0]:npm",
+  "partialOutput": "",
+  "cleanupCompleted": true,
+  "result": {
+    "setupSucceeded": false,
+    "setupDurationMs": 0,
+    "setupFailureOutput": null,
+    "assertions": [],
+    "executions": []
+  }
+}

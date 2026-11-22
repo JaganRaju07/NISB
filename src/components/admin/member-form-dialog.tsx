@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AlertCircle, ShieldAlert, X, User } from "lucide-react";
 import { createMemberAction, updateMemberAction } from "@/lib/actions/admin-actions";
 import { MemberAvatar } from "@/components/ui";
+import { toast } from "sonner";
 import type { AdminMember } from "@/lib/admin";
 
 interface MemberFormDialogProps {
@@ -59,11 +60,13 @@ export function MemberFormDialog({
 
       if (!res.success) {
         setError(res.error ?? "An error occurred");
+        toast.error(res.error ?? "Failed to save member");
         setIsSubmitting(false);
         return;
       }
 
       setIsSubmitting(false);
+      toast.success(isEditing ? "Member updated" : "Member added");
       onClose();
       router.refresh();
     } catch (err) {

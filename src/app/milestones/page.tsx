@@ -12,7 +12,7 @@ import { MilestoneList } from "./milestone-list";
 export const metadata: Metadata = {
   title: "Milestones & History — NISB Digital Archive",
   description:
-    "A chronological institutional archive of major achievements, chapter foundations, and events of NIE IEEE Student Branch (STB64141).",
+    "A chronological institutional archive of major achievements, chapter foundations, and events of NIE IEEE Student Branch.",
 };
 
 interface MilestonesPageProps {

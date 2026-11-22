@@ -4,6 +4,7 @@ import { Newsreader, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/ui/navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -24,9 +25,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NIE IEEE Student Branch — STB64141, Mysuru",
+  metadataBase: new URL("https://nisb.vercel.app"),
+  title: {
+    default: "NIE IEEE Student Branch | NISB Mysuru",
+    template: "%s | NISB",
+  },
   description:
-    "An institutional digital archive preserving the people, leadership, and milestones of NIE IEEE Student Branch (NISB), The National Institute of Engineering, Mysuru (IEEE Branch Code: STB64141, IEEE Bangalore Section).",
+    "NIE IEEE Student Branch (NISB) at The National Institute of Engineering, Mysuru.",
+  keywords: ["NISB", "IEEE", "NIE Mysuru", "IEEE Bangalore Section", "STB64141"],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://nisb.vercel.app",
+    siteName: "NIE IEEE Student Branch",
+    title: "NIE IEEE Student Branch | NISB Mysuru",
+    description:
+      "Hands-on learning, technical events, leadership and community impact at NIE Mysuru.",
+  },
+  twitter: {
+    card: "summary",
+    title: "NIE IEEE Student Branch | NISB Mysuru",
+    description:
+      "Hands-on learning, technical events, leadership and community impact at NIE Mysuru.",
+  },
   icons: {
     icon: "/assets/images/Condensed---White-Circle.ico",
     shortcut: "/assets/images/Condensed---White-Circle.ico",
@@ -39,6 +63,29 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "NIE IEEE Student Branch",
+    alternateName: "NISB",
+    url: "https://nisb.vercel.app",
+    logo: "https://nisb.vercel.app/assets/images/Condensed---White-Circle.png",
+    description:
+      "The IEEE student branch of The National Institute of Engineering, Mysuru.",
+    parentOrganization: {
+      "@type": "Organization",
+      name: "IEEE Bangalore Section",
+    },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Manandavadi Road",
+      addressLocality: "Mysuru",
+      addressRegion: "Karnataka",
+      postalCode: "570008",
+      addressCountry: "IN",
+    },
+  };
+
   return (
     <html
       lang="en"
@@ -62,6 +109,11 @@ export default function RootLayout({
         <div id="main-content" className="flex-1 flex flex-col">
           {children}
         </div>
+        <Toaster position="top-right" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
       </body>
     </html>
   );

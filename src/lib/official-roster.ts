@@ -3,7 +3,7 @@
  * Sourced directly from official NIE IEEE Student Branch records:
  * https://www.nisb.in/ and https://www.nisb.in/content.html
  *
- * Branch Code: STB64141 · IEEE Bangalore Section · The National Institute of Engineering, Mysuru
+ * IEEE Bangalore Section · The National Institute of Engineering, Mysuru
  */
 
 export interface OfficialRosterMember {
@@ -417,7 +417,6 @@ export const OFFICIAL_CONTACT = {
   institution: "NIE IEEE Student Branch (NISB)",
   college: "The National Institute of Engineering",
   address: "Manandavadi Road, Mysuru - 570008, Karnataka, India",
-  branchCode: "STB64141",
   section: "IEEE Bangalore Section",
   subSection: "IEEE Mysuru Sub Section",
   region: "IEEE Region 10 (Asia-Pacific)",

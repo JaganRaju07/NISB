@@ -23,7 +23,7 @@ export default function SocietiesPage() {
         backHref="/"
         eyebrow="Technical Chapters &amp; Affinity Groups"
         title="Societies &amp; Chapters"
-        description="The six official IEEE technical societies and student affinity groups hosted under NIE IEEE Student Branch (STB64141), The National Institute of Engineering, Mysuru."
+        description="The six official IEEE technical societies and student affinity groups hosted under NIE IEEE Student Branch, The National Institute of Engineering, Mysuru."
       />
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-8 space-y-16">

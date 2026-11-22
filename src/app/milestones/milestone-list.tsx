@@ -131,12 +131,12 @@ export function MilestoneList({
 
           <div className="space-y-2">
             <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">
-              Branch Milestones Timeline
+              No milestones published yet
             </h2>
           </div>
 
           <p className="text-sm text-slate-300 leading-relaxed max-w-xl mx-auto">
-            The archive is curating historical events, Region 10 awards, chapter establishments, and landmark editions of ANKURA, ADROIT, and Electronika from the past 25+ years.
+            NISB has not published any milestone records here yet.
           </p>
 
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3">

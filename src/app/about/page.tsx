@@ -16,9 +16,9 @@ import { PageHeader, Footer } from "@/components/ui";
 import { OFFICIAL_PUBLICATIONS } from "@/lib/official-roster";
 
 export const metadata: Metadata = {
-  title: "About the Digital Archive — NIE IEEE Student Branch",
+  title: "About NISB — NIE IEEE Student Branch",
   description:
-    "Institutional mission, historical records, and stewardship of NIE IEEE Student Branch (STB64141), Mysuru.",
+    "Institutional mission, historical records, and stewardship of NIE IEEE Student Branch, Mysuru.",
 };
 
 export default function AboutPage() {
@@ -27,9 +27,9 @@ export default function AboutPage() {
       <PageHeader
         backLabel="Home"
         backHref="/"
-        eyebrow="Institutional Mission &amp; History"
-        title="About the Archive"
-        description="Preserving the historical records, student branch leadership, and engineering achievements of NIE IEEE Student Branch (STB64141)."
+        eyebrow="About the branch"
+        title="About NISB"
+        description="Our story, activities and role within the IEEE community."
       />
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-8 space-y-16">
@@ -45,7 +45,7 @@ export default function AboutPage() {
               </h2>
             </div>
             <div className="rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-1 font-mono text-xs text-sky-400">
-              STB64141 · EST. 25+ YEARS
+              EST. 25+ YEARS
             </div>
           </div>
 
@@ -154,7 +154,7 @@ export default function AboutPage() {
         <section id="collections" className="space-y-6">
           <div className="border-b border-slate-800 pb-4">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-              Documented Collections &amp; Publications
+              Publications
             </h2>
             <p className="text-sm text-slate-400 font-sans mt-1">
               Authentic periodicals preserved in full text as part of the student branch archival record.
