@@ -2,15 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ExternalLink,
-  Github,
-  Instagram,
-  Linkedin,
   Mail,
   MapPin,
   MessageSquare,
   Phone,
-  Youtube,
 } from "lucide-react";
+import {
+  FaGithub as Github,
+  FaInstagram as Instagram,
+  FaLinkedin as Linkedin,
+  FaYoutube as Youtube,
+} from "react-icons/fa6";
 import { OFFICIAL_CONTACT } from "@/lib/official-roster";
 
 interface FooterProps {
