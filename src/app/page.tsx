@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -27,6 +28,12 @@ import {
 } from "@/lib/official-roster";
 
 export const instant = false;
+
+export const metadata: Metadata = {
+  title: "NIE IEEE Student Branch — STB64141, Mysuru",
+  description:
+    "Official website and digital archive of NIE IEEE Student Branch (STB64141), The National Institute of Engineering, Mysuru.",
+};
 
 export default async function Home() {
   const [membersRes, milestonesRes] = await Promise.all([
@@ -125,10 +132,8 @@ export default async function Home() {
     });
   });
 
-  // Executive leadership officers for the leadership discovery section
-  const executiveOfficers = OFFICIAL_ROSTER_MEMBERS.filter(
-    (m) => m.category === "Executive Leadership"
-  );
+  // Official team members for the leadership discovery section (all 21 official members)
+  const officialMembers = OFFICIAL_ROSTER_MEMBERS;
 
   return (
     <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
@@ -148,7 +153,7 @@ export default async function Home() {
           {/* Editorial Headline */}
           <div className="space-y-4 max-w-4xl mx-auto">
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
-              NISB Digital Archive
+              NIE IEEE Student Branch
             </h1>
 
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto font-sans">
@@ -201,13 +206,13 @@ export default async function Home() {
               <div>
                 <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-sky-400 mb-1">
                   <Users className="h-3.5 w-3.5" />
-                  <span>Archival Leadership Register</span>
+                  <span>Team Leadership Register</span>
                 </div>
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                  Executive Leadership (2025–2026)
+                  Branch Leadership &amp; Officers (2025–2026)
                 </h2>
                 <p className="mt-1 text-sm text-slate-400 max-w-2xl font-sans">
-                  The executive officers directing branch operations, technical initiatives, and committee governance.
+                  The executive committee, coordinators, and technical chapter officers of NIE IEEE Student Branch.
                 </p>
               </div>
 
@@ -222,9 +227,9 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Executive Officers Grid */}
+            {/* Official Officers Grid (All 21 Members) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {executiveOfficers.map((member) => (
+              {officialMembers.map((member) => (
                 <div
                   key={member.id}
                   className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-slate-700 hover:shadow-lg hover:shadow-sky-950/30"
@@ -238,7 +243,7 @@ export default async function Home() {
                     />
 
                     <div className="flex-1 min-w-0">
-                      <span className="inline-block rounded bg-slate-800 px-2 py-0.5 text-[10px] font-mono text-slate-300 mb-1.5 border border-slate-700/60">
+                      <span className="inline-block rounded bg-slate-800 px-2 py-0.5 text-[10px] font-mono text-slate-300 mb-1.5 border border-slate-700/60 truncate max-w-full">
                         {member.portfolio}
                       </span>
                       <h3 className="font-semibold text-white text-sm truncate group-hover:text-sky-300 transition-colors">
@@ -258,10 +263,6 @@ export default async function Home() {
                       <span>Archival Profile</span>
                       <ArrowRight className="h-3 w-3" />
                     </Link>
-
-                    <span className="text-[10px] text-slate-400">
-                      STB64141
-                    </span>
                   </div>
                 </div>
               ))}
@@ -560,7 +561,7 @@ export default async function Home() {
             </h3>
 
             <p className="text-sm text-slate-300 leading-relaxed font-sans">
-              Unlike promotional websites, the NISB Digital Archive enforces a strict database-level check:
+              Unlike promotional websites, NIE IEEE Student Branch enforces a strict database-level check:
               no record can be published to public indexation unless its verification status is explicitly confirmed
               by authorized branch curators. Staged website entries remain labeled with their provenance status,
               and empty fields remain explicitly empty until confirmed by official branch records.

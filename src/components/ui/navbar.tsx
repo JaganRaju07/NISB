@@ -101,7 +101,7 @@ function NavbarContent() {
         <Link
           href="/"
           className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded-sm"
-          aria-label="NISB Digital Archive Home"
+          aria-label="NIE IEEE Student Branch Home"
         >
           <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-900 border border-slate-700/80 p-1 group-hover:border-sky-500 transition-colors shadow-sm">
             <Image

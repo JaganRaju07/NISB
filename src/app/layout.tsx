@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NISB Digital Archive — NIE IEEE Student Branch, Mysuru",
+  title: "NIE IEEE Student Branch — STB64141, Mysuru",
   description:
     "An institutional digital archive preserving the people, leadership, and milestones of NIE IEEE Student Branch (NISB), The National Institute of Engineering, Mysuru (IEEE Branch Code: STB64141, IEEE Bangalore Section).",
   icons: {

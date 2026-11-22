@@ -11,11 +11,12 @@ describe("Phase 2 — Migration Safeguards & SQL Architecture Integrity", () => 
   const migration003Path = path.join(rootDir, "supabase", "migrations", "003_contributions.sql");
   const schemaPath = path.join(rootDir, "supabase", "schema.sql");
 
-  const migration001 = fs.readFileSync(migration001Path, "utf-8");
-  const migration002 = fs.readFileSync(migration002Path, "utf-8");
-  const migration002Down = fs.readFileSync(migration002DownPath, "utf-8");
-  const migration003 = fs.readFileSync(migration003Path, "utf-8");
-  const schema = fs.readFileSync(schemaPath, "utf-8");
+  const normalizeLf = (str: string) => str.replace(/\r\n/g, "\n");
+  const migration001 = normalizeLf(fs.readFileSync(migration001Path, "utf-8"));
+  const migration002 = normalizeLf(fs.readFileSync(migration002Path, "utf-8"));
+  const migration002Down = normalizeLf(fs.readFileSync(migration002DownPath, "utf-8"));
+  const migration003 = normalizeLf(fs.readFileSync(migration003Path, "utf-8"));
+  const schema = normalizeLf(fs.readFileSync(schemaPath, "utf-8"));
 
   const cleanSql = (sql: string) => sql.replace(/--.*$/gm, "").trim();
 
