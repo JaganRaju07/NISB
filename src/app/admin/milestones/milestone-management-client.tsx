@@ -167,7 +167,7 @@ export function MilestoneManagementClient({
               <option value="all">All ({initialMilestones.length})</option>
               <option value="draft">Draft</option>
               <option value="published">Published</option>
-              <option value="archived">Archived</option>
+              <option value="archived">Retired</option>
             </select>
           </div>
 

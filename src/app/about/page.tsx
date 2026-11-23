@@ -150,14 +150,14 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Section 2B: Documented Archival Collections & Publications */}
+        {/* Section 2B: Publications */}
         <section id="collections" className="space-y-6">
           <div className="border-b border-slate-800 pb-4">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
               Publications
             </h2>
             <p className="text-sm text-slate-400 font-sans mt-1">
-              Authentic periodicals preserved in full text as part of the student branch archival record.
+              The branch publications and periodicals.
             </p>
           </div>
 
@@ -208,7 +208,7 @@ export default function AboutPage() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 rounded-md border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-colors"
                       >
-                        <span>Download Archive PDF</span>
+                        <span>Download PDF</span>
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     )}
@@ -219,24 +219,21 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Section 3: Archival Purpose & Data Integrity */}
+        {/* Section 3: Branch Purpose */}
         <section className="space-y-6">
           <div className="border-b border-slate-800 pb-4">
             <p className="font-mono text-xs uppercase tracking-widest text-sky-400">
               Data Integrity
             </p>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-              Why a Verifiable Digital Archive?
+              About the branch
             </h2>
           </div>
 
           <div className="space-y-4 text-sm sm:text-base text-slate-300 leading-relaxed">
             <p>
-              Student branches frequently encounter institutional memory loss across
-              annual committee transitions. Paper records, event photographs, and
-              student accomplishments often dissipate over time. The NISB Digital Archive
-              establishes a permanent, tamper-resistant, verifiable repository of
-              student branch history.
+              NISB brings students together for technical learning, leadership,
+              professional development and community initiatives throughout the year.
             </p>
           </div>
 
@@ -267,7 +264,7 @@ export default function AboutPage() {
                 <span>Secure Digital Infrastructure</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Built on modern, hardened cloud architecture ensuring fast, reliable public access to student branch archives.
+                Built on modern, reliable cloud infrastructure for public access to branch information.
               </p>
             </div>
 
@@ -286,7 +283,7 @@ export default function AboutPage() {
         </section>
 
         {/* Section 4: Fast Navigation Callouts */}
-        <section className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h3 className="font-display text-xl font-bold text-white">
               Explore Members Directory

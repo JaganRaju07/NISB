@@ -23,19 +23,19 @@ export async function generateMetadata({
 }: MilestoneDetailProps): Promise<Metadata> {
   const { id } = await params;
   if (!UUID_REGEX.test(id)) {
-    return { title: "Milestone Not Found — NISB Archive" };
+    return { title: "Milestone Not Found — NISB" };
   }
 
   const { data: milestone } = await getPublicMilestoneById(id);
   if (!milestone) {
-    return { title: "Milestone Not Found — NISB Archive" };
+    return { title: "Milestone Not Found — NISB" };
   }
 
   return {
     title: `${milestone.title} — NISB Milestones`,
     description: milestone.description
       ? milestone.description.slice(0, 160)
-      : `Archival milestone record for ${milestone.title}.`,
+      : `${milestone.title} at NIE IEEE Student Branch.`,
   };
 }
 
@@ -90,7 +90,7 @@ async function MilestoneDetailContent({
         </Link>
         <div className="border border-slate-800 rounded-lg bg-slate-900/40 p-12 text-center space-y-3">
           <p className="font-mono text-sm text-slate-300">
-            Archive database client in standby mode. Milestone records will appear here once connected.
+            The database is not configured. Published milestones will appear here when connected.
           </p>
         </div>
       </main>

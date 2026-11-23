@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
             Restricted Access
           </span>
           <span className="font-mono text-xs text-slate-400">
-            Institutional Archive
+            Administration
           </span>
         </div>
 
@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
           Admin Portal Login
         </h1>
         <p className="mt-2 font-sans text-xs text-slate-400 leading-relaxed">
-          Authorized access for archive stewards and branch counselors to manage member records,
+          Authorized access for branch administrators to manage member records,
           verification audits, and milestone chronologies.
         </p>
 

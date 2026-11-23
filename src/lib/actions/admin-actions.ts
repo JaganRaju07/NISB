@@ -77,7 +77,7 @@ export async function loginAdminAction(formData: FormData): Promise<ActionRespon
       await supabase.auth.signOut();
       return {
         success: false,
-        error: "Access Forbidden: Account is not recognized as an authorized archive curator.",
+        error: "Access Forbidden: Account is not recognized as an authorized administrator.",
       };
     }
 

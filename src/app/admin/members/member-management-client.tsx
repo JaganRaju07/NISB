@@ -165,7 +165,7 @@ export function MemberManagementClient({
               <option value="all">All ({initialMembers.length})</option>
               <option value="draft">Draft</option>
               <option value="published">Published</option>
-              <option value="archived">Archived</option>
+              <option value="archived">Retired</option>
             </select>
           </div>
 
@@ -283,7 +283,7 @@ export function MemberManagementClient({
                       title="Manage roles and society links"
                     >
                       <Layers className="h-3 w-3 text-sky-400" />
-                      <span>{m.member_roles?.length ?? 0} Roles</span>
+                      {m.member_roles?.length ? <span>{m.member_roles.length} Roles</span> : null}
                     </button>
                   </td>
 

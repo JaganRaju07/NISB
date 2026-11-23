@@ -82,7 +82,7 @@ export function MemberFormDialog({
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="space-y-0.5">
             <span className="font-mono text-[10px] uppercase tracking-wider text-sky-400 font-bold">
-              Archival Admin Portal
+              Admin
             </span>
             <h2 className="font-mono text-xl font-bold tracking-tight text-white flex items-center gap-2">
               <User className="h-5 w-5 text-sky-400" />
@@ -146,7 +146,7 @@ export function MemberFormDialog({
                   className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                 />
                 <p className="mt-1 font-mono text-[10px] text-slate-400 leading-tight">
-                  Official NISB core photos are sourced from <code>nisb.in/content.html#team</code> or uploaded to Supabase Storage (<code>archive-media</code>). Accepts full HTTPS URLs or local root-relative paths.
+                  Official NISB core photos are sourced from <code>nisb.in/content.html#team</code> or uploaded to Supabase Storage. Accepts full HTTPS URLs or local root-relative paths.
                 </p>
               </div>
             </div>
@@ -254,7 +254,7 @@ export function MemberFormDialog({
               >
                 <option value="draft">Draft (Staged)</option>
                 <option value="published">Published (Public View)</option>
-                <option value="archived">Archived (Retired)</option>
+                <option value="archived">Retired</option>
               </select>
               <p className="mt-1 font-mono text-[10px] text-slate-400">
                 Only published records appear on the public directory.
