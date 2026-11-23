@@ -65,10 +65,10 @@ export default async function AdminDashboardPage() {
       <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <span className="rounded border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-300 uppercase tracking-wider">
-            Administration
+            Archive Stewardship
           </span>
           <h1 className="mt-2 font-mono text-3xl font-extrabold tracking-tight text-white">
-            Management Console
+            Archive Management Console
           </h1>
           <p className="mt-1 font-sans text-sm text-slate-400 leading-relaxed">
             Administrative verification, member staging, and milestone chronological audit.
@@ -274,7 +274,7 @@ export default async function AdminDashboardPage() {
             href="/admin/members"
             className="font-mono text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors"
           >
-            {stats.totalMembers > 0 ? `View All (${stats.totalMembers}) →` : "View All →"}
+            View All ({stats.totalMembers}) →
           </Link>
         </div>
 

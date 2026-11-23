@@ -36,7 +36,7 @@ export function AdminHeader({
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
                 <span className="font-mono text-sm font-bold tracking-tight text-white">
-                  NISB ADMIN
+                  NISB ARCHIVE
                 </span>
                 <span className="rounded border border-amber-500/40 bg-amber-500/20 px-1.5 py-0.2 font-mono text-[9px] font-bold text-amber-300 uppercase tracking-wider">
                   Admin
@@ -85,7 +85,7 @@ export function AdminHeader({
             </span>
           )}
 
-          {/* Public site link */}
+          {/* Public Archive Link */}
           <Link
             href="/"
             target="_blank"

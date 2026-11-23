@@ -26,7 +26,7 @@ export function StatusBadge({ type, value }: StatusBadgeProps) {
         return (
           <span className="inline-flex items-center gap-1 rounded border border-zinc-700 bg-zinc-900 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-zinc-400">
             <span className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
-            Retired
+            Archived
           </span>
         );
       default:

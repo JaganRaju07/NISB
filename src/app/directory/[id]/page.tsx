@@ -34,7 +34,7 @@ export async function generateMetadata({
 }: DirectoryRecordProps): Promise<Metadata> {
   const { id } = await params;
   if (!UUID_REGEX.test(id)) {
-    return { title: "Member Not Found — NISB" };
+    return { title: "Member Not Found — NISB Archive" };
   }
 
   const staticMember = OFFICIAL_ROSTER_MEMBERS.find((m) => m.id === id);
@@ -47,14 +47,14 @@ export async function generateMetadata({
 
   const { data: member } = await getPublicMemberById(id);
   if (!member) {
-    return { title: "Member Not Found — NISB" };
+    return { title: "Member Not Found — NISB Archive" };
   }
 
   return {
     title: `${member.full_name} — NISB Directory`,
     description: member.role
       ? `${member.full_name}, ${member.role} at NIE IEEE Student Branch.`
-      : `Profile for ${member.full_name} at NIE IEEE Student Branch.`,
+      : `Archival record for ${member.full_name} at NIE IEEE Student Branch.`,
   };
 }
 
@@ -410,7 +410,7 @@ async function DirectoryRecordContent({
         {/* Quiet fallback line when bio, interests, contributions and tenure are all empty */}
         {showQuietEmptyLine && (
           <p className="font-mono text-xs text-slate-400 italic pt-6 pb-2 border-t border-slate-800/80 mt-2">
-            Further profile details will appear when they are confirmed.
+            Further historical details will be indexed as records are confirmed by the archive committee.
           </p>
         )}
       </article>

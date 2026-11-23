@@ -95,7 +95,7 @@ export function MilestoneFormDialog({
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="space-y-0.5">
             <span className="font-mono text-[10px] uppercase tracking-wider text-sky-400 font-bold">
-              Admin
+              Archival Admin Portal
             </span>
             <h2 className="font-mono text-xl font-bold tracking-tight text-white flex items-center gap-2">
               <Milestone className="h-5 w-5 text-amber-400" />
@@ -235,7 +235,7 @@ export function MilestoneFormDialog({
               name="description"
               rows={3}
               defaultValue={milestone?.description ?? ""}
-              placeholder="Summary of the event or achievement."
+              placeholder="Factual archival summary of the event or achievement."
               className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 font-sans text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
             />
           </div>
@@ -254,7 +254,7 @@ export function MilestoneFormDialog({
               >
                 <option value="draft">Draft (Staged)</option>
                 <option value="published">Published (Public View)</option>
-                <option value="archived">Retired</option>
+                <option value="archived">Archived (Retired)</option>
               </select>
               <p className="mt-1 font-mono text-[10px] text-slate-400">
                 Only published milestones appear on the public timeline.
@@ -273,7 +273,7 @@ export function MilestoneFormDialog({
               >
                 <option value="pending">Pending (Unverified)</option>
                 <option value="source_listed">Source Listed (Reported)</option>
-                <option value="confirmed">Confirmed</option>
+                <option value="confirmed">Confirmed (Archival Provenance)</option>
               </select>
               <p className="mt-1 font-mono text-[10px] text-slate-400">
                 Requires confirmed status to be published.

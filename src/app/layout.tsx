@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Instrument_Serif, Geist, Geist_Mono } from "next/font/google";
+import { Newsreader, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/ui/navbar";
 import { Toaster } from "@/components/ui/sonner";
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
   display: "swap",
   style: ["normal", "italic"],
-  weight: ["400"],
+  weight: ["400", "600", "700"],
 });
 
 const geistSans = Geist({
@@ -91,12 +91,12 @@ export default function RootLayout({
       lang="en"
       className={cn(
         "h-full antialiased scroll-smooth",
-        instrumentSerif.variable,
+        newsreader.variable,
         geistSans.variable,
         geistMono.variable
       )}
     >
-      <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)] font-sans">
+      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-sky-600 selection:text-white">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-sky-600 focus:px-4 focus:py-2 focus:text-white focus:outline-none focus:ring-2 focus:ring-white"

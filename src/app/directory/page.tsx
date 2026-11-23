@@ -9,9 +9,9 @@ import {
 import { DirectoryList } from "./directory-list";
 
 export const metadata: Metadata = {
-  title: "People — NISB",
+  title: "Member Directory — NISB Digital Archive",
   description:
-    "The people and officers of NIE IEEE Student Branch.",
+    "An indexed institutional directory of NIE IEEE Student Branch officers, committee leaders, and members.",
 };
 
 interface DirectoryPageProps {
@@ -22,13 +22,13 @@ export default function DirectoryPage({
   searchParams,
 }: DirectoryPageProps) {
   return (
-    <div className="flex flex-1 flex-col bg-[var(--paper)] text-[var(--foreground)]">
+    <div className="flex flex-1 flex-col bg-slate-950 text-slate-100">
       <PageHeader
         backLabel="Home"
         backHref="/"
-        eyebrow="Leadership"
-        title="People"
-        description="Officers and committee leaders of NIE IEEE Student Branch."
+        eyebrow="Institutional Leadership Directory"
+        title="Member Directory"
+        description="Official directory and indexed archival records of NIE IEEE Student Branch officers, technical chapter leads, and committee members."
       />
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-8">

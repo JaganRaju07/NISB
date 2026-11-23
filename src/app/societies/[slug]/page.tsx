@@ -27,11 +27,11 @@ export async function generateMetadata({
   if (!staticSoc) {
     const { data: dbSoc } = await getPublicSocietyBySlug(slug);
     if (!dbSoc) {
-      return { title: "Society Not Found — NISB" };
+      return { title: "Society Not Found — NISB Archive" };
     }
     return {
       title: `${dbSoc.name} — NISB Societies`,
-      description: dbSoc.description?.slice(0, 160) ?? `${dbSoc.name} at NIE IEEE Student Branch.`,
+      description: dbSoc.description?.slice(0, 160) ?? `Archival record for ${dbSoc.name} at NIE IEEE Student Branch.`,
     };
   }
 
@@ -122,7 +122,6 @@ async function SocietyDetailContent({
                 alt={`${name} emblem`}
                 width={64}
                 height={64}
-                sizes="64px"
                 className="h-14 w-14 object-contain"
                 priority
               />

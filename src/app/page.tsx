@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Footer } from "@/components/ui/footer";
-import { CircuitTrace } from "@/components/ui/circuit-trace";
-import { Reveal } from "@/components/ui/reveal";
-import { getPublicMilestones } from "@/lib/archive";
 import {
-  OFFICIAL_ACTIVITIES,
+  ArrowRight,
+  Cpu,
+  ExternalLink,
+  HeartHandshake,
+  MapPin,
+  Users,
+  BookOpen,
+} from "lucide-react";
+import { Footer, MemberAvatar, UniversalSearch, type UniversalSearchItem } from "@/components/ui";
+import { getPublicMembers, getPublicMilestones } from "@/lib/archive";
+import {
   OFFICIAL_PUBLICATIONS,
   OFFICIAL_ROSTER_MEMBERS,
   OFFICIAL_SOCIETIES,
@@ -20,246 +26,381 @@ export const metadata: Metadata = {
     "NIE IEEE Student Branch (NISB) is a student-led IEEE community at The National Institute of Engineering, Mysuru.",
 };
 
+const activities = [
+  {
+    title: "Focus Groups",
+    description:
+      "Students work in peer-led groups on microcontrollers, deep learning, web development and Python, turning ideas into practical projects.",
+    icon: Cpu,
+  },
+  {
+    title: "WIE Weekly Meetups",
+    description:
+      "The Women in Engineering affinity group holds regular sessions to learn technical concepts and build small projects together.",
+    icon: Users,
+  },
+  {
+    title: "Industrial Visits",
+    description:
+      "Semester visits give members a closer look at how engineering teams work, including recent visits to ISRO, IISc, NOKIA, Cisco and Infosys.",
+    icon: MapPin,
+  },
+  {
+    title: "Social Initiatives",
+    description:
+      "NISB volunteers visit old-age homes and Divya Deepa to introduce children and elders to useful everyday technology.",
+    icon: HeartHandshake,
+  },
+];
+
 export default async function Home() {
-  const milestonesRes = await getPublicMilestones();
+  const [membersRes, milestonesRes] = await Promise.all([
+    getPublicMembers(),
+    getPublicMilestones(),
+  ]);
+
+  const publishedMembers = membersRes.data ?? [];
   const publishedMilestones = milestonesRes.data ?? [];
-  const nonSocietyOfficers = OFFICIAL_ROSTER_MEMBERS.filter(
-    (member) => member.category !== "Society Officers"
-  );
-  const chairperson = OFFICIAL_ROSTER_MEMBERS.find((member) => member.designation === "Chairperson");
+  const seenMemberIds = new Set<string>();
+  const searchIndex: UniversalSearchItem[] = [];
+
+  OFFICIAL_ROSTER_MEMBERS.forEach((member) => {
+    seenMemberIds.add(member.id);
+    searchIndex.push({
+      id: member.id,
+      category: "members",
+      categoryLabel: "People & Officers",
+      title: member.fullName,
+      subtitle: `${member.designation} · ${member.portfolio}`,
+      meta: member.category,
+      href: `/directory/${member.id}`,
+      photoUrl: member.localPhotoUrl,
+      badge: member.portfolio,
+      provenance: "staged_roster",
+    });
+  });
+
+  publishedMembers.forEach((member) => {
+    if (!seenMemberIds.has(member.id)) {
+      searchIndex.push({
+        id: member.id,
+        category: "members",
+        categoryLabel: "People & Officers",
+        title: member.full_name,
+        subtitle: member.role ?? "Member",
+        meta: member.department ?? "Verified record",
+        href: `/directory/${member.id}`,
+        photoUrl: member.photo_url,
+        provenance: "confirmed",
+      });
+    }
+  });
+
+  OFFICIAL_SOCIETIES.forEach((society) => {
+    searchIndex.push({
+      id: society.slug,
+      category: "societies",
+      categoryLabel: "Societies & Chapters",
+      title: `${society.name} (${society.shortName})`,
+      subtitle: society.establishedYear ? `Established ${society.establishedYear} at NISB` : "IEEE Technical Chapter",
+      meta: "IEEE Technical Society",
+      href: `/societies/${society.slug}`,
+      photoUrl: society.logoUrl,
+      badge: society.shortName,
+      provenance: "official",
+    });
+  });
+
+  publishedMilestones.forEach((milestone) => {
+    searchIndex.push({
+      id: milestone.id,
+      category: "milestones",
+      categoryLabel: "Milestones",
+      title: milestone.title,
+      subtitle: milestone.description ?? "Institutional milestone",
+      meta: milestone.milestone_year ? String(milestone.milestone_year) : (milestone.date ?? "NISB"),
+      href: `/milestones/${milestone.id}`,
+      badge: milestone.category ?? "Milestone",
+      provenance: "confirmed",
+    });
+  });
+
+  OFFICIAL_PUBLICATIONS.forEach((publication) => {
+    searchIndex.push({
+      id: publication.title,
+      category: "publications",
+      categoryLabel: "Publications",
+      title: publication.title,
+      subtitle: publication.periodicity,
+      meta: publication.type,
+      href: publication.externalLink ?? "/about",
+      isExternal: !!publication.externalLink,
+      photoUrl: publication.coverImage,
+      badge: publication.periodicity,
+      provenance: "official",
+    });
+  });
 
   return (
-    <main id="main-content" className="bg-[var(--paper)]">
-      <section className="crosshair section-rule">
-        <div className="site-container hairline-grid">
-          <div className="grid min-h-[680px] items-center gap-8 px-0 py-16 lg:grid-cols-12 lg:py-20">
-            <Reveal className="lg:col-span-7">
-              <p className="mono-label">IEEE STUDENT BRANCH · STB64141 · BANGALORE SECTION · REGION 10</p>
-              <h1 className="mt-8 max-w-[900px]">
-                NIE IEEE <em>Student</em> Branch
+    <div className="flex flex-1 flex-col bg-background text-foreground">
+      <main id="main-content">
+        <section className="relative isolate overflow-hidden border-b border-border">
+          <div className="hero-grid absolute inset-0 -z-10" />
+          <div className="mx-auto grid min-h-[620px] max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.15fr_.85fr] lg:py-20">
+            <div className="max-w-3xl">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-sky-300">
+                <span className="h-2 w-2 rounded-full bg-sky-400" />
+                STB64141 · IEEE Bangalore Section
+              </div>
+              <h1 className="font-display text-5xl leading-[0.98] font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
+                Build skills.
+                <br />
+                <span className="text-sky-400">Shape what&apos;s next.</span>
               </h1>
-              <p className="body-copy mt-8 max-w-[620px]">
-                A student-led IEEE community for hands-on learning, technical events,
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
+                NISB is the IEEE student branch of The National Institute of Engineering,
+                Mysuru. We bring students together for hands-on learning, technical events,
                 leadership and community impact.
               </p>
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Link href="/directory" className="button-primary">Meet the team <span aria-hidden="true">→</span></Link>
-                <Link href="/#contact" className="button-secondary">Contact us <span aria-hidden="true">↗</span></Link>
-              </div>
-            </Reveal>
-            <Reveal className="lg:col-span-5" delay={120}>
-              <CircuitTrace />
-            </Reveal>
-          </div>
-
-          <div className="section-rule grid grid-cols-2 border-b border-[var(--line)] md:grid-cols-4">
-            {[
-              ["21", "Officers"],
-              ["6", "Societies & chapters"],
-              ["2", "Publications"],
-              ["23,000+", "Bangalore Section members"],
-            ].map(([value, label]) => (
-              <div key={label} className="border-r border-[var(--line)] px-5 py-7 last:border-r-0">
-                <p className="font-display text-4xl">{value}</p>
-                <p className="mono-label mt-2 text-[10px] text-[var(--muted)]">{label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="about" className="section-rule py-24 lg:py-32">
-        <div className="site-container hairline-grid">
-          <Reveal className="grid gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <p className="mono-label">01 / About</p>
-              <h2 className="mt-5">What is NISB</h2>
-            </div>
-            <div className="body-copy lg:col-span-7 lg:col-start-6">
-              <p>
-                NIE IEEE Student Branch is the official student branch of The National
-                Institute of Engineering, Mysuru. For more than 25 years, it has
-                organised technical workshops and events, including ANKURA, ADROIT,
-                Electronika and IPL.
-              </p>
-              <h3 className="mt-10 font-display text-3xl">Why NISB</h3>
-              <p className="mt-3">
-                NISB connects students with workshops, seminars, webinars, talks,
-                competitions and hackathons. Members build technical confidence,
-                practical experience and professional connections.
-              </p>
-              <p className="mt-8 border-l border-[var(--accent)] pl-5">
-                IEEE Bangalore Section was established in 1977 and has grown to more
-                than 23,000 members.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="section-rule py-24 lg:py-32">
-        <div className="site-container hairline-grid">
-          <Reveal className="grid gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <p className="mono-label">02 / Activities</p>
-              <h2 className="mt-5">Learn by doing</h2>
-            </div>
-            <div className="lg:col-span-8">
-              {OFFICIAL_ACTIVITIES.map((activity, index) => (
-                <article key={activity.title} className="activity-row grid gap-3 py-7 md:grid-cols-[56px_220px_1fr] md:items-baseline">
-                  <span className="mono-label text-[var(--accent)]">0{index + 1}</span>
-                  <h3 className="font-display text-2xl">{activity.title}</h3>
-                  <p className="body-copy">{activity.description}</p>
-                  <span className="hidden text-[var(--accent)] md:block md:col-start-3 md:justify-self-end" aria-hidden="true">→</span>
-                </article>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section id="leadership" className="section-rule py-24 lg:py-32">
-        <div className="site-container hairline-grid">
-          <Reveal className="flex items-end justify-between gap-6">
-            <div>
-              <p className="mono-label">03 / Leadership</p>
-              <h2 className="mt-5">The 2025–2026 team</h2>
-            </div>
-            <Link href="/directory" className="link-slide hidden text-sm md:inline">View all 21 officers ↗</Link>
-          </Reveal>
-
-          {chairperson && (
-            <Reveal className="mt-12 grid gap-8 md:grid-cols-12">
-              <Link href={`/directory/${chairperson.id}`} className="group md:col-span-5" aria-label={`View ${chairperson.fullName}`}>
-                <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-white">
-                  <Image
-                    src={chairperson.localPhotoUrl}
-                    alt={chairperson.fullName}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 416px"
-                    className="photo-tone object-cover object-top"
-                    priority
-                  />
-                </div>
-              </Link>
-              <div className="md:col-span-6 md:col-start-7 md:self-end">
-                <p className="mono-label text-[var(--accent)]">Chairperson</p>
-                <h3 className="mt-4 text-5xl">{chairperson.fullName}</h3>
-                <Link href={`/directory/${chairperson.id}`} className="link-slide mt-6 inline-block text-sm">View profile ↗</Link>
-              </div>
-            </Reveal>
-          )}
-
-          <div className="mt-12 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-4">
-            {nonSocietyOfficers.filter((member) => member.id !== chairperson?.id).map((member) => (
-              <Reveal key={member.id}>
-                <Link href={`/directory/${member.id}`} className="group block">
-                  <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-white">
-                    <Image
-                      src={member.localPhotoUrl}
-                      alt={member.fullName}
-                      fill
-                      sizes="(max-width: 768px) 50vw, 280px"
-                      className="photo-tone object-cover object-top"
-                    />
-                  </div>
-                  <h3 className="mt-4 text-2xl">{member.fullName}</h3>
-                  <p className="mono-label mt-1 text-[10px] text-[var(--muted)]">{member.designation}</p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/directory" className="inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-950/30 transition hover:bg-sky-500">
+                  Meet the team <ArrowRight className="h-4 w-4" />
                 </Link>
-              </Reveal>
-            ))}
-          </div>
-          <Link href="/directory" className="link-slide mt-8 inline-block text-sm md:hidden">View all 21 officers ↗</Link>
-        </div>
-      </section>
-
-      <section id="societies" className="section-rule py-24 lg:py-32">
-        <div className="site-container hairline-grid">
-          <Reveal className="flex items-end justify-between gap-6">
-            <div>
-              <p className="mono-label">04 / Societies</p>
-              <h2 className="mt-5">Technical chapters</h2>
-            </div>
-            <Link href="/societies" className="link-slide hidden text-sm md:inline">View chapters ↗</Link>
-          </Reveal>
-          <div className="mt-10">
-            {OFFICIAL_SOCIETIES.map((society) => (
-              <Reveal key={society.slug}>
-                <Link href={`/societies/${society.slug}`} className="group grid items-center gap-5 border-t border-[var(--line)] py-5 md:grid-cols-[72px_220px_1fr_120px]">
-                  <Image src={society.logoUrl} alt="" width={48} height={48} sizes="48px" className="h-12 w-12 object-contain grayscale transition-[filter] duration-300 group-hover:grayscale-0" />
-                  <div>
-                    <p className="mono-label text-[10px] text-[var(--accent)]">{society.shortName}</p>
-                    <h3 className="mt-1 text-2xl">{society.name}</h3>
-                  </div>
-                  <p className="line-clamp-2 body-copy text-sm">{society.description}</p>
-                  <p className="text-right text-xl" aria-hidden="true">→</p>
+                <Link href="#about" className="inline-flex items-center rounded-md border border-border bg-card px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-sky-400">
+                  Explore NISB
                 </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="publications" className="section-rule py-24 lg:py-32">
-        <div className="site-container hairline-grid">
-          <Reveal>
-            <p className="mono-label">05 / Publications</p>
-            <h2 className="mt-5">Stories from NISB</h2>
-          </Reveal>
-          <div className="mt-12 grid gap-10 md:grid-cols-2">
-            {OFFICIAL_PUBLICATIONS.map((publication) => (
-              <Reveal key={publication.title} className="card publication-cover">
-                <div className="relative h-[420px] bg-[#EFEFEA]">
-                  <Image
-                    src={publication.coverImage}
-                    alt={`${publication.title} publication cover`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 384px"
-                    className="object-contain p-8"
-                  />
-                </div>
-                <div className="border-t border-[var(--line)] p-6">
-                  <p className="mono-label text-[10px] text-[var(--accent)]">{publication.periodicity}</p>
-                  <h3 className="mt-2 text-3xl">{publication.title}</h3>
-                  <p className="body-copy mt-3 text-sm">{publication.description}</p>
-                  <div className="mt-5 flex flex-wrap gap-5 text-sm">
-                    {publication.externalLink && <a href={publication.externalLink} target="_blank" rel="noopener noreferrer" className="link-slide">Read issue ↗</a>}
-                    {publication.downloadLink && <a href={publication.downloadLink} target="_blank" rel="noopener noreferrer" className="link-slide">Download PDF ↗</a>}
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {publishedMilestones.length > 0 && (
-        <section id="milestones" className="section-rule py-24 lg:py-32">
-          <div className="site-container hairline-grid">
-            <Reveal className="flex items-end justify-between">
-              <div>
-                <p className="mono-label">06 / Milestones</p>
-                <h2 className="mt-5">Recent moments</h2>
               </div>
-              <Link href="/milestones" className="link-slide text-sm">View timeline ↗</Link>
-            </Reveal>
-            <div className="mt-12 border-l border-[var(--line)]">
-              {publishedMilestones.slice(0, 5).map((milestone) => (
-                <Reveal key={milestone.id} className="relative ml-5 border-b border-[var(--line)] py-6">
-                  <span className="absolute -left-[25px] top-[38px] h-2 w-2 rounded-full bg-[var(--accent)]" />
-                  <p className="mono-label text-[10px] text-[var(--muted)]">{milestone.milestone_year ?? milestone.date}</p>
-                  <Link href={`/milestones/${milestone.id}`} className="mt-2 block">
-                    <h3 className="text-2xl">{milestone.title}</h3>
-                    {milestone.description && <p className="body-copy mt-2 text-sm">{milestone.description}</p>}
-                  </Link>
-                </Reveal>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card/75 p-4 shadow-2xl shadow-black/20 backdrop-blur">
+              <div className="mb-3 flex items-center justify-between px-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Find people and chapters</p>
+                <span className="rounded border border-border px-2 py-1 font-mono text-[10px] text-slate-400">Cmd / Ctrl + K</span>
+              </div>
+              <UniversalSearch items={searchIndex} />
+            </div>
+          </div>
+
+          <div className="border-t border-border bg-slate-950/70">
+            <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-border px-5 sm:px-8 lg:grid-cols-5">
+              {[
+                ["25+", "years of NISB"],
+                ["21", "officers"],
+                ["6", "societies & chapters"],
+                ["2", "publications"],
+                ["23,000+", "Bangalore Section members"],
+              ].map(([value, label]) => (
+                <div key={label} className="px-3 py-5 sm:px-5">
+                  <div className="font-display text-2xl font-semibold text-white sm:text-3xl">{value}</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-400">{label}</div>
+                </div>
               ))}
             </div>
           </div>
         </section>
-      )}
 
+        <section id="about" className="border-b border-border py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div className="grid gap-10 lg:grid-cols-[.85fr_1.15fr]">
+              <div>
+                <p className="section-eyebrow">About NISB</p>
+                <h2 className="mt-3 max-w-xl font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                  One of Karnataka&apos;s oldest and most active IEEE student branches.
+                </h2>
+              </div>
+              <div className="grid gap-6 text-base leading-8 text-slate-300 sm:grid-cols-2">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold text-white">What is NISB?</h3>
+                  <p>
+                    NISB is the IEEE student branch of National Institute of Engineering.
+                    For more than 25 years, it has hosted technical workshops and events,
+                    including signature programs such as ANKURA, ADROIT, Electronika and IPL.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold text-white">Why NISB?</h3>
+                  <p>
+                    NISB connects students with workshops, seminars, webinars, talks,
+                    competitions and hackathons. Members build technical confidence,
+                    practical experience and lasting professional connections.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-14 rounded-xl border border-border bg-card p-6 sm:p-8">
+              <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
+                <div>
+                  <p className="text-sm font-semibold text-sky-400">A Part of IEEE Bangalore Section</p>
+                  <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300">
+                    IEEE Bangalore Section was established in 1977 and is one of the
+                    most vibrant IEEE sections. Its membership has grown to more than 23,000.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {[
+                    ["/assets/ieee-white.png", "IEEE"],
+                    ["/assets/BS_white.png", "IEEE Bangalore Section"],
+                    ["/assets/MSS-Logo-White.png", "IEEE Mysuru Sub-Section"],
+                    ["/assets/NISB short white.png", "NISB"],
+                  ].map(([src, label]) => (
+                    <div key={label} className="flex h-20 items-center justify-center rounded-lg border border-border bg-slate-950 px-3">
+                      <Image src={src} alt={label} width={100} height={56} className="max-h-14 w-auto object-contain" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div className="section-heading">
+              <div>
+                <p className="section-eyebrow">Activities</p>
+                <h2>Learn by doing</h2>
+              </div>
+              <p>Technical learning and community work, throughout the year.</p>
+            </div>
+            <div className="mt-10 grid gap-4 md:grid-cols-2">
+              {activities.map((activity, index) => {
+                const Icon = activity.icon;
+                return (
+                  <article key={activity.title} className={`activity-card ${index === 0 ? "md:col-span-2" : ""}`}>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-sky-400/20 bg-sky-400/10 text-sky-300">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3>{activity.title}</h3>
+                      <p>{activity.description}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section id="publications" className="border-b border-border py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div className="section-heading">
+              <div>
+                <p className="section-eyebrow">Publications</p>
+                <h2>Stories from NISB</h2>
+              </div>
+              <p>Two official publications documenting the branch and its community.</p>
+            </div>
+            <div className="mt-10 grid gap-5 md:grid-cols-2">
+              {OFFICIAL_PUBLICATIONS.map((publication) => (
+                <article key={publication.title} className="publication-card">
+                  <div className="relative h-72 w-full overflow-hidden rounded-lg bg-slate-950 md:h-80">
+                    <Image
+                      src={publication.coverImage}
+                      alt={`${publication.title} publication cover`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-contain"
+                    />
+                  </div>
+                  <div className="flex-1 p-6">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-sky-400">{publication.periodicity}</p>
+                    <h3 className="mt-2 font-display text-3xl font-semibold text-white">{publication.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-300">{publication.description}</p>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      {publication.externalLink && (
+                        <a href={publication.externalLink} target="_blank" rel="noopener noreferrer" className="text-link">
+                          <BookOpen className="h-4 w-4" /> Read {publication.title} <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      )}
+                      {publication.downloadLink && (
+                        <a href={publication.downloadLink} target="_blank" rel="noopener noreferrer" className="text-link">
+                          Download PDF <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="leadership" className="border-b border-border py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div className="section-heading">
+              <div>
+                <p className="section-eyebrow">Leadership</p>
+                <h2>Meet the 2025–2026 team</h2>
+              </div>
+              <Link href="/directory" className="text-link">View all 21 officers <ArrowRight className="h-4 w-4" /></Link>
+            </div>
+            <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {OFFICIAL_ROSTER_MEMBERS.slice(0, 8).map((member) => (
+                <Link key={member.id} href={`/directory/${member.id}`} className="officer-card">
+                  <MemberAvatar name={member.fullName} photoUrl={member.localPhotoUrl} size="lg" className="border border-border" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-sky-400">{member.portfolio}</p>
+                    <h3 className="mt-1 truncate text-base font-semibold text-white">{member.fullName}</h3>
+                    <p className="mt-1 text-sm text-slate-400">{member.designation}</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-slate-500" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="societies" className="border-b border-border py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div className="section-heading">
+              <div>
+                <p className="section-eyebrow">Societies & Affinity Groups</p>
+                <h2>Explore our technical chapters</h2>
+              </div>
+              <Link href="/societies" className="text-link">View all chapters <ArrowRight className="h-4 w-4" /></Link>
+            </div>
+            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {OFFICIAL_SOCIETIES.map((society) => (
+                <Link key={society.slug} href={`/societies/${society.slug}`} className="society-card">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-slate-950 p-2">
+                    <Image src={society.logoUrl} alt={`${society.name} logo`} width={40} height={40} className="h-8 w-8 object-contain" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-sky-400">{society.shortName}</p>
+                    <h3 className="mt-1 text-lg font-semibold text-white">{society.name}</h3>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-slate-500" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {publishedMilestones.length > 0 && (
+          <section id="events" className="border-b border-border py-20 sm:py-24">
+            <div className="mx-auto max-w-7xl px-5 sm:px-8">
+              <div className="section-heading">
+                <div>
+                  <p className="section-eyebrow">Events & Milestones</p>
+                  <h2>Recent institutional milestones</h2>
+                </div>
+                <Link href="/milestones" className="text-link">View timeline <ArrowRight className="h-4 w-4" /></Link>
+              </div>
+              <div className="mt-10 grid gap-4 md:grid-cols-3">
+                {publishedMilestones.slice(0, 3).map((milestone) => (
+                  <Link key={milestone.id} href={`/milestones/${milestone.id}`} className="publication-card p-6">
+                    <p className="text-xs font-semibold text-sky-400">{milestone.milestone_year ?? "Milestone"}</p>
+                    <h3 className="mt-3 text-lg font-semibold text-white">{milestone.title}</h3>
+                    {milestone.description && <p className="mt-2 text-sm leading-6 text-slate-400">{milestone.description}</p>}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

@@ -10,9 +10,9 @@ import {
 import { MilestoneList } from "./milestone-list";
 
 export const metadata: Metadata = {
-  title: "Milestones — NISB",
+  title: "Milestones & History — NISB Digital Archive",
   description:
-    "Major achievements and events of NIE IEEE Student Branch.",
+    "A chronological institutional archive of major achievements, chapter foundations, and events of NIE IEEE Student Branch.",
 };
 
 interface MilestonesPageProps {

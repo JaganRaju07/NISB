@@ -36,7 +36,7 @@ export default async function AdminMembersPage() {
             <Database className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
               <h3 className="font-mono text-sm font-bold uppercase text-amber-300">
-                Standby Mode
+                Admin Standby Mode Active
               </h3>
               <p className="font-sans text-xs text-amber-200/80 leading-relaxed">
                 Supabase database credentials are not actively configured in <code className="text-amber-100">.env.local</code>.
