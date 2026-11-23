@@ -112,11 +112,11 @@ async function SocietyDetailContent({
       </nav>
 
       {/* Society Overview Card */}
-      <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm space-y-10">
+      <article className="border border-[var(--line)] rounded-xl bg-[var(--surface)] p-6 sm:p-10 space-y-10">
         {/* Header */}
         <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-slate-800">
           <div className="flex items-center gap-5">
-            <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-xl border border-slate-700 bg-slate-950 p-2 flex items-center justify-center shrink-0 shadow-inner">
+            <div className="logo-chip h-16 w-16 sm:h-20 sm:w-20 shrink-0">
               <Image
                 src={logoUrl}
                 alt={`${name} emblem`}

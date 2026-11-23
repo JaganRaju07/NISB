@@ -17,13 +17,13 @@ export function Footer({ className = "" }: { className?: string }) {
   ];
 
   return (
-    <footer id="contact" className={`inverted-band ${className}`}>
+    <footer id="contact" className={`border-t border-[var(--line)] bg-[var(--surface)] ${className}`}>
       <div className="site-container hairline-grid py-20">
         <div className="grid gap-12 lg:grid-cols-12">
           <section className="lg:col-span-5" aria-labelledby="contact-heading">
             <p className="mono-label">07 / Contact</p>
             <h2 id="contact-heading" className="mt-5">Let&apos;s build<br />together.</h2>
-            <address className="mt-8 not-italic text-[15px] leading-7 text-[#C5CBD6]">
+            <address className="mt-8 not-italic text-[15px] leading-7 text-[var(--body)]">
               {OFFICIAL_CONTACT.address}<br />
               <a className="link-slide" href={`tel:${OFFICIAL_CONTACT.phone.replace(/\s+/g, "")}`}>{OFFICIAL_CONTACT.phone}</a><br />
               <a className="link-slide" href={`mailto:${OFFICIAL_CONTACT.email}`}>{OFFICIAL_CONTACT.email}</a>
@@ -50,20 +50,20 @@ export function Footer({ className = "" }: { className?: string }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`NISB on ${label}`}
-              className="flex h-11 w-11 items-center justify-center border border-[#3B4457] transition-colors hover:border-[#F2F4F8]"
+              className="flex h-11 w-11 items-center justify-center border border-[var(--line)] transition-colors hover:border-[var(--accent)]"
             >
               <Icon className="h-4 w-4" />
             </a>
           ))}
-          <a href={OFFICIAL_CONTACT.socials.discord} target="_blank" rel="noopener noreferrer" className="ml-2 min-h-11 border border-[#3B4457] px-4 py-3 text-sm">
+          <a href={OFFICIAL_CONTACT.socials.discord} target="_blank" rel="noopener noreferrer" className="ml-2 min-h-11 border border-[var(--line)] px-4 py-3 text-sm">
             CommuNIEty Server ↗
           </a>
-          <a href={OFFICIAL_CONTACT.socials.blog} target="_blank" rel="noopener noreferrer" className="min-h-11 border border-[#3B4457] px-4 py-3 text-sm">
+          <a href={OFFICIAL_CONTACT.socials.blog} target="_blank" rel="noopener noreferrer" className="min-h-11 border border-[var(--line)] px-4 py-3 text-sm">
             Blog ↗
           </a>
         </div>
 
-        <div className="mt-16 grid gap-10 border-t border-[#3B4457] pt-10 md:grid-cols-12">
+        <div className="mt-16 grid gap-10 border-t border-[var(--line)] pt-10 md:grid-cols-12">
           <div className="md:col-span-3">
             <p className="mono-label">Explore</p>
             <div className="mt-4 flex flex-col gap-2 text-sm">
@@ -98,9 +98,9 @@ export function Footer({ className = "" }: { className?: string }) {
           </div>
         </div>
 
-        <div className="relative mt-14 overflow-hidden border-t border-[#3B4457] pt-5">
-          <p className="select-none font-display text-[clamp(7rem,19vw,16rem)] leading-[.72] text-[#F2F4F8] opacity-[0.09]">NISB</p>
-          <p className="mt-8 text-xs text-[#C5CBD6]">© 2026 NIE IEEE Student Branch. All rights reserved.</p>
+        <div className="relative mt-14 overflow-hidden border-t border-[var(--line)] pt-5">
+          <p className="select-none font-display text-[clamp(7rem,19vw,16rem)] leading-[.72] text-[var(--text)] opacity-[0.06]">NISB</p>
+          <p className="mt-8 text-xs text-[var(--muted)]">© 2026 NIE IEEE Student Branch. All rights reserved.</p>
         </div>
       </div>
     </footer>

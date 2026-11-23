@@ -210,7 +210,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
       aria-label="Search NISB"
     >
       {/* ── Search Input Frame ── */}
-      <div className="relative rounded-xl border border-slate-700/80 bg-slate-900/90 shadow-2xl backdrop-blur-md transition-all duration-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-500/20">
+      <div className="relative rounded-xl border border-[var(--line)] bg-[var(--surface)] transition-all duration-200 focus-within:border-[var(--accent)]">
         <div className="flex items-center px-4 py-3 sm:py-3.5">
           <Search className="h-5 w-5 text-sky-400 shrink-0 mr-3" />
 
@@ -297,7 +297,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
       {isOpen && query.trim() !== "" && (
         <div
           id="universal-search-results"
-          className="absolute top-full left-0 right-0 z-50 mt-2 max-h-[28rem] overflow-y-auto rounded-xl border border-slate-700/80 bg-slate-950/95 p-3 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150"
+          className="absolute top-full left-0 right-0 z-50 mt-2 max-h-[28rem] overflow-y-auto rounded-xl border border-[var(--line)] bg-[var(--surface)] p-3"
         >
           {filteredItems.length === 0 ? (
             <div className="p-8 text-center space-y-3 font-mono text-xs text-slate-400">

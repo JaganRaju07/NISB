@@ -147,7 +147,7 @@ export function DirectoryList({
 
   return (
     <div className="space-y-8">
-      <div className="sticky top-[72px] z-20 border border-[var(--line)] bg-[var(--panel)] p-4">
+      <div className="sticky top-[72px] z-20 border border-[var(--line)] bg-[var(--surface)] p-4">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="relative max-w-lg flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
@@ -211,7 +211,7 @@ export function DirectoryList({
       </div>
 
       {filteredItems.length === 0 ? (
-        <div className="border border-[var(--line)] bg-[var(--panel)] px-6 py-16 text-center">
+        <div className="border border-[var(--line)] bg-[var(--surface)] px-6 py-16 text-center">
           <p className="font-display text-3xl">No people found</p>
           {hasActiveFilters && <button type="button" onClick={clearAllFilters} className="button-secondary mt-6">Clear filters</button>}
         </div>

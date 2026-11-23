@@ -25,6 +25,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  themeColor: "#0A0F1C",
   metadataBase: new URL("https://nisb.vercel.app"),
   title: {
     default: "NIE IEEE Student Branch | NISB Mysuru",
@@ -90,7 +91,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        "h-full antialiased scroll-smooth",
+        "dark h-full antialiased scroll-smooth",
         instrumentSerif.variable,
         geistSans.variable,
         geistMono.variable
@@ -99,11 +100,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)] font-sans">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-sky-600 focus:px-4 focus:py-2 focus:text-white focus:outline-none focus:ring-2 focus:ring-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-[var(--accent-fill)] focus:px-4 focus:py-2 focus:text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
         >
           Skip to main content
         </a>
-        <Suspense fallback={<div className="h-24 w-full bg-slate-950 border-b border-slate-800" />}>
+        <Suspense fallback={<div className="h-24 w-full bg-[var(--background)] border-b border-[var(--line)]" />}>
           <Navbar />
         </Suspense>
         <div id="main-content" className="flex-1 flex flex-col">

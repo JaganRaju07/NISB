@@ -43,7 +43,7 @@ export default async function AdminDashboardPage() {
     <div className="mx-auto w-full max-w-6xl p-6 md:p-8 space-y-8">
       {/* Top Banner / Standby Warning */}
       {!auth.isConfigured && (
-        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5">
           <div className="flex items-start gap-3">
             <Database className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
@@ -96,7 +96,7 @@ export default async function AdminDashboardPage() {
       {/* ── Metric Cards Grid ── */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {/* Card 1: Members */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 space-y-2 shadow-sm">
+        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-mono text-xs font-bold uppercase text-slate-400">
               Member Records
@@ -113,7 +113,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Card 2: Verification Queue */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 space-y-2 shadow-sm">
+        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-mono text-xs font-bold uppercase text-slate-400">
               Audit Breakdown
@@ -131,7 +131,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Card 3: Milestones */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 space-y-2 shadow-sm">
+        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-mono text-xs font-bold uppercase text-slate-400">
               Milestones
@@ -148,7 +148,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Card 4: Chapters */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 space-y-2 shadow-sm">
+        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-mono text-xs font-bold uppercase text-slate-400">
               Societies
@@ -218,7 +218,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* ── Archival Integrity Checklist ── */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 shadow-sm">
+      <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-emerald-400" />
@@ -278,9 +278,9 @@ export default async function AdminDashboardPage() {
           </Link>
         </div>
 
-        <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/80 shadow-md">
+        <div className="overflow-x-auto rounded-xl border border-[var(--line)] bg-[var(--surface)]">
           <table className="w-full text-left font-sans text-xs">
-            <thead className="border-b border-slate-800 bg-slate-950/90 font-mono text-[11px] uppercase tracking-wider text-slate-400">
+            <thead className="sticky top-0 z-10 border-b border-[var(--line)] bg-[var(--surface-2)] font-mono text-[11px] uppercase tracking-wider text-[var(--muted)]">
               <tr>
                 <th className="px-4 py-3">Member Name</th>
                 <th className="px-4 py-3">Recorded Role</th>
@@ -289,9 +289,9 @@ export default async function AdminDashboardPage() {
                 <th className="px-4 py-3">Private Administrative Note</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[var(--line)]">
               {recentMembers.map((m) => (
-                <tr key={m.id} className="hover:bg-slate-800/40 transition-colors">
+                <tr key={m.id} className="hover:bg-[var(--surface-2)] transition-colors">
                   <td className="px-4 py-3 font-mono font-bold text-white">
                     {m.full_name}
                   </td>

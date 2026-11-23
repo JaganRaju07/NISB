@@ -128,11 +128,11 @@ async function SocietiesContent() {
             return (
               <article
                 key={soc.slug}
-                className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-slate-700"
+                className="group flex flex-col justify-between rounded-xl border border-[var(--line)] bg-[var(--surface)] p-6 transition-colors hover:border-[var(--accent)]"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="relative h-12 w-12 rounded-lg bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center">
+                    <div className="logo-chip h-12 w-12">
                       <Image
                         src={soc.logoUrl}
                         alt={`${soc.name} logo`}

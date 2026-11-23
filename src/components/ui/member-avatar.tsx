@@ -69,7 +69,7 @@ export function MemberAvatar({
       height={cfg.px}
       priority={priority}
       sizes={cfg.px <= 48 ? "(max-width: 768px) 48px, 48px" : "(max-width: 768px) 160px, 160px"}
-      className={`${cfg.class} rounded-md object-cover border border-slate-700/80 shrink-0 shadow-sm ${className}`}
+      className={`${cfg.class} rounded-md object-cover border border-[var(--line)] shrink-0 ${className}`}
       unoptimized
       onError={handleImageError}
     />

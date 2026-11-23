@@ -20,10 +20,18 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 12);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
@@ -63,10 +71,10 @@ export function Navbar() {
     : [];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--line)] bg-[rgba(248,248,245,0.96)]">
+    <header className={`sticky top-0 z-50 border-b transition-colors ${scrolled ? "border-[var(--line)] bg-[rgba(10,15,28,0.70)] backdrop-blur-md" : "border-transparent bg-transparent"}`}>
       <div className="site-container flex h-[72px] items-center justify-between">
         <Link href="/" className="flex items-center gap-3" aria-label="NISB home">
-          <Image src="/assets/images/Condensed---White-Circle.png" alt="" width={40} height={40} sizes="40px" priority className="h-10 w-10" />
+          <span className="logo-chip h-12 w-12"><Image src="/assets/images/Condensed---White-Circle.png" alt="" width={36} height={36} sizes="36px" priority className="h-9 w-9" /></span>
           <span className="font-bold tracking-tight">NISB</span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex" aria-label="Primary navigation">
@@ -102,7 +110,7 @@ export function Navbar() {
       )}
       {searchOpen && (
         <div
-          className="fixed inset-0 z-[60] flex items-start justify-center bg-[rgba(11,18,32,0.18)] px-4 pt-[12vh]"
+          className="fixed inset-0 z-[60] flex items-start justify-center bg-[rgba(10,15,28,0.82)] px-4 pt-[12vh]"
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setSearchOpen(false);

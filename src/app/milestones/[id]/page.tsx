@@ -137,7 +137,7 @@ async function MilestoneDetailContent({
       </nav>
 
       {/* Record Sheet Card */}
-      <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm space-y-8">
+      <article className="border border-[var(--line)] rounded-xl bg-[var(--surface)] p-6 sm:p-10 space-y-8">
         <header className="border-b border-slate-800 pb-6 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
             <div className="flex items-center gap-2">

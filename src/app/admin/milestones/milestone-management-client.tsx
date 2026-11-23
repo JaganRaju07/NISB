@@ -141,7 +141,7 @@ export function MilestoneManagementClient({
   return (
     <div className="space-y-6">
       {/* Controls Bar */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Search */}
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
@@ -199,9 +199,9 @@ export function MilestoneManagementClient({
       </div>
 
       {/* Milestones Table */}
-      <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/90 shadow-md">
+      <div className="overflow-x-auto rounded-xl border border-[var(--line)] bg-[var(--surface)]">
         <table className="w-full text-left font-sans text-xs">
-          <thead className="border-b border-slate-800 bg-slate-950/90 font-mono text-[11px] uppercase tracking-wider text-slate-400">
+          <thead className="sticky top-0 z-10 border-b border-[var(--line)] bg-[var(--surface-2)] font-mono text-[11px] uppercase tracking-wider text-[var(--muted)]">
             <tr>
               <th className="px-4 py-3">Year / Date</th>
               <th className="px-4 py-3">Milestone Title &amp; Category</th>
@@ -213,7 +213,7 @@ export function MilestoneManagementClient({
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-[var(--line)]">
             {filteredMilestones.length === 0 ? (
               <tr>
                 <td colSpan={8} className="px-4 py-12 text-center font-mono text-xs text-slate-400">
@@ -225,7 +225,7 @@ export function MilestoneManagementClient({
                 const pCount = participantCountMap.get(m.id) ?? 0;
 
                 return (
-                  <tr key={m.id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={m.id} className="hover:bg-[var(--surface-2)] transition-colors">
                     <td className="px-4 py-3 font-mono">
                       <div className="text-sm font-bold text-white flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5 text-amber-400" />

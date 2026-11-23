@@ -31,7 +31,7 @@ export default async function AdminMembersPage() {
     <div className="mx-auto w-full max-w-6xl p-6 md:p-8 space-y-6">
       {/* Standby Banner */}
       {!auth.isConfigured && (
-        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5">
           <div className="flex items-start gap-3">
             <Database className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-1">

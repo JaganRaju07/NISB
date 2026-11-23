@@ -10,7 +10,7 @@ export function StatusBadge({ type, value }: StatusBadgeProps) {
     switch (value) {
       case "published":
         return (
-          <span className="inline-flex items-center gap-1 rounded border border-sky-500/40 bg-sky-500/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-sky-300 shadow-sm">
+          <span className="inline-flex items-center gap-1 rounded border border-sky-500/40 bg-sky-500/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-sky-300 ">
             <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
             Published
           </span>
@@ -42,14 +42,14 @@ export function StatusBadge({ type, value }: StatusBadgeProps) {
   switch (value) {
     case "confirmed":
       return (
-        <span className="inline-flex items-center gap-1 rounded border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-300 shadow-sm">
+        <span className="inline-flex items-center gap-1 rounded border border-[var(--line)] bg-[var(--surface-2)] px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--accent)]">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
           Confirmed
         </span>
       );
     case "source_listed":
       return (
-        <span className="inline-flex items-center gap-1 rounded border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300 shadow-sm">
+        <span className="inline-flex items-center gap-1 rounded border border-[var(--line)] bg-[var(--surface-2)] px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
           <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
           Source Listed
         </span>

@@ -238,7 +238,7 @@ export function MilestoneList({
             return (
               <div
                 key={m.id}
-                className="group relative rounded-xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 hover:border-slate-700 transition-all shadow-sm"
+                className="group relative rounded-xl border border-[var(--line)] bg-[var(--surface)] p-6 sm:p-8 hover:border-[var(--accent)] transition-colors"
               >
                 {/* Node marker on timeline */}
                 <div className="absolute -left-[31px] sm:-left-[39px] top-7 h-4 w-4 rounded-full border-2 border-slate-950 bg-sky-500 shadow-sm" />

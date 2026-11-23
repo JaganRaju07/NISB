@@ -4,12 +4,14 @@ import Link from "next/link";
 import { Footer } from "@/components/ui/footer";
 import { CircuitTrace } from "@/components/ui/circuit-trace";
 import { Reveal } from "@/components/ui/reveal";
+import { StatCount } from "@/components/ui/stat-count";
+import { ActivityTile } from "@/components/ui/activity-spotlights";
+import { SocietyAccordion } from "@/components/ui/society-accordion";
 import { getPublicMilestones } from "@/lib/archive";
 import {
   OFFICIAL_ACTIVITIES,
   OFFICIAL_PUBLICATIONS,
   OFFICIAL_ROSTER_MEMBERS,
-  OFFICIAL_SOCIETIES,
 } from "@/lib/official-roster";
 
 export const instant = false;
@@ -29,9 +31,10 @@ export default async function Home() {
   const chairperson = OFFICIAL_ROSTER_MEMBERS.find((member) => member.designation === "Chairperson");
 
   return (
-    <main id="main-content" className="bg-[var(--paper)]">
-      <section className="crosshair section-rule">
-        <div className="site-container hairline-grid">
+    <main id="main-content" className="bg-[var(--background)]">
+      <section className="crosshair section-rule relative">
+        <div className="hero-backdrop absolute inset-x-0 top-[72px] h-[680px] -z-10 lg:h-[760px]" />
+        <div className="hero-content site-container hairline-grid">
           <div className="grid min-h-[680px] items-center gap-8 px-0 py-16 lg:grid-cols-12 lg:py-20">
             <Reveal className="lg:col-span-7">
               <p className="mono-label">IEEE STUDENT BRANCH · STB64141 · BANGALORE SECTION · REGION 10</p>
@@ -54,13 +57,13 @@ export default async function Home() {
 
           <div className="section-rule grid grid-cols-2 border-b border-[var(--line)] md:grid-cols-4">
             {[
-              ["21", "Officers"],
-              ["6", "Societies & chapters"],
-              ["2", "Publications"],
-              ["23,000+", "Bangalore Section members"],
+              [21, "Officers"],
+              [6, "Societies & chapters"],
+              [2, "Publications"],
+              [23000, "Bangalore Section members"],
             ].map(([value, label]) => (
               <div key={label} className="border-r border-[var(--line)] px-5 py-7 last:border-r-0">
-                <p className="font-display text-4xl">{value}</p>
+                <p className="font-mono tabular-nums text-3xl"><StatCount value={Number(value)} suffix={value === 23000 ? "+" : ""} /></p>
                 <p className="mono-label mt-2 text-[10px] text-[var(--muted)]">{label}</p>
               </div>
             ))}
@@ -104,14 +107,14 @@ export default async function Home() {
               <p className="mono-label">02 / Activities</p>
               <h2 className="mt-5">Learn by doing</h2>
             </div>
-            <div className="lg:col-span-8">
+            <div className="grid gap-4 lg:col-span-8 md:grid-cols-2">
               {OFFICIAL_ACTIVITIES.map((activity, index) => (
-                <article key={activity.title} className="activity-row grid gap-3 py-7 md:grid-cols-[56px_220px_1fr] md:items-baseline">
+                <ActivityTile key={activity.title} className="grid gap-4 p-6">
                   <span className="mono-label text-[var(--accent)]">0{index + 1}</span>
                   <h3 className="font-display text-2xl">{activity.title}</h3>
-                  <p className="body-copy">{activity.description}</p>
-                  <span className="hidden text-[var(--accent)] md:block md:col-start-3 md:justify-self-end" aria-hidden="true">→</span>
-                </article>
+                  <p className="body-copy text-sm">{activity.description}</p>
+                  <span className="justify-self-end text-[var(--accent)]" aria-hidden="true">→</span>
+                </ActivityTile>
               ))}
             </div>
           </Reveal>
@@ -131,7 +134,7 @@ export default async function Home() {
           {chairperson && (
             <Reveal className="mt-12 grid gap-8 md:grid-cols-12">
               <Link href={`/directory/${chairperson.id}`} className="group md:col-span-5" aria-label={`View ${chairperson.fullName}`}>
-                <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-white">
+                <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-[var(--surface)]">
                   <Image
                     src={chairperson.localPhotoUrl}
                     alt={chairperson.fullName}
@@ -140,6 +143,7 @@ export default async function Home() {
                     className="photo-tone object-cover object-top"
                     priority
                   />
+                  <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[var(--background)] to-transparent" />
                 </div>
               </Link>
               <div className="md:col-span-6 md:col-start-7 md:self-end">
@@ -154,7 +158,7 @@ export default async function Home() {
             {nonSocietyOfficers.filter((member) => member.id !== chairperson?.id).map((member) => (
               <Reveal key={member.id}>
                 <Link href={`/directory/${member.id}`} className="group block">
-                  <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-white">
+                  <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-[var(--surface)]">
                     <Image
                       src={member.localPhotoUrl}
                       alt={member.fullName}
@@ -162,6 +166,7 @@ export default async function Home() {
                       sizes="(max-width: 768px) 50vw, 280px"
                       className="photo-tone object-cover object-top"
                     />
+                    <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[var(--background)] to-transparent" />
                   </div>
                   <h3 className="mt-4 text-2xl">{member.fullName}</h3>
                   <p className="mono-label mt-1 text-[10px] text-[var(--muted)]">{member.designation}</p>
@@ -182,21 +187,7 @@ export default async function Home() {
             </div>
             <Link href="/societies" className="link-slide hidden text-sm md:inline">View chapters ↗</Link>
           </Reveal>
-          <div className="mt-10">
-            {OFFICIAL_SOCIETIES.map((society) => (
-              <Reveal key={society.slug}>
-                <Link href={`/societies/${society.slug}`} className="group grid items-center gap-5 border-t border-[var(--line)] py-5 md:grid-cols-[72px_220px_1fr_120px]">
-                  <Image src={society.logoUrl} alt="" width={48} height={48} sizes="48px" className="h-12 w-12 object-contain grayscale transition-[filter] duration-300 group-hover:grayscale-0" />
-                  <div>
-                    <p className="mono-label text-[10px] text-[var(--accent)]">{society.shortName}</p>
-                    <h3 className="mt-1 text-2xl">{society.name}</h3>
-                  </div>
-                  <p className="line-clamp-2 body-copy text-sm">{society.description}</p>
-                  <p className="text-right text-xl" aria-hidden="true">→</p>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
+          <SocietyAccordion />
         </div>
       </section>
 
@@ -209,7 +200,7 @@ export default async function Home() {
           <div className="mt-12 grid gap-10 md:grid-cols-2">
             {OFFICIAL_PUBLICATIONS.map((publication) => (
               <Reveal key={publication.title} className="card publication-cover">
-                <div className="relative h-[420px] bg-[#EFEFEA]">
+                <div className="relative h-[420px] bg-[var(--surface-2)]">
                   <Image
                     src={publication.coverImage}
                     alt={`${publication.title} publication cover`}

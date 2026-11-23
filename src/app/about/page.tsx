@@ -167,7 +167,7 @@ export default function AboutPage() {
                 key={pub.title}
                 className="flex flex-col sm:flex-row gap-6 rounded-xl border border-slate-800 bg-slate-900/60 p-6 items-center"
               >
-                <div className="relative h-44 w-32 shrink-0 overflow-hidden rounded-md border border-slate-700 bg-slate-950 shadow-md">
+                <div className="relative h-44 w-32 shrink-0 overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)]">
                   <Image
                     src={pub.coverImage}
                     alt={`${pub.title} Cover`}

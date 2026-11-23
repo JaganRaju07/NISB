@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex flex-1 items-center justify-center p-6 sm:p-12">
-      <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl backdrop-blur-md">
+      <div className="w-full max-w-md rounded-xl border border-[var(--line)] bg-[var(--surface)] p-8">
         {/* Top Eyebrow */}
         <div className="flex items-center gap-2 mb-2">
           <span className="rounded border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-300 uppercase tracking-wider">

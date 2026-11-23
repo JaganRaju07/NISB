@@ -128,7 +128,7 @@ async function DirectoryRecordContent({
         </nav>
 
         {/* Record Sheet Card */}
-        <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm space-y-8">
+        <article className="border border-[var(--line)] rounded-xl bg-[var(--surface)] p-6 sm:p-10 space-y-8">
           {/* Header Row */}
           <header className="flex flex-col sm:flex-row items-start gap-6 pb-8 border-b border-slate-800">
             <div className="shrink-0">
@@ -242,7 +242,7 @@ async function DirectoryRecordContent({
       </nav>
 
       {/* Record Sheet Card */}
-      <article className="border border-slate-800 rounded-xl bg-slate-900/60 p-6 sm:p-10 shadow-lg backdrop-blur-sm">
+      <article className="border border-[var(--line)] rounded-xl bg-[var(--surface)] p-6 sm:p-10">
         {/* Header Row: Portrait on Left, Name & Role on Right */}
         <header className="flex flex-col sm:flex-row items-start gap-6 pb-8 border-b border-slate-800">
           <div className="shrink-0">

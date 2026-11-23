@@ -91,8 +91,8 @@ export function MilestoneParticipantDialog({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs">
-      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-2xl text-slate-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(10,15,28,0.82)] p-4">
+      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-xl border border-[var(--line)] bg-[var(--surface-2)] p-6 text-[var(--text)]">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="space-y-0.5">
