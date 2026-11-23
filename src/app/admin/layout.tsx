@@ -4,8 +4,8 @@ import { getAdminAuthStatus } from "@/lib/admin";
 import { AdminHeader } from "@/components/admin/admin-header";
 
 export const metadata: Metadata = {
-  title: "Admin Portal — NISB Digital Archive",
-  description: "Administrative archive management, member staging, and verification.",
+  title: "Admin — NISB",
+  description: "Administration for NISB member and milestone records.",
 };
 
 async function AdminHeaderAsync() {
@@ -35,11 +35,11 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+    <div className="admin-shell min-h-screen flex flex-col">
       <Suspense fallback={<AdminHeaderFallback />}>
         <AdminHeaderAsync />
       </Suspense>
-      <div className="flex-1 flex flex-col bg-blueprint-grid">
+      <div className="flex-1 flex flex-col">
         {children}
       </div>
     </div>

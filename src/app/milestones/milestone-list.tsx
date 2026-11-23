@@ -209,8 +209,9 @@ export function MilestoneList({
           </div>
 
           <div className="font-mono text-xs text-slate-400">
-            Showing <span className="font-semibold text-white">{filteredMilestones.length}</span>{" "}
-            of {initialMilestones.length} milestone records
+            {filteredMilestones.length > 0
+              ? <>Showing <span className="font-semibold text-white">{filteredMilestones.length}</span> of {initialMilestones.length} milestones</>
+              : "No milestones match"}
           </div>
         </div>
       </div>

@@ -49,11 +49,11 @@ const CATEGORY_TABS: Array<{
   label: string;
   icon: typeof Search;
 }> = [
-  { id: "all", label: "All Records", icon: Search },
+  { id: "all", label: "All", icon: Search },
   { id: "members", label: "People & Officers", icon: Users },
   { id: "societies", label: "Societies & Chapters", icon: Landmark },
   { id: "milestones", label: "Milestones", icon: MilestoneIcon },
-  { id: "publications", label: "Collections & Print", icon: BookOpen },
+  { id: "publications", label: "Publications", icon: BookOpen },
 ];
 
 export function UniversalSearch({ items, className = "" }: UniversalSearchProps) {
@@ -146,7 +146,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
     return groups;
   }, [filteredItems]);
 
-  // Total counts per category across the whole archive index
+  // Total counts per category across the full index
   const categoryCounts = useMemo(() => {
     const counts: Record<SearchCategory, number> = {
       all: items.length,
@@ -207,7 +207,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
       ref={containerRef}
       className={`relative w-full max-w-3xl mx-auto ${className}`}
       role="search"
-      aria-label="Universal Archive Search"
+      aria-label="Search NISB"
     >
       {/* ── Search Input Frame ── */}
       <div className="relative rounded-xl border border-slate-700/80 bg-slate-900/90 shadow-2xl backdrop-blur-md transition-all duration-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-500/20">
@@ -276,15 +276,17 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
                 }`}
               >
                 <span>{tab.label}</span>
-                <span
-                  className={`rounded-full px-1.5 py-0.2 text-[9px] ${
-                    isActive
-                      ? "bg-sky-400 text-slate-950 font-bold"
-                      : "bg-slate-800 text-slate-400"
-                  }`}
-                >
-                  {count}
-                </span>
+                {count > 0 && (
+                  <span
+                    className={`rounded-full px-1.5 py-0.2 text-[9px] ${
+                      isActive
+                        ? "bg-sky-400 text-slate-950 font-bold"
+                        : "bg-slate-800 text-slate-400"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -301,7 +303,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
             <div className="p-8 text-center space-y-3 font-mono text-xs text-slate-400">
               <AlertCircle className="h-6 w-6 text-slate-400 mx-auto" />
               <p className="text-sm font-semibold text-slate-300 font-sans">
-                No archival records found for &ldquo;{query}&rdquo;
+                No results found for &ldquo;{query}&rdquo;
               </p>
               <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
                 Try searching by a member name (e.g. &ldquo;Sagar&rdquo;, &ldquo;Abhay&rdquo;), a chapter (&ldquo;CS&rdquo;, &ldquo;WIE&rdquo;, &ldquo;CASS&rdquo;), or publication title (&ldquo;MANAS&rdquo;, &ldquo;JIJNASA&rdquo;).
@@ -312,7 +314,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
               {/* Top Result Count Indicator */}
               <div className="flex items-center justify-between px-2 pt-1 font-mono text-[11px] text-slate-400 border-b border-slate-800/80 pb-2">
                 <span>
-                  Found <strong className="text-sky-400">{filteredItems.length}</strong> matching archival record{filteredItems.length === 1 ? "" : "s"}
+                  Found <strong className="text-sky-400">{filteredItems.length}</strong> matching result{filteredItems.length === 1 ? "" : "s"}
                 </span>
                 <span className="text-[10px] text-slate-400 hidden sm:inline">
                   Navigate with ↑ ↓ and press ↵ Enter
@@ -414,6 +416,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
                                     alt={item.title}
                                     width={24}
                                     height={24}
+                                    sizes="24px"
                                     className="h-6 w-6 object-contain"
                                   />
                                 ) : (
@@ -491,9 +494,9 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
               {/* 4. Publications & Print Collections */}
               {groupedResults.publications.length > 0 && (
                 <div className="space-y-1.5">
-                  <div className="flex items-center gap-1.5 px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-purple-400">
+                  <div className="flex items-center gap-1.5 px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-sky-400">
                     <BookOpen className="h-3 w-3" />
-                    <span>Documented Publications ({groupedResults.publications.length})</span>
+                    <span>Publications ({groupedResults.publications.length})</span>
                   </div>
 
                   <ul className="space-y-1">
@@ -521,6 +524,7 @@ export function UniversalSearch({ items, className = "" }: UniversalSearchProps)
                                     src={item.photoUrl}
                                     alt={item.title}
                                     fill
+                                    sizes="32px"
                                     className="object-cover"
                                   />
                                 ) : (

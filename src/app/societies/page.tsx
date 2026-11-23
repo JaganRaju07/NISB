@@ -10,7 +10,7 @@ import {
 } from "@/lib/official-roster";
 
 export const metadata: Metadata = {
-  title: "Societies & Chapters — NISB Digital Archive",
+  title: "Societies & Chapters — NISB",
   description:
     "Explore the IEEE technical societies and student affinity groups operating under NIE IEEE Student Branch, Mysuru.",
 };
@@ -138,6 +138,7 @@ async function SocietiesContent() {
                         alt={`${soc.name} logo`}
                         width={40}
                         height={40}
+                        sizes="40px"
                         className="h-9 w-9 object-contain"
                       />
                     </div>
@@ -191,7 +192,7 @@ async function SocietiesContent() {
                     href={`/societies/${soc.slug}`}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors"
                   >
-                    <span>View Chapter Archive</span>
+                    <span>View Chapter Page</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
 
